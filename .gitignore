@@ -1,0 +1,97 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Visual Studio cache files
+.vs/
+
+# Windows image thumbnails
+Thumbs.db
+
+# User-specific files for Rider and VS Code
+.idea/
+*.sln.iml
+.vscode/
+
+# Build directories
+**/bin/
+**/obj/
+
+# Debugging files
+*.pdb
+*.cache
+*.ilk
+*.log
+
+# ReSharper files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# DotCover
+*.dotCover
+
+# NuGet packages
+*.nupkg
+packages/
+
+# Package directories
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Windows-specific files
+*.dbmdl
+*.mdf
+*.ldf
+
+# Publish directory
+publish/
+
+# .NET Core
+project.assets.json
+
+# NCrunch
+*.ncrunch*
+.*crunch*
+
+# SonarQube
+.sonar/
+
+# Test results
+TestResults/
+*.trx
+
+# WPF Specific
+Generated_Code/
+
+# Backup & temporary files
+*.bak
+*.tmp
+*.temp
+
+# Rider logs
+.idea/.idea.*
+
+# Local history for JetBrains IDEs
+.idea/.localHistory
+
+# Rider caches
+.idea/system/
+.idea/modules.xml
+.idea/.name
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/httpRequests
+.idea/sonarlint
+.idea/inspectionProfiles
+.idea/markdown-navigator.xml
+.idea/gradle.xml
+.idea/jarRepositories.xml
