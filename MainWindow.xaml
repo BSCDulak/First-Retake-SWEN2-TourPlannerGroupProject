@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject"
         mc:Ignorable="d"
+
+        xmlns:usercontrols="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
+
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <usercontrols:MenuBar ></usercontrols:MenuBar>
 
     </Grid>
 </Window>
