@@ -1,3 +1,7 @@
+# Open LibreOffice-files
+.~lock.*
+
+
 # Build results
 bin/
 obj/
