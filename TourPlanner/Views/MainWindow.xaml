@@ -1,0 +1,36 @@
+﻿<Window x:Class="SWEN2_TourPlannerGroupProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject"
+        mc:Ignorable="d"
+        
+        xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
+        xmlns:userControls="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
+        xmlns:subViews="clr-namespace:SWEN2_TourPlannerGroupProject.Views.Subviews"
+
+        Title="MainWindow" Height="450" Width="800">
+<!-- This is our main entry point and also the only xaml where the xaml.cs has to have some additional code to initialize our
+    DataContext, to be precise our MainWindowViewModel which constructs all the other viewModels in its constructor, without this nothing works.-->
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+            <userControls:MenuBar ></userControls:MenuBar>
+        <TabControl Grid.Column="0" Grid.Row="1">
+            <TabItem Header="Tab1">
+                <subViews:Tab1></subViews:Tab1>
+            </TabItem>
+            <TabItem Header="Tab2">
+                <subViews:Tab2></subViews:Tab2>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

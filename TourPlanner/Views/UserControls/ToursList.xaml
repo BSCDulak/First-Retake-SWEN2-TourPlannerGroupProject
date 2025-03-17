@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="SWEN2_TourPlannerGroupProject.Views.UserControls.ToursList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
+             xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewModels:ToursListViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ListView ItemsSource="{Binding Tours}" 
+                  SelectedItem="{Binding SelectedTour}" 
+                  DisplayMemberPath="Name"></ListView>
+    </Grid>
+</UserControl>
