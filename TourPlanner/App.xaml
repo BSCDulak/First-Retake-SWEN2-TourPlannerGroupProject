@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject"
              StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
+        <!-- Styles for the buttons in the application, instead of doing styles individually per file, we do it collectively here -->
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="FontSize" Value="25"></Setter>

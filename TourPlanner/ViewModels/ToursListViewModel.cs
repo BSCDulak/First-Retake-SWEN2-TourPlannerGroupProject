@@ -5,6 +5,9 @@ using SWEN2_TourPlannerGroupProject.MVVM;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
+    // This class is the viewmodel for the ToursList, it contains the list of tours and the commands for adding and deleting tours.
+    // this commands are triggered by the buttons in the GUI. the remove button has a condition of SelectedTour != null, which means
+    // that the button is only enabled when a tour is selected in the list.
     internal class ToursListViewModel : ViewModelBase
     {
         public ObservableCollection<Tour> Tours { get; }

@@ -8,6 +8,9 @@ using SWEN2_TourPlannerGroupProject.Models;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
+    // This is the main viewmodel for the MainWindow, it contains the viewmodels for
+    // the ToursList, SubTabButtons and TourDetailsWrapPanel.
+    // every time a new viewmodel is created it needs to be added here and initialized in the constructor.
     internal class MainWindowViewModel : ViewModelBase
     {
         public ToursListViewModel ToursListViewModel { get; }

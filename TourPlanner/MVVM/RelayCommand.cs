@@ -7,6 +7,8 @@ using System.Windows.Input;
 
 namespace SWEN2_TourPlannerGroupProject.MVVM
 {
+    // This class is a RelayCommand that implements the ICommand interface(ICommand comes from using System.Windows.Input),
+    // it is used to bind commands to buttons in the GUI.
     internal class RelayCommand : ICommand
     {
 

@@ -8,6 +8,8 @@
 
              xmlns:subviews="clr-namespace:SWEN2_TourPlannerGroupProject.Views.Subviews"
              d:DesignHeight="450" d:DesignWidth="800">
+    <!-- MenuBar is a user control that contains a menu with three items: File, Edit, and About. 
+    This is currently just fluff and does nothing, that's why it has no ViewModel -->
     <Grid>
         <Menu>
             <MenuItem Header="File" FontSize="16">
