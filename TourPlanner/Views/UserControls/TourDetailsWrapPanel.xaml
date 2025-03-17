@@ -12,6 +12,8 @@
         <WrapPanel>
             <Label Content="Name"></Label>
             <TextBox Text="{Binding SelectedTour.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <Label Content="Description"></Label>
+            <TextBox Text="{Binding SelectedTour.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </WrapPanel>
             
     </Grid>
