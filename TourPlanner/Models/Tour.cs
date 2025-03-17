@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWEN2_TourPlannerGroupProject.Models
 {
-    internal class Tours
+    internal class Tour
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
@@ -17,7 +17,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public string? EstimatedTime { get; set; }
         public string? RouteInformation { get; set; }
         public string? RouteImagePath { get; set; }
-        public int TourId { get; set; }
+        public int? TourId { get; set; }
 
     }
 }

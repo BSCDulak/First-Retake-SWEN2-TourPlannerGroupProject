@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using SWEN2_TourPlannerGroupProject.MVVM;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {

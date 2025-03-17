@@ -9,10 +9,6 @@
              xmlns:subviews="clr-namespace:SWEN2_TourPlannerGroupProject.Views.Subviews"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
         <Menu>
             <MenuItem Header="File" FontSize="16">
                 <MenuItem Header="Exit"></MenuItem>
@@ -21,14 +17,7 @@
             <MenuItem Header="About" FontSize="16"></MenuItem>
         </Menu>
 
-        <TabControl Grid.Column="0" Grid.Row="1">
-            <TabItem Header="Tab1">
-                <subviews:Tab1></subviews:Tab1>
-            </TabItem>
-            <TabItem Header="Tab2">
-                <subviews:Tab2></subviews:Tab2>
-            </TabItem>
-        </TabControl>
+        
 
     </Grid>
 </UserControl>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
@@ -12,9 +7,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
     internal class ToursListViewModel : ViewModelBase
     {
-        public ObservableCollection<Tours> Tours { get; }
-        private Tours? _selectedTour;
-        public Tours? SelectedTour
+        public ObservableCollection<Tour> Tours { get; }
+        private Tour? _selectedTour;
+        public Tour? SelectedTour
         {
             get => _selectedTour;
             set
@@ -24,16 +19,11 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }
         }
-        private string? _newTourName;
-        public string? NewTourName
-        {
-            get => _newTourName;
-            set => SetField(ref _newTourName, value);
-        }
+        
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public ToursListViewModel(ObservableCollection<Tours> tours)
+        public ToursListViewModel(ObservableCollection<Tour> tours)
         {
             Tours = tours;
             AddCommand = new RelayCommand(_ => AddTour());
@@ -41,8 +31,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         }
         private void AddTour()
         {
-            Tours.Add(new Tours {Name = NewTourName});
-            NewTourName = string.Empty;
+            var newTour = new Tour { Name = "newTour"};
+            Tours.Add(newTour);
         }
         private void DeleteTour()
         {

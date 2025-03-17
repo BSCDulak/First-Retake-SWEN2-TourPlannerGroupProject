@@ -17,7 +17,7 @@
             <RowDefinition Height="4*"></RowDefinition>
         </Grid.RowDefinitions>
         <userControl:SubTabButtons Grid.ColumnSpan="2"></userControl:SubTabButtons>
-        <userControl:ToursList></userControl:ToursList>
-        <Button Grid.Column="1" Grid.Row="1">Details of Tours goes here</Button>
+        <userControl:ToursList Grid.Row="1"></userControl:ToursList>
+        <Button Grid.Column="1" Grid.Row="1">Details of Tour goes here</Button>
     </Grid>
 </UserControl>
