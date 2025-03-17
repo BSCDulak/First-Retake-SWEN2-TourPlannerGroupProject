@@ -17,6 +17,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public string? EstimatedTime { get; set; }
         public string? RouteInformation { get; set; }
         public string? RouteImagePath { get; set; }
+        public int TourId { get; set; }
 
     }
 }
