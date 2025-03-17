@@ -15,6 +15,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     {
         public ToursListViewModel ToursListViewModel { get; }
         public SubTabButtonsViewModel SubTabButtonsViewModel { get; }
+        public SubTabButtonsViewModel SubTabButtonsViewModelTourLogs { get; }
         public TourDetailsWrapPanelViewModel TourDetailsWrapPanelViewModel { get; }
 
         public MainWindowViewModel()
@@ -31,6 +32,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             
             ToursListViewModel = new ToursListViewModel(tours);
             SubTabButtonsViewModel = new SubTabButtonsViewModel(
+                ToursListViewModel.AddCommand,
+                ToursListViewModel.DeleteCommand
+            );
+            SubTabButtonsViewModelTourLogs = new SubTabButtonsViewModel(
                 ToursListViewModel.AddCommand,
                 ToursListViewModel.DeleteCommand
             );
