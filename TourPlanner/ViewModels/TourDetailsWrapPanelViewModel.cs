@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SWEN2_TourPlannerGroupProject.Models;
+
+namespace SWEN2_TourPlannerGroupProject.ViewModels
+{
+    internal class TourDetailsWrapPanelViewModel : ViewModelBase
+    {
+        private readonly ToursListViewModel _toursListViewModel;
+
+        public Tour? SelectedTour
+        {
+            get => _toursListViewModel.SelectedTour;
+            set
+            {
+                _toursListViewModel.SelectedTour = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public TourDetailsWrapPanelViewModel(ToursListViewModel toursListViewModel)
+        {
+            _toursListViewModel = toursListViewModel;
+            _toursListViewModel.PropertyChanged += ToursListViewModelPropertyChanged;
+        }
+
+        private void ToursListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_toursListViewModel.SelectedTour))
+            {
+                OnPropertyChanged(nameof(SelectedTour));
+            }
+        }
+    }
+}

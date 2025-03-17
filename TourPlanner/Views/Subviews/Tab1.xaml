@@ -20,6 +20,15 @@
         </Grid.RowDefinitions>
         <userControls:SubTabButtons DataContext="{Binding SubTabButtonsViewModel}" Grid.ColumnSpan="2"></userControls:SubTabButtons>
         <userControls:ToursList DataContext="{Binding ToursListViewModel}" Grid.Row="1"></userControls:ToursList>
-        <Button Grid.Column="1" Grid.Row="1">Details of Tour goes here</Button>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <!--- the image below is still just a placeholder, later on it needs to be bound using path string variable in Tour.cs -->
+            <Image Source="../../Images/fantasymap.png"></Image>
+            <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelViewModel}"></userControls:TourDetailsWrapPanel>
+
+        </Grid>
     </Grid>
 </UserControl>
