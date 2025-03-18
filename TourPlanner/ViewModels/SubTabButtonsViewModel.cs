@@ -9,18 +9,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     // after we got the tour logs logic working we can remove the tab selection logic.
     internal class SubTabButtonsViewModel : ViewModelBase
     {
-        private bool _isTourTabSelected;
-        private bool _isLogTabSelected;
-        public bool IsTourTabSelected
-        {
-            get => _isTourTabSelected;
-            set => SetField(ref _isTourTabSelected, value);
-        }
-        public bool IsLogTabSelected
-        {
-            get => _isLogTabSelected;
-            set => SetField(ref _isLogTabSelected, value);
-        }
+  
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }

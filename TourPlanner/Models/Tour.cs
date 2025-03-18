@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public string? RouteImagePath { get; set; }
         public int? TourId { get; set; }
 
-        /* todo This is a list of TourLogs that are associated with this Tour, needs a model, viewmodel and usercontrol.
-        public List<TourLog> TourLogs { get; set; } = new List<TourLog>();
-        */
+        /* todo This is a list of TourLogs that are associated with this Tour, needs a model, viewmodel and usercontrol.*/
+        public ObservableCollection<TourLog> TourLogs { get; set; } = new ObservableCollection<TourLog>();
+        
 
     }
 }
