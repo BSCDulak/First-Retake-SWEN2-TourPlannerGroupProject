@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2-TourPlannerGroupProject", ".\TourPlanner\SWEN2-TourPlannerGroupProject.csproj", "{28634113-F408-4152-8C7B-3CB89C6D7E79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2-TourPlannerGroupProject", "TourPlanner\SWEN2-TourPlannerGroupProject.csproj", "{28634113-F408-4152-8C7B-3CB89C6D7E79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2-TourPlannerGroupProject.Tests", "TourPlanner.Tests\SWEN2-TourPlannerGroupProject.Tests.csproj", "{BEAD1592-EA62-44D1-AF74-2C8866A51DCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{28634113-F408-4152-8C7B-3CB89C6D7E79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28634113-F408-4152-8C7B-3CB89C6D7E79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28634113-F408-4152-8C7B-3CB89C6D7E79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEAD1592-EA62-44D1-AF74-2C8866A51DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEAD1592-EA62-44D1-AF74-2C8866A51DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEAD1592-EA62-44D1-AF74-2C8866A51DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEAD1592-EA62-44D1-AF74-2C8866A51DCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
