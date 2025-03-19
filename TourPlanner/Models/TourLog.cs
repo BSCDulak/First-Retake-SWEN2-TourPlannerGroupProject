@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWEN2_TourPlannerGroupProject.Models
 {
-    class TourLog
+    public class TourLog
     {
         public string? Date { get; set; }
         public string? TotalTime { get; set; }
@@ -15,8 +15,8 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public string? Rating { get; set; }
         public string? AverageSpeed { get; set; }
         public DateTime DateTime { get; set; }
-        public string Comment { get; set; }
-        public required string Difficulty { get; set; }
+        public string? Comment { get; set; }
+        public string? Difficulty { get; set; }
         public double TotalDistance { get; set; }
         public TimeSpan TimeSpan { get; set; }
         

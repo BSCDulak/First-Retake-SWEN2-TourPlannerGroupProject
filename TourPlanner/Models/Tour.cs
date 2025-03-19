@@ -23,6 +23,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public int? TourId { get; set; }
 
         /* todo This is a list of TourLogs that are associated with this Tour, needs a model, viewmodel and usercontrol.*/
-        public ObservableCollection<TourLog> TourLogs { get; set; } = new ObservableCollection<TourLog>();
+        //public ObservableCollection<TourLog> TourLogs { get; set; } = new ObservableCollection<TourLog>();
+        public ObservableCollection<TourLog> TourLogs { get; set; } = new();
     }
 }

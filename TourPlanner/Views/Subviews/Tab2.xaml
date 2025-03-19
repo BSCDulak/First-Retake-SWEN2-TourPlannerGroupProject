@@ -27,7 +27,7 @@
         
         <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"/>
 
-        <userControls:TourLogs Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding TourLogsViewModel}" />
+        <userControls:TourLogs Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding TourLogs}" />
 
     </Grid>
 </UserControl>

@@ -27,7 +27,7 @@
             </Grid.RowDefinitions>
             <!--- the image below is still just a placeholder, later on it needs to be bound using path string variable in Tour.cs -->
             <Image Source="../../Images/fantasymap.png"></Image>
-            <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelViewModel}"></userControls:TourDetailsWrapPanel>
+            <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelView}"></userControls:TourDetailsWrapPanel>
 
         </Grid>
     </Grid>
