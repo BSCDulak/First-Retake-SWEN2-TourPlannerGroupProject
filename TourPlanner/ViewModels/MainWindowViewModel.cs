@@ -44,6 +44,18 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 Report = "Perfect weather conditions"
             });
 
+            tour1.TourLogs.Add(new TourLog
+            {
+                Date = DateTime.Now.ToString("dd.MM.yyyy"),
+                TotalTime = "1:00:00",
+                TotalDistance = 10.5,
+                Rating = "1",
+                AverageSpeed = "5.25",
+                Comment = "Ez Tour",
+                Difficulty = "Easy",
+                Report = "Perfect weather conditions"
+            });
+
             var tour2 = tours[1];
             tour2.TourLogs.Add(new TourLog 
             { 
@@ -68,10 +80,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 ToursListView.DeleteCommand
             );
             // this binds the subtab buttons to the tour logs viewmodel
-            /* SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
-                TourLogsViewModel.AddCommand,
-                TourLogsViewModel.DeleteCommand
-            );*/
+            SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
+                TourLogs.AddTourLogCommand,
+                TourLogs.DeleteTourLogCommand
+            );
             TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
         }
     }
