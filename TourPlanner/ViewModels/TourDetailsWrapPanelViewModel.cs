@@ -8,7 +8,7 @@ using SWEN2_TourPlannerGroupProject.Models;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
-    // This class is the viewmodel for the TourDetailsWrapPanel, which contains the details of a selected Tour from the ToursListViewModel
+    // This class is the viewmodel for the TourDetailsWrapPanel, which contains the details of a selected Tour from the ToursListView
     internal class TourDetailsWrapPanelViewModel : ViewModelBase
     {
         private readonly ToursListViewModel _toursListViewModel;

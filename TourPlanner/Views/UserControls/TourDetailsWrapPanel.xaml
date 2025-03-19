@@ -15,11 +15,11 @@
             <Label Content="Description"></Label>
             <TextBox Text="{Binding SelectedTour.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Content="From"></Label>
-            <TextBox Text="{Binding SelectedTour.From, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Text="{Binding SelectedTour.StartLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Content="To"></Label>
-            <TextBox Text="{Binding SelectedTour.To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Text="{Binding SelectedTour.EndLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Content="Transportation type"></Label>
-            <TextBox Text="{Binding SelectedTour.Transportation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Text="{Binding SelectedTour.TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Content="Distance"></Label>
             <TextBox Text="{Binding SelectedTour.Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Content="Estimated time"></Label>

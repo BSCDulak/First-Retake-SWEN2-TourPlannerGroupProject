@@ -18,8 +18,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="4*"></RowDefinition>
         </Grid.RowDefinitions>
-        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsViewModel}" Grid.ColumnSpan="2"></userControls:SubTabButtons>
-        <userControls:ToursList DataContext="{Binding ToursListViewModel}" Grid.Row="1"></userControls:ToursList>
+        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="2"></userControls:SubTabButtons>
+        <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"></userControls:ToursList>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
