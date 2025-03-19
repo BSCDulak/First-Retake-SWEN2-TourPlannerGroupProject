@@ -21,11 +21,11 @@
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
 
-      
-        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsViewModel}" Grid.ColumnSpan="2"/>
+
+        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="2"/>
 
         
-        <userControls:ToursList DataContext="{Binding ToursListViewModel}" Grid.Row="1"/>
+        <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"/>
 
         <userControls:TourLogs Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding TourLogsViewModel}" />
 

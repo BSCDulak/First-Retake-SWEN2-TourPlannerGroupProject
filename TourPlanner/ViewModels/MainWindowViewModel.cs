@@ -13,9 +13,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     // every time a new viewmodel is created it needs to be added here and initialized in the constructor.
     internal class MainWindowViewModel : ViewModelBase
     {
-        public ToursListViewModel ToursListViewModel { get; }
-        public SubTabButtonsViewModel SubTabButtonsViewModel { get; }
-        public SubTabButtonsViewModel SubTabButtonsViewModelTourLogs { get; }
+        public ToursListViewModel ToursListView { get; }
+        public SubTabButtonsViewModel SubTabButtonsForToursListView { get; }
+        public SubTabButtonsViewModel SubTabButtonsForTourLogsView { get; }
         public TourDetailsWrapPanelViewModel TourDetailsWrapPanelViewModel { get; }
 
         public MainWindowViewModel()
@@ -30,20 +30,20 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
 
             //this makes a new TourListViewModel and binds it to the tours list
-            ToursListViewModel = new ToursListViewModel(tours);
+            ToursListView = new ToursListViewModel(tours);
             //todo create a TourListTourLogsViewModel -> this makes a new TourListViewModel and binds it to the tour logs list
-            //ToursListTourLogsViewModel = new ToursListViewModel(not sure if we gotta do tours or tourlogs here);
+            //ToursListTourLogsViewModel = new ToursListView(not sure if we gotta do tours or tourlogs here);
             // this binds the subtab buttons to the tours viewmodel
-            SubTabButtonsViewModel = new SubTabButtonsViewModel(
-                ToursListViewModel.AddCommand,
-                ToursListViewModel.DeleteCommand
+            SubTabButtonsForToursListView = new SubTabButtonsViewModel(
+                ToursListView.AddCommand,
+                ToursListView.DeleteCommand
             );
             // this binds the subtab buttons to the tour logs viewmodel
-            /*SubTabButtonsViewModelTourLogs = new SubTabButtonsViewModel(
+            /* SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
                 TourLogsViewModel.AddCommand,
                 TourLogsViewModel.DeleteCommand
             );*/
-            TourDetailsWrapPanelViewModel = new TourDetailsWrapPanelViewModel(ToursListViewModel);
+            TourDetailsWrapPanelViewModel = new TourDetailsWrapPanelViewModel(ToursListView);
         }
     }
 }

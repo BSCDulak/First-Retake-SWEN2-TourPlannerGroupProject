@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
+             xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewModels:TourLogsViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -16,36 +18,36 @@
                 Padding="15">
 
             <StackPanel>
-                <TextBlock Text="Tour Details" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="Tour Logs" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Date/Time:" FontWeight="Bold" Width="100"/>
-                    <TextBox Text="{Binding SelectedTour.DateTime}" Width="200"/>
+                    <TextBox Text="{Binding SelectedTour.TourLogs.Date}" Width="200"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Comment:" FontWeight="Bold" Width="100"/>
-                    <TextBox Text="{Binding SelectedTour.Comment}" Width="200"/>
+                    <TextBox Text="{Binding SelectedTour.TourLogs.Comment}" Width="200"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Difficulty:" FontWeight="Bold" Width="100"/>
-                    <TextBox Text="{Binding SelectedTour.Difficulty}" Width="200"/>
+                    <TextBox Text="{Binding SelectedTour.TourLogs.Difficulty}" Width="200"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Total Distance:" FontWeight="Bold" Width="100"/>
-                    <TextBox Text="{Binding SelectedTour.TotalDistance}" Width="200"/>
+                    <TextBox Text="{Binding SelectedTour.TourLogs.TotalDistance}" Width="200"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Total Time:" FontWeight="Bold" Width="100"/>
-                    <TextBox Text="{Binding SelectedTour.TotalTime}" Width="200"/>
+                    <TextBox Text="{Binding SelectedTour.TourLogs.TotalTime}" Width="200"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Rating:" FontWeight="Bold" Width="100"/>
-                    <TextBox Text="{Binding SelectedTour.Rating}" Width="200"/>
+                    <TextBox Text="{Binding SelectedTour.TourLogs.Rating}" Width="200"/>
                 </StackPanel>
             </StackPanel>
         </Border>

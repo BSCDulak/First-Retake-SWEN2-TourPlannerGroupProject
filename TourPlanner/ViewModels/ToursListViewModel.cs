@@ -12,6 +12,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     {
         public ObservableCollection<Tour> Tours { get; }
         private Tour? _selectedTour;
+
         public Tour? SelectedTour
         {
             get => _selectedTour;
@@ -22,9 +23,14 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }
         }
+
         
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ToursListViewModel()
+        {
+            // Initialize properties if necessary
+        }
 
         public ToursListViewModel(ObservableCollection<Tour> tours)
         {

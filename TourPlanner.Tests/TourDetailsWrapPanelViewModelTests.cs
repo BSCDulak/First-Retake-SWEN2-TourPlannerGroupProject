@@ -25,7 +25,7 @@ public class TourDetailsWrapPanelViewModelTests
         tourDetailsWrapPanelViewModel.SelectedTour.Name = "New Tour Name";
 
         // Assert
-        // Verify that the name change is reflected in the ToursListViewModel's SelectedTour
+        // Verify that the name change is reflected in the ToursListView's SelectedTour
         Assert.AreEqual("New Tour Name", toursListViewModel.SelectedTour?.Name);
     }
 }
