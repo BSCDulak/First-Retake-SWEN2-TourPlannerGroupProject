@@ -10,9 +10,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="11*"/>
             
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="40*"/>
            
         </Grid.ColumnDefinitions>
 
@@ -22,12 +22,14 @@
         </Grid.RowDefinitions>
 
 
-        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="2"/>
+        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="1"/>
 
         
         <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"/>
 
-        <userControls:TourLogs Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding TourLogsViewModel}" />
+        <userControls:SubTabButtons Grid.Column="1"  DataContext="{Binding SubTabButtonsForTourLogsView}" Grid.ColumnSpan="1"/>
+
+        <userControls:TourLogs Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" DataContext="{Binding TourLogs}" />
 
     </Grid>
 </UserControl>
