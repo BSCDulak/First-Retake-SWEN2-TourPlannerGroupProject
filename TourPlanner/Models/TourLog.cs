@@ -19,6 +19,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public string? Difficulty { get; set; }
         public double TotalDistance { get; set; }
         public TimeSpan TimeSpan { get; set; }
+        public string? Name { get; set; }
         
 
     }

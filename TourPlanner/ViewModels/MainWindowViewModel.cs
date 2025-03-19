@@ -41,7 +41,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 AverageSpeed = "5.25",
                 Comment = "Great tour with beautiful scenery",
                 Difficulty = "Moderate",
-                Report = "Perfect weather conditions"
+                Report = "Perfect weather conditions",
+                Name = "First Log"
             });
 
             tour1.TourLogs.Add(new TourLog
@@ -53,7 +54,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 AverageSpeed = "5.25",
                 Comment = "Ez Tour",
                 Difficulty = "Easy",
-                Report = "Perfect weather conditions"
+                Report = "Perfect weather conditions",
+                Name = "Second Log"
             });
 
             var tour2 = tours[1];
@@ -66,7 +68,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 AverageSpeed = "5.0",
                 Comment = "Challenging but rewarding hike",
                 Difficulty = "Hard",
-                Report = "Some rain but manageable"
+                Report = "Some rain but manageable",
+                Name = "Log2"
             });
 
             //this makes a new TourListViewModel and binds it to the tours list

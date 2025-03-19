@@ -21,7 +21,7 @@
                 Margin="0,0,10,0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="Log1"/>
+                        <TextBlock Text="{Binding Name}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -38,6 +38,12 @@
                          FontSize="18" 
                          FontWeight="Bold" 
                          Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="Name:" FontWeight="Bold" Width="100"/>
+                    <TextBox Text="{Binding SelectedTourLog.Name}" 
+                             Width="200"/>
+                </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Date:" FontWeight="Bold" Width="100"/>
