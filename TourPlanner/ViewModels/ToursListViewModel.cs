@@ -1,17 +1,18 @@
 ﻿using System.Collections.ObjectModel;
-using System.Formats.Tar;
-using System.Windows;
 using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
+    // This class is the viewmodel for the ToursList, it contains the list of tours and the commands for adding and deleting tours.
+    // this commands are triggered by the buttons in the GUI. the remove button has a condition of SelectedTour != null, which means
+    // that the button is only enabled when a tour is selected in the list.
     internal class ToursListViewModel : ViewModelBase
     {
         public ObservableCollection<Tour> Tours { get; }
-
         private Tour? _selectedTour;
+
         public Tour? SelectedTour
         {
             get => _selectedTour;
@@ -23,44 +24,25 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
-        private string _newTourName;
-        public string NewTourName
-        {
-            get => _newTourName;
-            set
-            {
-                _newTourName = value;
-                OnPropertyChanged(nameof(NewTourName));
-            }
-        }
-
+        
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ToursListViewModel()
+        {
+            // Initialize properties if necessary
+        }
 
         public ToursListViewModel(ObservableCollection<Tour> tours)
         {
             Tours = tours;
-            AddCommand = new RelayCommand(_ => AddTour(), _ => !string.IsNullOrWhiteSpace(NewTourName));
+            AddCommand = new RelayCommand(_ => AddTour());
             DeleteCommand = new RelayCommand(_ => DeleteTour(), _ => SelectedTour != null);
         }
-
         private void AddTour()
         {
-            throw new NotImplementedException();
+            var newTour = new Tour { Name = "newTour"};
+            Tours.Add(newTour);
         }
-
-        private void AddTour(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(NewTourName))
-            {
-                var newTour = new Tour { Name = NewTourName };
-                Tours.Add(newTour);
-                NewTourName = string.Empty;
-
-                
-            }
-        }
-
         private void DeleteTour()
         {
             if (SelectedTour != null)
@@ -68,7 +50,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 Tours.Remove(SelectedTour);
                 SelectedTour = null;
             }
+                
         }
     }
 }
-
