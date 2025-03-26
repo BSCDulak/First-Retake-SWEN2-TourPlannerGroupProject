@@ -79,14 +79,14 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             //ToursListTourLogsViewModel = new ToursListView(not sure if we gotta do tours or tourlogs here);
             // this binds the subtab buttons to the tours viewmodel
             SubTabButtonsForToursListView = new SubTabButtonsViewModel(
-                ToursListView.AddCommand,
+                tourName => ToursListView.AddTour(tourName),
                 ToursListView.DeleteCommand
             );
             // this binds the subtab buttons to the tour logs viewmodel
-            SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
+            /*SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
                 TourLogs.AddTourLogCommand,
                 TourLogs.DeleteTourLogCommand
-            );
+            );*/
             TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
         }
     }

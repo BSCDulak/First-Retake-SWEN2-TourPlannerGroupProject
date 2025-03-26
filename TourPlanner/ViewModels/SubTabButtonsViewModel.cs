@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.MVVM;
-
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -9,14 +10,31 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     // after we got the tour logs logic working we can remove the tab selection logic.
     internal class SubTabButtonsViewModel : ViewModelBase
     {
-  
+        private string _newAddText;
+        public string NewAddText
+        {
+            get => _newAddText;
+            set
+            {
+                if (_newAddText != value)
+                {
+                    _newAddText = value;
+                    OnPropertyChanged(nameof(NewAddText));  // Notify the UI that the value has changed
+                }
+            }
+        }
+
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand)
+        public SubTabButtonsViewModel(Action<string> addAction, ICommand deleteCommand)
         {
-            AddCommand = addCommand;
+            AddCommand = new RelayCommand(param =>
+            {
+                Debug.WriteLine($"Command param: {param}");  // Debug here
+                addAction(param as string);
+            });
             DeleteCommand = deleteCommand;
         }
 
