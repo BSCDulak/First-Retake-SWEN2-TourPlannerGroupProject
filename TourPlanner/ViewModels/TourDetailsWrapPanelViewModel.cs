@@ -29,7 +29,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             _toursListViewModel.PropertyChanged += ToursListViewModelPropertyChanged;
         }
         // This constructor is used for the design view, there shall be no errors!
-        public TourDetailsWrapPanelViewModel() => _toursListViewModel = null;
+        public TourDetailsWrapPanelViewModel()
+        {
+            _toursListViewModel = null;
+        }
 
 
 

@@ -1,8 +1,5 @@
-﻿using SWEN2_TourPlannerGroupProject.Models;
-using SWEN2_TourPlannerGroupProject.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +23,6 @@ namespace SWEN2_TourPlannerGroupProject.Views.UserControls
         public SubTabButtons()
         {
             InitializeComponent();
-            DataContext = new ToursListViewModel(new ObservableCollection<Tour>());
         }
     }
 }
