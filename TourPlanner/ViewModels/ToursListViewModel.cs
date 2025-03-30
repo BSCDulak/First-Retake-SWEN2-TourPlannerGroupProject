@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using System.Formats.Tar;
-using System.Windows;
 using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
+using SWEN2_TourPlannerGroupProject.Services;
+using System.Windows;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -29,35 +29,45 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             get => _newTourName;
             set
             {
-                _newTourName = value;
-                OnPropertyChanged(nameof(NewTourName));
+                if (SetField(ref _newTourName, value))
+                {
+                    CommandManager.InvalidateRequerySuggested(); 
+                }
             }
         }
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
 
+        private readonly TourDataService _dataService;
+
+        
         public ToursListViewModel(ObservableCollection<Tour> tours)
         {
             Tours = tours;
+            _dataService = new TourDataService();
+
             AddCommand = new RelayCommand(_ => AddTour(), _ => !string.IsNullOrWhiteSpace(NewTourName));
             DeleteCommand = new RelayCommand(_ => DeleteTour(), _ => SelectedTour != null);
         }
 
-        private void AddTour()
+        
+        public ToursListViewModel()
         {
-            throw new NotImplementedException();
+            Tours = new ObservableCollection<Tour>();
+            AddCommand = new RelayCommand(_ => { });
+            DeleteCommand = new RelayCommand(_ => { });
+            _dataService = new TourDataService();
         }
 
-        private void AddTour(object sender, RoutedEventArgs e)
+        private void AddTour()
         {
             if (!string.IsNullOrWhiteSpace(NewTourName))
             {
                 var newTour = new Tour { Name = NewTourName };
                 Tours.Add(newTour);
+                _dataService.AddTour(newTour); 
                 NewTourName = string.Empty;
-
-                
             }
         }
 
@@ -65,6 +75,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             if (SelectedTour != null)
             {
+                _dataService.DeleteTour(SelectedTour); 
                 Tours.Remove(SelectedTour);
                 SelectedTour = null;
             }
