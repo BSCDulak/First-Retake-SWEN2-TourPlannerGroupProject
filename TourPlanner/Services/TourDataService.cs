@@ -10,21 +10,21 @@ namespace SWEN2_TourPlannerGroupProject.Services
     {
         public ObservableCollection<Tour> GetAllTours()
         {
-            using var db = new AppDbContext();
+            using var db = new AppDbContext(App.ConnectionString);
             var tours = db.Tours.Include(t => t.TourLogs).ToList();
             return new ObservableCollection<Tour>(tours);
         }
 
         public void AddTour(Tour tour)
         {
-            using var db = new AppDbContext();
+            using var db = new AppDbContext(App.ConnectionString);
             db.Tours.Add(tour);
             db.SaveChanges();
         }
 
         public void DeleteTour(Tour tour)
         {
-            using var db = new AppDbContext();
+            using var db = new AppDbContext(App.ConnectionString);
             var existing = db.Tours.Include(t => t.TourLogs).FirstOrDefault(t => t.Id == tour.Id);
             if (existing != null)
             {
@@ -35,14 +35,14 @@ namespace SWEN2_TourPlannerGroupProject.Services
 
         public void UpdateTour(Tour tour)
         {
-            using var db = new AppDbContext();
+            using var db = new AppDbContext(App.ConnectionString);
             db.Tours.Update(tour);
             db.SaveChanges();
         }
 
         public void AddTourLog(int tourId, TourLog log)
         {
-            using var db = new AppDbContext();
+            using var db = new AppDbContext(App.ConnectionString);
             var tour = db.Tours.Include(t => t.TourLogs).FirstOrDefault(t => t.Id == tourId);
             if (tour != null)
             {
@@ -53,7 +53,7 @@ namespace SWEN2_TourPlannerGroupProject.Services
 
         public void DeleteTourLog(int tourId, TourLog log)
         {
-            using var db = new AppDbContext();
+            using var db = new AppDbContext(App.ConnectionString);
             var tour = db.Tours.Include(t => t.TourLogs).FirstOrDefault(t => t.Id == tourId);
             if (tour != null)
             {
