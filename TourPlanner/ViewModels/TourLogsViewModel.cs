@@ -30,10 +30,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     {
         private readonly ToursListViewModel _toursListViewModel;
 
-        public ObservableCollection<TourLog> TourLogs
-        {
-            get => _toursListViewModel.SelectedTour?.TourLogs ?? new ObservableCollection<TourLog>();
-        }
+        public ObservableCollection<TourLog> TourLogs => _toursListViewModel.SelectedTour?.TourLogs ?? new ObservableCollection<TourLog>();
 
         private TourLog? _selectedTourLog;
         public TourLog? SelectedTourLog
@@ -49,7 +46,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ICommand AddTourLogCommand { get; }
         public ICommand DeleteTourLogCommand { get; }
-        public TourLogsViewModel() : this(new ToursListViewModel()) { }
+        public TourLogsViewModel() : this(new ToursListViewModel(new ObservableCollection<Tour>())) { }
+
 
         public TourLogsViewModel(ToursListViewModel toursListViewModel)
         {
@@ -83,5 +81,19 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 SelectedTourLog = null;
             }
         }
+
+        private string _newLogName;
+        public string NewLogName
+        {
+            get => _newLogName;
+            set
+            {
+                if (SetField(ref _newLogName, value))
+                {
+                    CommandManager.InvalidateRequerySuggested(); 
+                }
+            }
+        }
+
     }
 }
