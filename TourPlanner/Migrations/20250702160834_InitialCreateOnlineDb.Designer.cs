@@ -12,8 +12,8 @@ using SWEN2_TourPlannerGroupProject.Data;
 namespace SWEN2_TourPlannerGroupProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250702155634_ChangeToOnlineDb")]
-    partial class ChangeToOnlineDb
+    [Migration("20250702160834_InitialCreateOnlineDb")]
+    partial class InitialCreateOnlineDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
