@@ -41,10 +41,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ToursListViewModel()
-        {
-            // Initialize properties if necessary
-        }
 
         private readonly TourDataService _dataService;
 
