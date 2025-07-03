@@ -26,9 +26,30 @@
             <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <Label Content="Route information"></Label>
             <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Button Content="💾 Save changes"
+            Width="100"
+            Height="30"
+            FontSize="12"
+            Padding="5,2"
+            Background="#FF2D89EF"
+            Foreground="White"
+            BorderBrush="Transparent"
+            Cursor="Hand"
+            ToolTip="Save changes"
+            Command="{Binding SaveTourCommand}">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+
+
 
 
         </WrapPanel>
-            
+
     </Grid>
 </UserControl>

@@ -8,6 +8,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
 {
     public class TourLog
     {
+        public int Id { get; set; }
         public string? Date { get; set; }
         public string? TotalTime { get; set; }
         public string? Report { get; set; }

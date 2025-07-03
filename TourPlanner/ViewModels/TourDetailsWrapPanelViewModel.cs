@@ -4,7 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
+using SWEN2_TourPlannerGroupProject.MVVM;
+using SWEN2_TourPlannerGroupProject.Services;
+
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -43,5 +47,17 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 OnPropertyChanged(nameof(SelectedTour));
             }
         }
+
+        public ICommand SaveTourCommand => new RelayCommand(_ => SaveTour());
+
+        private void SaveTour()
+        {
+            if (SelectedTour != null)
+            {
+                var service = new TourDataService();
+                service.UpdateTour(SelectedTour);
+            }
+        }
+
     }
 }
