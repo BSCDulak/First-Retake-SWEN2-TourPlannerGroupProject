@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject.Views.Subviews"
              xmlns:userControls="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
              xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
+             xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -26,8 +27,8 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <!--- the image below is still just a placeholder, later on it needs to be bound using path string variable in Tour.cs -->
-            <Image Source="../../Images/fantasymap.png"></Image>
-            <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelView}"></userControls:TourDetailsWrapPanel>
+            <wpf:WebView2 x:Name="MapView" Margin="10,10,25,75" Grid.RowSpan="2" />
+            <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelView}" Margin="10,110,10,0"></userControls:TourDetailsWrapPanel>
 
         </Grid>
     </Grid>
