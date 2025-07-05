@@ -1,71 +1,83 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using SWEN2_TourPlannerGroupProject.Data;
 using SWEN2_TourPlannerGroupProject.Models;
+using SWEN2_TourPlannerGroupProject.Data;
 
 namespace SWEN2_TourPlannerGroupProject.Services
 {
     public class TourDataService
     {
-        public ObservableCollection<Tour> GetAllTours()
+        private readonly AppDbContextFactory _contextFactory;
+
+        public TourDataService()
         {
-            using var db = new AppDbContext(App.ConnectionString);
-            var tours = db.Tours.Include(t => t.TourLogs).ToList();
-            return new ObservableCollection<Tour>(tours);
+            _contextFactory = new AppDbContextFactory();
         }
 
+        // Get all tours
+        public List<Tour> GetTours()
+        {
+            using var context = _contextFactory.CreateDbContext(null);
+            return context.Tours.Include(t => t.TourLogs).ToList();
+        }
+
+        // Add a new tour
         public void AddTour(Tour tour)
         {
-            using var db = new AppDbContext(App.ConnectionString);
-            db.Tours.Add(tour);
-            db.SaveChanges();
+            using var context = _contextFactory.CreateDbContext(null);
+            context.Tours.Add(tour);
+            context.SaveChanges();
         }
 
-        public void DeleteTour(Tour tour)
-        {
-            using var db = new AppDbContext(App.ConnectionString);
-            var existing = db.Tours.Include(t => t.TourLogs).FirstOrDefault(t => t.Id == tour.Id);
-            if (existing != null)
-            {
-                db.Tours.Remove(existing);
-                db.SaveChanges();
-            }
-        }
-
+        // Update an existing tour
         public void UpdateTour(Tour tour)
         {
-            using var db = new AppDbContext(App.ConnectionString);
-            db.Tours.Update(tour);
-            db.SaveChanges();
+            using var context = _contextFactory.CreateDbContext(null);
+            context.Tours.Update(tour);
+            context.SaveChanges();
         }
 
-        public void AddTourLog(int tourId, TourLog log)
+        // Delete a tour
+        public void DeleteTour(Tour tour)
         {
-            using var db = new AppDbContext(App.ConnectionString);
-            var tour = db.Tours.Include(t => t.TourLogs).FirstOrDefault(t => t.Id == tourId);
-            if (tour != null)
-            {
-                tour.TourLogs.Add(log);
-                db.SaveChanges();
-            }
+            using var context = _contextFactory.CreateDbContext(null);
+            context.Tours.Remove(tour);
+            context.SaveChanges();
         }
 
-        public void DeleteTourLog(int tourId, TourLog log)
+        // Get all tour logs for a tour
+        public List<TourLog> GetTourLogs(int tourId)
         {
-            using var db = new AppDbContext(App.ConnectionString);
-            var tour = db.Tours.Include(t => t.TourLogs).FirstOrDefault(t => t.Id == tourId);
-            if (tour != null)
-            {
-                var existingLog = tour.TourLogs.FirstOrDefault(l => l.Id == log.Id);
-                if (existingLog != null)
-                {
-                    tour.TourLogs.Remove(existingLog);
-                    db.SaveChanges();
-                }
-            }
+            using var context = _contextFactory.CreateDbContext(null);
+            return context.TourLogs.Where(l => l.TourId == tourId).ToList();
+        }
+
+        // Add a new tour log
+        public void AddTourLog(TourLog log)
+        {
+            using var context = _contextFactory.CreateDbContext(null);
+            context.TourLogs.Add(log);
+            context.SaveChanges();
+        }
+
+        // Update an existing tour log
+        public void UpdateTourLog(TourLog log)
+        {
+            using var context = _contextFactory.CreateDbContext(null);
+            context.TourLogs.Update(log);
+            context.SaveChanges();
+        }
+
+        // Delete a tour log
+        public void DeleteTourLog(TourLog log)
+        {
+            using var context = _contextFactory.CreateDbContext(null);
+            context.TourLogs.Remove(log);
+            context.SaveChanges();
         }
     }
 }
+
 
 

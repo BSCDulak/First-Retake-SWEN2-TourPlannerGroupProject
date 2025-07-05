@@ -1,29 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
 using SWEN2_TourPlannerGroupProject.Services;
 
-
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
-    // This class is the viewmodel for the TourDetailsWrapPanel, which contains the details of a selected Tour from the ToursListView
+    // ViewModel for the details panel in Tab1
     internal class TourDetailsWrapPanelViewModel : ViewModelBase
     {
         private readonly ToursListViewModel _toursListViewModel;
 
         public Tour? SelectedTour
         {
-            get => _toursListViewModel.SelectedTour;
+            get => _toursListViewModel?.SelectedTour;
             set
             {
-                _toursListViewModel.SelectedTour = value;
-                OnPropertyChanged();
+                if (_toursListViewModel != null)
+                {
+                    _toursListViewModel.SelectedTour = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(MapUri));  // Notify when SelectedTour changes
+                }
             }
         }
 
@@ -32,19 +31,19 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             _toursListViewModel = toursListViewModel;
             _toursListViewModel.PropertyChanged += ToursListViewModelPropertyChanged;
         }
-        // This constructor is used for the design view, there shall be no errors!
+
+        // Design-time constructor
         public TourDetailsWrapPanelViewModel()
         {
-            _toursListViewModel = null;
+            _toursListViewModel = null!;
         }
-
-
 
         private void ToursListViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(_toursListViewModel.SelectedTour))
             {
                 OnPropertyChanged(nameof(SelectedTour));
+                OnPropertyChanged(nameof(MapUri)); // Notify MapUri when SelectedTour changes
             }
         }
 
@@ -59,5 +58,29 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
+        /// <summary>
+        /// MapUri property to bind in WebView2.
+        /// Generates a Google Maps query from StartLocation and EndLocation.
+        /// </summary>
+        public Uri MapUri
+        {
+            get
+            {
+                if (SelectedTour == null
+                    || string.IsNullOrWhiteSpace(SelectedTour.StartLocation)
+                    || string.IsNullOrWhiteSpace(SelectedTour.EndLocation))
+                {
+                    // Default map view if no locations are set
+                    return new Uri("https://www.openstreetmap.org");
+                }
+
+                string query = $"{SelectedTour.StartLocation} to {SelectedTour.EndLocation}";
+                string url = $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(query)}";
+                return new Uri(url);
+            }
+        }
     }
 }
+
+
+

@@ -6,30 +6,35 @@
              xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject.Views.Subviews"
              xmlns:userControls="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
              xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
-             xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="2"></userControls:SubTabButtons>
-        <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"></userControls:ToursList>
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <!--- the image below is still just a placeholder, later on it needs to be bound using path string variable in Tour.cs -->
-            <wpf:WebView2 x:Name="MapView" Margin="10,10,25,75" Grid.RowSpan="2" />
-            <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelView}" Margin="10,110,10,0"></userControls:TourDetailsWrapPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
 
-        </Grid>
+        <!-- Botones Add / Remove arriba -->
+        <userControls:SubTabButtons 
+            DataContext="{Binding SubTabButtonsForToursListView}" 
+            Grid.ColumnSpan="2" />
+
+        <!-- Lista de Tours a la izquierda -->
+        <userControls:ToursList 
+            DataContext="{Binding ToursListView}" 
+            Grid.Row="1" 
+            Grid.Column="0" />
+
+        <!-- Detalle del Tour seleccionado a la derecha -->
+        <Border Grid.Row="1" Grid.Column="1" Padding="10" Background="WhiteSmoke">
+            <userControls:TourDetailsWrapPanel 
+                DataContext="{Binding TourDetailsWrapPanelView}" />
+        </Border>
     </Grid>
 </UserControl>
+

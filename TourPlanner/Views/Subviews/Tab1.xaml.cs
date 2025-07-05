@@ -23,7 +23,7 @@ namespace SWEN2_TourPlannerGroupProject.Views.Subviews
         public Tab1()
         {
             InitializeComponent();
-            MapView.Source = new Uri("https://www.google.com/maps");
+            
 
           
 

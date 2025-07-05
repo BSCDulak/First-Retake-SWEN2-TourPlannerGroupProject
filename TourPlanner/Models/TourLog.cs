@@ -21,7 +21,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
         public double TotalDistance { get; set; }
         public TimeSpan TimeSpan { get; set; }
         public string? Name { get; set; }
-        
+        public int TourId { get; set; }
+
+
 
     }
 }

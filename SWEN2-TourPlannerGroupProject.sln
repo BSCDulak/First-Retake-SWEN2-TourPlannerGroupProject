@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2-TourPlannerGroupProje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2-TourPlannerGroupProject.Tests", "TourPlanner.Tests\SWEN2-TourPlannerGroupProject.Tests.csproj", "{BEAD1592-EA62-44D1-AF74-2C8866A51DCE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "maphtlm", "maphtlm", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
+	ProjectSection(SolutionItems) = preProject
+		MapHtml\map.html = MapHtml\map.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

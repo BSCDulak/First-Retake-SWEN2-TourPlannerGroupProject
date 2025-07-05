@@ -3,53 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
              xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
+             xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              d:DataContext="{d:DesignInstance Type=viewModels:TourDetailsWrapPanelViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <WrapPanel>
-            <Label Content="Name"></Label>
-            <TextBox Text="{Binding SelectedTour.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="Description"></Label>
-            <TextBox Text="{Binding SelectedTour.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="From"></Label>
-            <TextBox Text="{Binding SelectedTour.StartLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="To"></Label>
-            <TextBox Text="{Binding SelectedTour.EndLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="Transportation type"></Label>
-            <TextBox Text="{Binding SelectedTour.TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="Distance"></Label>
-            <TextBox Text="{Binding SelectedTour.Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="Estimated time"></Label>
-            <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Label Content="Route information"></Label>
-            <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                <Button Content="💾 Save changes"
-            Width="100"
-            Height="30"
-            FontSize="12"
-            Padding="5,2"
-            Background="#FF2D89EF"
-            Foreground="White"
-            BorderBrush="Transparent"
-            Cursor="Hand"
-            ToolTip="Save changes"
-            Command="{Binding SaveTourCommand}">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="5"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </StackPanel>
 
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <!-- Formulario arriba -->
+        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Name"/>
+            <TextBox Text="{Binding SelectedTour.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <Label Content="Description"/>
+            <TextBox Text="{Binding SelectedTour.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        </WrapPanel>
+            <Label Content="From"/>
+            <TextBox Text="{Binding SelectedTour.StartLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <Label Content="To"/>
+            <TextBox Text="{Binding SelectedTour.EndLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Content="Transportation type"/>
+            <TextBox Text="{Binding SelectedTour.TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Content="Distance"/>
+            <TextBox Text="{Binding SelectedTour.Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Content="Estimated time"/>
+            <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Content="Route information"/>
+            <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Content="💾 Save changes"
+                    Command="{Binding SaveTourCommand}"
+                    Margin="0,10,0,0"
+                    Background="#FF2D89EF"
+                    Foreground="White"
+                    Width="150"
+                    Height="35"
+                    HorizontalAlignment="Right"/>
+        </StackPanel>
+
+        <!-- Mapa abajo -->
+        <wpf:WebView2 Source="{Binding MapUri}" Grid.Row="1" Height="300"/>
     </Grid>
 </UserControl>
+
+
+
+
+
