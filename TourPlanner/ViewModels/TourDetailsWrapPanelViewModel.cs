@@ -61,17 +61,16 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ICommand CalculateRouteCommand => new RelayCommand(async _ => await CalculateRoute());
 
+
         private async Task CalculateRoute()
         {
             if (SelectedTour == null) return;
 
             try
             {
-                
                 var apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImE2Njg2Zjg3MDUxZjRhY2M4MDk0ZWMyOGZjN2U1MDBmIiwiaCI6Im11cm11cjY0In0=";
                 var client = new OpenRouteServiceClient(apiKey);
 
-                
                 var from = await client.GeocodeAsync(SelectedTour.StartLocation);
                 var to = await client.GeocodeAsync(SelectedTour.EndLocation);
 
@@ -80,7 +79,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 SelectedTour.ToLatitude = to.lat;
                 SelectedTour.ToLongitude = to.lon;
 
-                // 
                 var routeJson = await client.GetRouteAsync(from.lat, from.lon, to.lat, to.lon);
                 var summary = routeJson["features"]?[0]?["properties"]?["summary"];
 
@@ -93,11 +91,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     SelectedTour.EstimatedTime = $"{TimeSpan.FromSeconds(durationSec):hh\\:mm}";
                 }
 
-                //
+                // Guardar GeoJSON
                 var outputPath = System.IO.Path.Combine(AppContext.BaseDirectory, "MapHtml", "route.geojson");
                 System.IO.File.WriteAllText(outputPath, routeJson.ToString());
 
-                // 
                 var service = new TourDataService();
                 service.UpdateTour(SelectedTour);
 
@@ -108,6 +105,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 System.Diagnostics.Debug.WriteLine($"Error calculating route: {ex.Message}");
             }
         }
+
 
 
 

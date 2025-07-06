@@ -36,6 +36,8 @@
                 <userControls:TourDetailsWrapPanel 
                     DataContext="{Binding TourDetailsWrapPanelView}" />
                 <subviews:OpenRouteServiceMap Height="300" />
+               
+
             </StackPanel>
         </Border>
     </Grid>

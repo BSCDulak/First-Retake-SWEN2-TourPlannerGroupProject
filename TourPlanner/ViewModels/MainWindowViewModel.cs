@@ -19,6 +19,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public SubTabButtonsViewModel SubTabButtonsForTourLogsView { get; }
         public TourDetailsWrapPanelViewModel TourDetailsWrapPanelView { get; }
 
+       
+
+
         public MainWindowViewModel()
         {
             var tours = new ObservableCollection<Tour>();
