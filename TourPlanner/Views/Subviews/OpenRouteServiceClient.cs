@@ -39,6 +39,28 @@ namespace SWEN2_TourPlannerGroupProject.Services
             var jsonString = await response.Content.ReadAsStringAsync();
             return JObject.Parse(jsonString);
         }
+
+        public async Task<(double lat, double lon)> GeocodeAsync(string location)
+        {
+            var url = $"https://api.openrouteservice.org/geocode/search?api_key={_apiKey}&text={Uri.EscapeDataString(location)}";
+
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var json = JObject.Parse(jsonString);
+
+            var coords = json["features"]?[0]?["geometry"]?["coordinates"];
+            if (coords == null || coords.Count() < 2)
+                throw new Exception("Could not geocode address");
+
+            double lon = coords[0].Value<double>();
+            double lat = coords[1].Value<double>();
+
+            return (lat, lon);
+        }
     }
 }
+
+
 
