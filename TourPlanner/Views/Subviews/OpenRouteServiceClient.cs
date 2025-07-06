@@ -1,7 +1,8 @@
-﻿using System.Net.Http;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace SWEN2_TourPlannerGroupProject.Services
 {
@@ -24,21 +25,35 @@ namespace SWEN2_TourPlannerGroupProject.Services
             {
                 coordinates = new[]
                 {
-                    new[] { fromLon, fromLat },
-                    new[] { toLon, toLat }
-                }
+            new[] { fromLon, fromLat },
+            new[] { toLon, toLat }
+        }
             };
 
-            var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(body);
-            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            content.Headers.Add("Authorization", _apiKey);
+            var jsonBody = JsonConvert.SerializeObject(body);
 
-            var response = await _httpClient.PostAsync(url, content);
+            var request = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+            };
+
+            
+            request.Headers.Add("X-Api-Key", _apiKey);
+
+            System.Diagnostics.Debug.WriteLine($"[OpenRouteServiceClient] Using API Key: {_apiKey}");
+
+            var response = await _httpClient.SendAsync(request);
+            System.Diagnostics.Debug.WriteLine($"[OpenRouteServiceClient] StatusCode: {response.StatusCode}");
+
             response.EnsureSuccessStatusCode();
 
             var jsonString = await response.Content.ReadAsStringAsync();
             return JObject.Parse(jsonString);
         }
+
+
+
+
 
         public async Task<(double lat, double lon)> GeocodeAsync(string location)
         {

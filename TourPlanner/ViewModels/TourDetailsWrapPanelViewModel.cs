@@ -31,7 +31,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             _toursListViewModel = toursListViewModel;
             _toursListViewModel.PropertyChanged += ToursListViewModelPropertyChanged;
+
+            System.Diagnostics.Debug.WriteLine("✅ TourDetailsWrapPanelViewModel CREATED");
         }
+
 
         // Design-time constructor
         public TourDetailsWrapPanelViewModel()
@@ -59,16 +62,14 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
-        public ICommand CalculateRouteCommand => new RelayCommand(async _ => await CalculateRoute());
-
+        public ICommand CalculateRouteCommand => new RelayCommand(async _ => await CalculateRoute(), _ => SelectedTour != null
+);
 
         private async Task CalculateRoute()
         {
-            if (SelectedTour == null) return;
-
             try
             {
-                var apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImE2Njg2Zjg3MDUxZjRhY2M4MDk0ZWMyOGZjN2U1MDBmIiwiaCI6Im11cm11cjY0In0=";
+                var apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImE2Njg2Zjg3MDUxZjRhY2M4MDk0ZWMyOGZjN2U1MDBmIiwiaCI6Im11cm11cjY0In0==";
                 var client = new OpenRouteServiceClient(apiKey);
 
                 var from = await client.GeocodeAsync(SelectedTour.StartLocation);
@@ -103,8 +104,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error calculating route: {ex.Message}");
+                System.Windows.MessageBox.Show($"Error calculating route:\n{ex.Message}");
             }
         }
+
 
 
 

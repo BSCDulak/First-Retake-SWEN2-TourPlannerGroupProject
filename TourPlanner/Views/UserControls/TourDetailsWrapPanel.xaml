@@ -49,7 +49,9 @@
         Foreground="White"
         Width="150"
         Height="35"
-        HorizontalAlignment="Right"/>
+       
+
+                HorizontalAlignment="Right"/>
 
         </StackPanel>
 
