@@ -8,49 +8,51 @@
              d:DataContext="{d:DesignInstance Type=viewModels:TourDetailsWrapPanelViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-        <Label Content="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+            <Label Content="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Description:" Grid.Row="1" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+            <Label Content="Description:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Start Location:" Grid.Row="2" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.StartLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+            <Label Content="Start Location:" Grid.Row="2" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.StartLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5"/>
 
-        <Label Content="End Location:" Grid.Row="3" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.EndLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+            <Label Content="End Location:" Grid.Row="3" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.EndLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Transport Type:" Grid.Row="4" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5"/>
+            <Label Content="Transport Type:" Grid.Row="4" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Distance:" Grid.Row="5" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5"/>
+            <Label Content="Distance:" Grid.Row="5" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Estimated Time:" Grid.Row="6" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5"/>
+            <Label Content="Estimated Time:" Grid.Row="6" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Route Information:" Grid.Row="7" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5"/>
+            <Label Content="Route Information:" Grid.Row="7" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5"/>
 
-        <Label Content="Route Image Path:" Grid.Row="8" Grid.Column="0" Margin="5"/>
-        <TextBox Text="{Binding SelectedTour.RouteImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Margin="5"/>
-    </Grid>
+            <Label Content="Route Image Path:" Grid.Row="8" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.RouteImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Margin="5"/>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
