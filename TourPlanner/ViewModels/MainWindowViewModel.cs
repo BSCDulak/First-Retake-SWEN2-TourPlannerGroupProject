@@ -30,6 +30,20 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 });
             }
 
+            tours.Add(new Tour
+            {
+                Name = "Tour10",
+                Description = "This is a test tour with a very long description to test the wrapping of the text in the TourDetailsWrapPanel. " +
+                              "It should be long enough to ensure that the text wraps correctly and does not overflow the panel.",
+                StartLocation = "Start Location",
+                EndLocation = "End Location",
+                TransportType = "Car",
+                Distance = "100 km",
+                EstimatedTime = "1 hour",
+                RouteInformation = "This is a test route information for the TourDetailsWrapPanel. It should be long enough to ensure that the text wraps correctly and does not overflow the panel.",
+                RouteImagePath = "Images/route_image.png",
+            });
+
             // Add test data for TourLogs
             var tour1 = tours[0];
             tour1.TourLogs.Add(new TourLog 
