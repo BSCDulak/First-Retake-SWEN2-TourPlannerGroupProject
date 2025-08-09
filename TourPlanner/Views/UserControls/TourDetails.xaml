@@ -24,7 +24,6 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
-                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
