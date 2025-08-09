@@ -27,7 +27,7 @@
             <TabItem Header="Tab1">
                 <subViews:Tab1></subViews:Tab1>
             </TabItem>
-            <TabItem Header="Tab2">
+            <TabItem Header="Tab2" HorizontalAlignment="Right" Margin="0,-2,-2,0" Width="46">
                 <subViews:Tab2></subViews:Tab2>
             </TabItem>
         </TabControl>
