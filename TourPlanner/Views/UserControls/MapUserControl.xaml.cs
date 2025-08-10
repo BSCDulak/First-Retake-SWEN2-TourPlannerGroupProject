@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Runtime.InteropServices;
+using SWEN2_TourPlannerGroupProject.ViewModels;
 
 namespace SWEN2_TourPlannerGroupProject.Views.UserControls
 {
@@ -21,11 +22,43 @@ namespace SWEN2_TourPlannerGroupProject.Views.UserControls
     /// </summary>
     public partial class MapUserControl : UserControl
     {
+        private MapViewModel? _mapViewModel;
+
         public MapUserControl()
         {
             InitializeComponent();
             SetupWebBrowser();
             LoadMap();
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            
+            if (e.Property == DataContextProperty)
+            {
+                if (e.NewValue is MapViewModel mapViewModel)
+                {
+                    _mapViewModel = mapViewModel;
+                    _mapViewModel.OnMapUpdateRequested += UpdateMap;
+                }
+                else if (e.OldValue is MapViewModel oldViewModel)
+                {
+                    oldViewModel.OnMapUpdateRequested -= UpdateMap;
+                }
+            }
+        }
+
+        private void UpdateMap(string html)
+        {
+            try
+            {
+                MapBrowser.NavigateToString(html);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating map: {ex.Message}");
+            }
         }
 
         private void SetupWebBrowser()

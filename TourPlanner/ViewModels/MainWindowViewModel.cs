@@ -45,6 +45,46 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 RouteImagePath = "Images/route_image.png",
             });
 
+            // Add test tours with real addresses
+            tours.Add(new Tour
+            {
+                Name = "Vienna City Tour",
+                Description = "A tour through Vienna's historic city center",
+                StartLocation = "Ehamgasse 8, Vienna",
+                EndLocation = "Schneidergasse 4, Vienna",
+                TransportType = "Walking",
+                Distance = "2.5 km",
+                EstimatedTime = "30 minutes",
+                RouteInformation = "Historic walking tour through Vienna's city center",
+                RouteImagePath = "Images/vienna_tour.png",
+            });
+
+            tours.Add(new Tour
+            {
+                Name = "Invalid Route Test",
+                Description = "This tour has invalid locations to test fallback",
+                StartLocation = "Invalid Address 123",
+                EndLocation = "NonExistent Street 456",
+                TransportType = "Car",
+                Distance = "Unknown",
+                EstimatedTime = "Unknown",
+                RouteInformation = "This should show the default Vienna map",
+                RouteImagePath = "Images/fallback.png",
+            });
+
+            tours.Add(new Tour
+            {
+                Name = "Incomplete Route Test",
+                Description = "This tour has only one location to test fallback",
+                StartLocation = "Ehamgasse 8, Vienna",
+                EndLocation = "", // Empty end location
+                TransportType = "Walking",
+                Distance = "Unknown",
+                EstimatedTime = "Unknown",
+                RouteInformation = "This should show the default Vienna map due to missing end location",
+                RouteImagePath = "Images/incomplete.png",
+            });
+
             // Add test data for TourLogs
             var tour1 = tours[0];
             tour1.TourLogs.Add(new TourLog 
@@ -104,6 +144,15 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             );
             TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
             MapViewModel = new MapViewModel();
+
+            // Connect the selected tour to the map view model
+            ToursListView.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ToursListViewModel.SelectedTour))
+                {
+                    MapViewModel.SetSelectedTour(ToursListView.SelectedTour);
+                }
+            };
         }
     }
 }
