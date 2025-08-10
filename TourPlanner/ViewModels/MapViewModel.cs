@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
 using System.Windows.Input;
+using System.ComponentModel;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
 
@@ -22,8 +23,21 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             get => _selectedTour;
             set
             {
+                // Unsubscribe from previous tour's property changes
+                if (_selectedTour != null)
+                {
+                    _selectedTour.PropertyChanged -= OnTourPropertyChanged;
+                }
+
                 SetField(ref _selectedTour, value);
                 OnPropertyChanged(nameof(SelectedTour));
+                
+                // Subscribe to new tour's property changes
+                if (_selectedTour != null)
+                {
+                    _selectedTour.PropertyChanged += OnTourPropertyChanged;
+                }
+                
                 UpdateMap();
             }
         }
@@ -36,6 +50,16 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public void SetSelectedTour(Tour? tour)
         {
             SelectedTour = tour;
+        }
+
+        private void OnTourPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            // Only update map when start or end location changes
+            if (e.PropertyName == nameof(Tour.StartLocation) || e.PropertyName == nameof(Tour.EndLocation))
+            {
+                Console.WriteLine($"Tour property changed: {e.PropertyName}, updating map...");
+                UpdateMap();
+            }
         }
 
         private async void UpdateMap()
