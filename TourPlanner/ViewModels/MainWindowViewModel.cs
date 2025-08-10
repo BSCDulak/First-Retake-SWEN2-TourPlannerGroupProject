@@ -18,6 +18,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public SubTabButtonsViewModel SubTabButtonsForToursListView { get; }
         public SubTabButtonsViewModel SubTabButtonsForTourLogsView { get; }
         public TourDetailsWrapPanelViewModel TourDetailsWrapPanelView { get; }
+        public MapViewModel MapViewModel { get; }
 
         public MainWindowViewModel()
         {
@@ -102,6 +103,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 TourLogs.DeleteTourLogCommand
             );
             TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
+            MapViewModel = new MapViewModel();
         }
     }
 }
