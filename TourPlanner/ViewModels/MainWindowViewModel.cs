@@ -59,6 +59,33 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 RouteImagePath = "Images/vienna_tour.png",
             });
 
+            // Add test tours with different distances to test transport selection
+            tours.Add(new Tour
+            {
+                Name = "Short Walk Test",
+                Description = "A short walk that should be under 30 minutes",
+                StartLocation = "Stephansplatz, Vienna",
+                EndLocation = "Graben, Vienna",
+                TransportType = "",
+                Distance = "",
+                EstimatedTime = "",
+                RouteInformation = "This should automatically select walking",
+                RouteImagePath = "Images/short_walk.png",
+            });
+
+            tours.Add(new Tour
+            {
+                Name = "Long Distance Test",
+                Description = "A longer route that should require public transport or car",
+                StartLocation = "Vienna International Airport",
+                EndLocation = "Stephansplatz, Vienna",
+                TransportType = "",
+                Distance = "",
+                EstimatedTime = "",
+                RouteInformation = "This should automatically select public transport or car",
+                RouteImagePath = "Images/long_distance.png",
+            });
+
             tours.Add(new Tour
             {
                 Name = "Invalid Route Test",

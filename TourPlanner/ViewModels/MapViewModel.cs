@@ -65,7 +65,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
                 if (startCoords.HasValue && endCoords.HasValue)
                 {
-                    // Both locations found, show route
+                    // Both locations found, show route and calculate transport info
                     await ShowRouteAsync(startCoords.Value, endCoords.Value, startLocation, endLocation);
                 }
                 else
@@ -116,36 +116,46 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             try
             {
-                var requestBody = new
+                // First try walking route
+                var walkingRoute = await GetRouteAsync(start, end, "foot-walking");
+                if (walkingRoute.HasValue && walkingRoute.Value.duration <= 1800) // 30 minutes = 1800 seconds
                 {
-                    coordinates = new[]
-                    {
-                        new[] { start.lng, start.lat },
-                        new[] { end.lng, end.lat }
-                    },
-                    format = "geojson",
-                    profile = "driving-car"
-                };
-
-                var json = JsonSerializer.Serialize(requestBody);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync($"https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key={API_KEY}", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var routeData = JsonDocument.Parse(responseContent);
-                    var coordinates = routeData.RootElement.GetProperty("features")[0].GetProperty("geometry").GetProperty("coordinates");
-                    
-                    // Generate JavaScript for the route
-                    var routeJs = GenerateRouteJavaScript(start, end, coordinates, startAddress, endAddress);
+                    // Walking is feasible (under 30 minutes)
+                    var routeJs = GenerateRouteJavaScript(start, end, walkingRoute.Value.coordinates, startAddress, endAddress, "Walking");
                     LoadMapWithRoute(routeJs);
+                    
+                    // Update tour with walking information
+                    UpdateTourWithRouteInfo(walkingRoute.Value, "Walking");
                 }
                 else
                 {
-                    Console.WriteLine($"Route API error: {responseContent}");
-                    ShowDefaultMap();
+                    // Try public transport
+                    var publicTransportRoute = await GetRouteAsync(start, end, "driving-car");
+                    if (publicTransportRoute.HasValue)
+                    {
+                        var routeJs = GenerateRouteJavaScript(start, end, publicTransportRoute.Value.coordinates, startAddress, endAddress, "Public Transport");
+                        LoadMapWithRoute(routeJs);
+                        
+                        // Update tour with public transport information
+                        UpdateTourWithRouteInfo(publicTransportRoute.Value, "Public Transport");
+                    }
+                    else
+                    {
+                        // Fallback to car
+                        var carRoute = await GetRouteAsync(start, end, "driving-car");
+                        if (carRoute.HasValue)
+                        {
+                            var routeJs = GenerateRouteJavaScript(start, end, carRoute.Value.coordinates, startAddress, endAddress, "Car");
+                            LoadMapWithRoute(routeJs);
+                            
+                            // Update tour with car information
+                            UpdateTourWithRouteInfo(carRoute.Value, "Car");
+                        }
+                        else
+                        {
+                            ShowDefaultMap();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -155,15 +165,109 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
-        private string GenerateRouteJavaScript((double lat, double lng) start, (double lat, double lng) end, JsonElement coordinates, string startAddress, string endAddress)
+        private async Task<((double lat, double lng)[] coordinates, double distance, double duration)?> GetRouteAsync((double lat, double lng) start, (double lat, double lng) end, string profile)
+        {
+            try
+            {
+                var requestBody = new
+                {
+                    coordinates = new[]
+                    {
+                        new[] { start.lng, start.lat },
+                        new[] { end.lng, end.lat }
+                    },
+                    format = "geojson",
+                    profile = profile
+                };
+
+                var json = JsonSerializer.Serialize(requestBody);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"https://api.openrouteservice.org/v2/directions/{profile}/geojson?api_key={API_KEY}", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var routeData = JsonDocument.Parse(responseContent);
+                    var features = routeData.RootElement.GetProperty("features");
+                    if (features.GetArrayLength() > 0)
+                    {
+                        var feature = features[0];
+                        var coordinates = feature.GetProperty("geometry").GetProperty("coordinates");
+                        var properties = feature.GetProperty("properties");
+                        var summary = properties.GetProperty("summary");
+                        
+                        var distance = summary.GetProperty("distance").GetDouble(); // in meters
+                        var duration = summary.GetProperty("duration").GetDouble(); // in seconds
+                        
+                        var coordArray = new List<(double lat, double lng)>();
+                        foreach (var coord in coordinates.EnumerateArray())
+                        {
+                            var lng = coord[0].GetDouble();
+                            var lat = coord[1].GetDouble();
+                            coordArray.Add((lat, lng));
+                        }
+                        
+                        return (coordArray.ToArray(), distance, duration);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Route API error for {profile}: {responseContent}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting {profile} route: {ex.Message}");
+            }
+            return null;
+        }
+
+        private void UpdateTourWithRouteInfo(((double lat, double lng)[] coordinates, double distance, double duration) routeInfo, string transportType)
+        {
+            if (SelectedTour != null)
+            {
+                // Update transport type
+                SelectedTour.TransportType = transportType;
+                
+                // Update distance (convert meters to km)
+                var distanceKm = routeInfo.distance / 1000.0;
+                SelectedTour.Distance = $"{distanceKm:F1} km";
+                
+                // Update estimated time (convert seconds to hours and minutes)
+                var totalMinutes = routeInfo.duration / 60.0;
+                var hours = (int)(totalMinutes / 60);
+                var minutes = (int)(totalMinutes % 60);
+                
+                if (hours > 0)
+                {
+                    SelectedTour.EstimatedTime = $"{hours}h {minutes}min";
+                }
+                else
+                {
+                    SelectedTour.EstimatedTime = $"{minutes} min";
+                }
+                
+                // Notify that the tour has been updated
+                OnPropertyChanged(nameof(SelectedTour));
+            }
+        }
+
+        private string GenerateRouteJavaScript((double lat, double lng) start, (double lat, double lng) end, (double lat, double lng)[] coordinates, string startAddress, string endAddress, string transportType)
         {
             var routeCoords = new StringBuilder();
-            foreach (var coord in coordinates.EnumerateArray())
+            foreach (var coord in coordinates)
             {
-                var lng = coord[0].GetDouble();
-                var lat = coord[1].GetDouble();
-                routeCoords.Append($"[{lat}, {lng}],");
+                routeCoords.Append($"[{coord.lat}, {coord.lng}],");
             }
+
+            var routeColor = transportType switch
+            {
+                "Walking" => "green",
+                "Public Transport" => "blue",
+                "Car" => "red",
+                _ => "blue"
+            };
 
             return $@"
                 var map = L.map('map').setView([{(start.lat + end.lat) / 2}, {(start.lng + end.lng) / 2}], 12);
@@ -173,13 +277,13 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 }}).addTo(map);
                 
                 var routeCoords = [{routeCoords.ToString().TrimEnd(',')}];
-                var route = L.polyline(routeCoords, {{color: 'blue', weight: 5}}).addTo(map);
+                var route = L.polyline(routeCoords, {{color: '{routeColor}', weight: 5}}).addTo(map);
                 
                 var startMarker = L.marker([{start.lat}, {start.lng}]).addTo(map);
-                startMarker.bindPopup('<b>Start</b><br>{startAddress}');
+                startMarker.bindPopup('<b>Start</b><br>{startAddress}<br><b>Transport:</b> {transportType}');
                 
                 var endMarker = L.marker([{end.lat}, {end.lng}]).addTo(map);
-                endMarker.bindPopup('<b>End</b><br>{endAddress}');
+                endMarker.bindPopup('<b>End</b><br>{endAddress}<br><b>Transport:</b> {transportType}');
                 
                 map.fitBounds(route.getBounds());
             ";
