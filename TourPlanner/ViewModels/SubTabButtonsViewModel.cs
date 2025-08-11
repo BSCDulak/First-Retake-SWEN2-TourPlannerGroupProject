@@ -13,11 +13,13 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand GenerateReport { get; }
 
-        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand)
+        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand, ICommand generateReport)
         {
             AddCommand = addCommand;
             DeleteCommand = deleteCommand;
+            GenerateReport = generateReport;
         }
 
         // This constructor is only used for design-time data, if we do not have this
@@ -27,6 +29,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             // Provide mock commands for design-time
             AddCommand = new RelayCommand(_ => { /* Mock add action */ });
             DeleteCommand = new RelayCommand(_ => { /* Mock delete action */ });
+            GenerateReport = new RelayCommand(_ => { /* Mock generate report action */ });
         }
 
     }

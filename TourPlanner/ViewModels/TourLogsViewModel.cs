@@ -49,6 +49,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ICommand AddTourLogCommand { get; }
         public ICommand DeleteTourLogCommand { get; }
+        public ICommand GenerateReportCommand { get; }
         public TourLogsViewModel() : this(new ToursListViewModel()) { }
 
         public TourLogsViewModel(ToursListViewModel toursListViewModel)
@@ -64,6 +65,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
             AddTourLogCommand = new RelayCommand(_ => AddTourLog(), _ => _toursListViewModel.SelectedTour != null);
             DeleteTourLogCommand = new RelayCommand(_ => DeleteTourLog(), _ => SelectedTourLog != null);
+            GenerateReportCommand = new RelayCommand(_ => GenerateReport(), _ => SelectedTourLog != null);  
         }
 
         private void AddTourLog()
@@ -82,6 +84,11 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 _toursListViewModel.SelectedTour.TourLogs.Remove(SelectedTourLog);
                 SelectedTourLog = null;
             }
+        }
+
+        private void GenerateReport()
+        {
+            // TODO: Implement report generation
         }
     }
 }
