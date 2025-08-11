@@ -22,6 +22,8 @@ namespace SWEN2_TourPlannerGroupProject.Models
         private string? _routeInformation;
         private string? _routeImagePath;
         private int? _tourId;
+        private string? _popularity;
+        private string? _childFriendliness;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -30,8 +32,8 @@ namespace SWEN2_TourPlannerGroupProject.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public string? Name 
-        { 
+        public string? Name
+        {
             get => _name;
             set
             {
@@ -42,9 +44,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? Description 
-        { 
+
+        public string? Description
+        {
             get => _description;
             set
             {
@@ -55,9 +57,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? StartLocation 
-        { 
+
+        public string? StartLocation
+        {
             get => _startLocation;
             set
             {
@@ -68,9 +70,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? EndLocation 
-        { 
+
+        public string? EndLocation
+        {
             get => _endLocation;
             set
             {
@@ -81,9 +83,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? TransportType 
-        { 
+
+        public string? TransportType
+        {
             get => _transportType;
             set
             {
@@ -94,9 +96,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? Distance 
-        { 
+
+        public string? Distance
+        {
             get => _distance;
             set
             {
@@ -107,9 +109,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? EstimatedTime 
-        { 
+
+        public string? EstimatedTime
+        {
             get => _estimatedTime;
             set
             {
@@ -120,9 +122,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? RouteInformation 
-        { 
+
+        public string? RouteInformation
+        {
             get => _routeInformation;
             set
             {
@@ -133,9 +135,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public string? RouteImagePath 
-        { 
+
+        public string? RouteImagePath
+        {
             get => _routeImagePath;
             set
             {
@@ -146,9 +148,9 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 }
             }
         }
-        
-        public int? TourId 
-        { 
+
+        public int? TourId
+        {
             get => _tourId;
             set
             {
@@ -163,5 +165,31 @@ namespace SWEN2_TourPlannerGroupProject.Models
         /* todo This is a list of TourLogs that are associated with this Tour, needs a model, viewmodel and usercontrol.*/
         //public ObservableCollection<TourLog> TourLogs { get; set; } = new ObservableCollection<TourLog>();
         public ObservableCollection<TourLog> TourLogs { get; set; } = new();
+
+        public string? Popularity
+        {
+            get => _popularity;
+            set
+            {
+                if (_popularity != value)
+                {
+                    _popularity = value;
+                    OnPropertyChanged(nameof(Popularity));
+                }
+            }
+        }
+
+        public string? ChildFriendliness
+        {
+            get => _childFriendliness;
+            set
+            {
+                if (_childFriendliness != value)
+                {
+                    _childFriendliness = value;
+                    OnPropertyChanged(nameof(ChildFriendliness));
+                }
+            }
+        }
     }
 }

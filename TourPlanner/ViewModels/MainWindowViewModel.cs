@@ -122,7 +122,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 Rating = "4",
                 AverageSpeed = "5.25",
                 Comment = "Great tour with beautiful scenery",
-                Difficulty = "Moderate",
+                Difficulty = "5",
                 Report = "Perfect weather conditions",
                 Name = "First Log"
             });
@@ -135,7 +135,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 Rating = "1",
                 AverageSpeed = "5.25",
                 Comment = "Ez Tour",
-                Difficulty = "Easy",
+                Difficulty = "5",
                 Report = "Perfect weather conditions",
                 Name = "Second Log"
             });
@@ -149,9 +149,258 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 Rating = "5",
                 AverageSpeed = "5.0",
                 Comment = "Challenging but rewarding hike",
-                Difficulty = "Hard",
+                Difficulty = "5",
                 Report = "Some rain but manageable",
                 Name = "Log2"
+            });
+
+            // Vienna City Tour logs
+            var viennaTour = tours.First(t => t.Name == "Vienna City Tour");
+            viennaTour.TourLogs.Add(new TourLog
+            {
+                Date = "10.08.2025",
+                TotalTime = "1:45:32",
+                TotalDistance = 4.5,
+                Rating = "4",
+                AverageSpeed = "2.57",
+                Comment = "Beautiful scenery throughout the route",
+                Difficulty = "5",
+                Report = "Sunny with a light breeze",
+                Name = "Log 1"
+            });
+            viennaTour.TourLogs.Add(new TourLog
+            {
+                Date = "08.08.2025",
+                TotalTime = "3:10:15",
+                TotalDistance = 8.2,
+                Rating = "5",
+                AverageSpeed = "2.59",
+                Comment = "Challenging climb but worth it",
+                Difficulty = "8",
+                Report = "Overcast but comfortable",
+                Name = "Log 2"
+            });
+            viennaTour.TourLogs.Add(new TourLog
+            {
+                Date = "05.08.2025",
+                TotalTime = "0:45:00",
+                TotalDistance = 2.1,
+                Rating = "3",
+                AverageSpeed = "2.80",
+                Comment = "Easy and relaxing walk",
+                Difficulty = "2",
+                Report = "Clear skies and warm",
+                Name = "Log 3"
+            });
+            viennaTour.TourLogs.Add(new TourLog
+            {
+                Date = "02.08.2025",
+                TotalTime = "5:20:42",
+                TotalDistance = 11.3,
+                Rating = "4",
+                AverageSpeed = "2.11",
+                Comment = "Lots of photo opportunities",
+                Difficulty = "7",
+                Report = "Windy at higher elevations",
+                Name = "Log 4"
+            });
+
+            // Short Walk Test logs
+            var shortWalk = tours.First(t => t.Name == "Short Walk Test");
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "10.08.2025",
+                TotalTime = "0:25:15",
+                TotalDistance = 1.9,
+                Rating = "4",
+                AverageSpeed = "4.52",
+                Comment = "Good for beginners",
+                Difficulty = "1",
+                Report = "Sunny with a light breeze",
+                Name = "Log 1"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "09.08.2025",
+                TotalTime = "0:40:20",
+                TotalDistance = 3.0,
+                Rating = "5",
+                AverageSpeed = "4.47",
+                Comment = "Easy and relaxing walk",
+                Difficulty = "2",
+                Report = "Overcast but comfortable",
+                Name = "Log 2"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "08.08.2025",
+                TotalTime = "0:32:45",
+                TotalDistance = 2.2,
+                Rating = "4",
+                AverageSpeed = "4.03",
+                Comment = "Lots of photo opportunities",
+                Difficulty = "3",
+                Report = "Clear skies and warm",
+                Name = "Log 3"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "06.08.2025",
+                TotalTime = "1:10:00",
+                TotalDistance = 5.0,
+                Rating = "3",
+                AverageSpeed = "4.29",
+                Comment = "Some traffic noise in parts",
+                Difficulty = "5",
+                Report = "Windy at higher elevations",
+                Name = "Log 4"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "04.08.2025",
+                TotalTime = "0:18:30",
+                TotalDistance = 1.8,
+                Rating = "4",
+                AverageSpeed = "5.84",
+                Comment = "Would definitely do again",
+                Difficulty = "4",
+                Report = "Crowded in popular areas",
+                Name = "Log 5"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "02.08.2025",
+                TotalTime = "0:55:12",
+                TotalDistance = 4.4,
+                Rating = "3",
+                AverageSpeed = "4.79",
+                Comment = "Good for beginners",
+                Difficulty = "6",
+                Report = "Peaceful and quiet",
+                Name = "Log 6"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "30.07.2025",
+                TotalTime = "0:20:45",
+                TotalDistance = 2.0,
+                Rating = "5",
+                AverageSpeed = "5.78",
+                Comment = "Weather was perfect",
+                Difficulty = "2",
+                Report = "Sunny with a light breeze",
+                Name = "Log 7"
+            });
+            shortWalk.TourLogs.Add(new TourLog
+            {
+                Date = "28.07.2025",
+                TotalTime = "0:50:30",
+                TotalDistance = 4.1,
+                Rating = "4",
+                AverageSpeed = "4.88",
+                Comment = "Some traffic noise in parts",
+                Difficulty = "5",
+                Report = "Overcast but comfortable",
+                Name = "Log 8"
+            });
+
+            // Long Distance Test logs
+            var longDistance = tours.First(t => t.Name == "Long Distance Test");
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "10.08.2025",
+                TotalTime = "4:15:10",
+                TotalDistance = 9.8,
+                Rating = "5",
+                AverageSpeed = "2.30",
+                Comment = "Challenging climb but worth it",
+                Difficulty = "9",
+                Report = "Sunny with a light breeze",
+                Name = "Log 1"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "08.08.2025",
+                TotalTime = "6:50:25",
+                TotalDistance = 12.0,
+                Rating = "4",
+                AverageSpeed = "1.75",
+                Comment = "Some traffic noise in parts",
+                Difficulty = "10",
+                Report = "Overcast but comfortable",
+                Name = "Log 2"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "06.08.2025",
+                TotalTime = "3:35:00",
+                TotalDistance = 10.2,
+                Rating = "3",
+                AverageSpeed = "2.84",
+                Comment = "Good for beginners",
+                Difficulty = "6",
+                Report = "Clear skies and warm",
+                Name = "Log 3"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "04.08.2025",
+                TotalTime = "7:10:40",
+                TotalDistance = 11.7,
+                Rating = "5",
+                AverageSpeed = "1.63",
+                Comment = "Beautiful scenery throughout the route",
+                Difficulty = "8",
+                Report = "Windy at higher elevations",
+                Name = "Log 4"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "02.08.2025",
+                TotalTime = "2:20:15",
+                TotalDistance = 7.4,
+                Rating = "4",
+                AverageSpeed = "3.17",
+                Comment = "Lots of photo opportunities",
+                Difficulty = "5",
+                Report = "Crowded in popular areas",
+                Name = "Log 5"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "30.07.2025",
+                TotalTime = "5:05:05",
+                TotalDistance = 9.5,
+                Rating = "3",
+                AverageSpeed = "1.87",
+                Comment = "Some construction along the way",
+                Difficulty = "7",
+                Report = "Peaceful and quiet",
+                Name = "Log 6"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "28.07.2025",
+                TotalTime = "1:25:55",
+                TotalDistance = 5.1,
+                Rating = "4",
+                AverageSpeed = "3.56",
+                Comment = "Would definitely do again",
+                Difficulty = "4",
+                Report = "Sunny with a light breeze",
+                Name = "Log 7"
+            });
+            longDistance.TourLogs.Add(new TourLog
+            {
+                Date = "26.07.2025",
+                TotalTime = "0:50:20",
+                TotalDistance = 3.4,
+                Rating = "5",
+                AverageSpeed = "4.05",
+                Comment = "Weather was perfect",
+                Difficulty = "3",
+                Report = "Overcast but comfortable",
+                Name = "Log 8"
             });
 
             //this makes a new TourListViewModel and binds it to the tours list
