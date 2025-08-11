@@ -60,6 +60,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 if (e.PropertyName == nameof(_toursListViewModel.SelectedTour))
                 {
                     OnPropertyChanged(nameof(TourLogs));
+                    // Reset SelectedTourLog when the selected tour changes
+                    SelectedTourLog = null;
                 }
             };
 
@@ -74,6 +76,12 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             {
                 var newLog = new TourLog { Comment = "New Log Entry" };
                 _toursListViewModel.SelectedTour.TourLogs.Add(newLog);
+                // Ensure SelectedTourLog reflects the newly added log
+                SelectedTourLog = newLog;
+
+                // Auto-update calculations for the current tour
+                _toursListViewModel.UpdateChildFriendliness();
+                _toursListViewModel.UpdatePopularity();
             }
         }
 
@@ -83,6 +91,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             {
                 _toursListViewModel.SelectedTour.TourLogs.Remove(SelectedTourLog);
                 SelectedTourLog = null;
+
+                // Auto-update calculations after removal
+                _toursListViewModel.UpdateChildFriendliness();
+                _toursListViewModel.UpdatePopularity();
             }
         }
 

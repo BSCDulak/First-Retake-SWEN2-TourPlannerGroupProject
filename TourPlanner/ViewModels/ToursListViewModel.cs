@@ -3,6 +3,8 @@ using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
 using System;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -40,29 +42,88 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             AddCommand = new RelayCommand(_ => AddTour());
             DeleteCommand = new RelayCommand(_ => DeleteTour(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
+            
+            // Subscribe to collection changes to handle log additions/removals
+            Tours.CollectionChanged += Tours_CollectionChanged;
+            
             UpdateAllCalculations();
+        }
+
+        private void Tours_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                // When a new tour is added, set up event handlers for its logs
+                foreach (Tour tour in e.NewItems!)
+                {
+                    SetupTourLogHandlers(tour);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                // When a tour is removed, clean up event handlers
+                foreach (Tour tour in e.OldItems!)
+                {
+                    tour.TourLogs.CollectionChanged -= TourLogs_CollectionChanged;
+                }
+            }
+        }
+
+        private void SetupTourLogHandlers(Tour tour)
+        {
+            // Set default values for new tour
+            tour.ChildFriendliness = "No data available";
+            tour.Popularity = "No data available";
+            
+            // Subscribe to tour logs collection changes
+            tour.TourLogs.CollectionChanged += TourLogs_CollectionChanged;
+        }
+
+        private void TourLogs_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Find the tour that owns these logs
+            var tourLogs = sender as ObservableCollection<TourLog>;
+            var tour = Tours.FirstOrDefault(t => t.TourLogs == tourLogs);
+            
+            if (tour != null)
+            {
+                // Recalculate for this specific tour
+                SelectedTour = tour;
+                UpdateChildFriendliness();
+                UpdatePopularity();
+            }
         }
 
         private void AddTour()
         {
             var newTour = new Tour { Name = "newTour" };
+            
+            // Set default values for new tour
+            newTour.ChildFriendliness = "No data available";
+            newTour.Popularity = "No data available";
+            
             Tours.Add(newTour);
+            
+            // Set up event handlers for the new tour
+            SetupTourLogHandlers(newTour);
         }
 
         private void DeleteTour()
         {
             if (SelectedTour != null)
             {
+                // Clean up event handlers before removing
+                SelectedTour.TourLogs.CollectionChanged -= TourLogs_CollectionChanged;
                 Tours.Remove(SelectedTour);
                 SelectedTour = null;
             }
         }
 
-        public void UpdateChildFriendliness(Tour tour)
+        public void UpdateChildFriendliness()
         {
-            if (tour.TourLogs == null || tour.TourLogs.Count == 0)
+            if (SelectedTour.TourLogs == null || SelectedTour.TourLogs.Count == 0)
             {
-                tour.ChildFriendliness = "No data to draw from"; // No data if no logs
+                SelectedTour.ChildFriendliness = "No data available"; // No data if no logs
                 return;
             }
 
@@ -70,7 +131,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             double avgDifficulty = 0;
             int validDifficultyCount = 0;
             
-            foreach (var log in tour.TourLogs)
+            foreach (var log in SelectedTour.TourLogs)
             {
                 if (double.TryParse(log.Difficulty, out double difficulty))
                 {
@@ -88,7 +149,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             double avgTimeHours = 0;
             int validTimeCount = 0;
             
-            foreach (var log in tour.TourLogs)
+            foreach (var log in SelectedTour.TourLogs)
             {
                 if (log.TimeSpan != TimeSpan.Zero)
                 {
@@ -106,7 +167,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             double avgDistanceKm = 0;
             int validDistanceCount = 0;
             
-            foreach (var log in tour.TourLogs)
+            foreach (var log in SelectedTour.TourLogs)
             {
                 if (log.TotalDistance > 0)
                 {
@@ -124,35 +185,35 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             // Child friendly if: avg difficulty < 5, avg time < 3 hours, avg distance < 10 km
             if (avgDifficulty < 5 && avgTimeHours < 3 && avgDistanceKm < 10)
             {
-                tour.ChildFriendliness = "Child friendly"; // Child friendly
+                SelectedTour.ChildFriendliness = "Child friendly"; // Child friendly
             }
             else
             {
-                tour.ChildFriendliness = "Not child friendly"; // Not child friendly
+                SelectedTour.ChildFriendliness = "Not child friendly"; // Not child friendly
             }
         }
 
-        public void UpdatePopularity(Tour tour)
+        public void UpdatePopularity()
         {
-            if (tour.TourLogs == null || tour.TourLogs.Count == 0)
+            if (SelectedTour.TourLogs == null || SelectedTour.TourLogs.Count == 0)
             {
-                tour.Popularity = "No data to draw from"; // No data if no logs
+                SelectedTour.Popularity = "No data available"; // No data if no logs
                 return;
             }
 
-            int logCount = tour.TourLogs.Count;
+            int logCount = SelectedTour.TourLogs.Count;
 
             if (logCount < 5)
             {
-                tour.Popularity = "Unpopular"; // Unpopular
+                SelectedTour.Popularity = "Unpopular"; // Unpopular
             }
             else if (logCount < 10)
             {
-                tour.Popularity = "Popular"; // Popular
+                SelectedTour.Popularity = "Popular"; // Popular
             }
             else
             {
-                tour.Popularity = "Very popular"; // Very popular
+                SelectedTour.Popularity = "Very popular"; // Very popular
             }
         }
 
@@ -160,8 +221,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             foreach (var tour in Tours)
             {
-                UpdateChildFriendliness(tour);
-                UpdatePopularity(tour);
+                SelectedTour = tour;
+                UpdateChildFriendliness();
+                UpdatePopularity();
             }
         }
 

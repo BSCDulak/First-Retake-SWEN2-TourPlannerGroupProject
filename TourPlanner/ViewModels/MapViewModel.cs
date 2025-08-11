@@ -407,6 +407,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 </html>";
 
             OnMapUpdateRequested?.Invoke(html);
+            //SelectedTour.TransportType = "Unknown"; // Set transport type to unknown
+            //SelectedTour.Distance = "Unknown"; // Set distance to unknown
+            //SelectedTour.EstimatedTime = "Unknown"; // Set estimated time to unknown
         }
 
         // Event to notify MapUserControl to update the map
