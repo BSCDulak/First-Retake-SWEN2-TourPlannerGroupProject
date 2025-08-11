@@ -19,7 +19,7 @@ namespace SWEN2_TourPlannerGroupProject.Data
 
             // config SQLite
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlite(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
 
             return new AppDbContext(optionsBuilder.Options);
         }
