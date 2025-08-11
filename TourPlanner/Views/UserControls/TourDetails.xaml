@@ -24,6 +24,8 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
@@ -49,6 +51,12 @@
 
             <Label Content="Route Information:" Grid.Row="7" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5"/>
+
+            <Label Content="Popularity:" Grid.Row="8" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.Popularity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Margin="5"/>
+
+            <Label Content="Child Friendliness:" Grid.Row="9" Grid.Column="0" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.ChildFriendliness, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="1" Margin="5"/>
         </Grid>
     </ScrollViewer>
 </UserControl>
