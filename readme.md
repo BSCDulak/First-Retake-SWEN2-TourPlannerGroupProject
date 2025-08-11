@@ -29,7 +29,7 @@ dotnet tool install --global dotnet-ef
 ```
 to create migrations use powershell
 ```shell
-dotnet ef migrations add someMigrationName
+dotnet ef migrations add someMigrationName --project TourPlanner
 ```
 to apply migrations build the project and then use
 ```shell
