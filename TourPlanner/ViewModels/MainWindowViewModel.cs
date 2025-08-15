@@ -22,7 +22,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public MainWindowViewModel()
         {
+            /*
             var tours = new ObservableCollection<Tour>();
+            
             for (var i = 1; i < 10; i++)
             {
                 tours.Add(new Tour
@@ -402,16 +404,17 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 Report = "Overcast but comfortable",
                 Name = "Log 8"
             });
-
+            */
             //this makes a new TourListViewModel and binds it to the tours list
-            ToursListView = new ToursListViewModel(tours);
+            ToursListView = new ToursListViewModel(new ObservableCollection<Tour>());
             TourLogs = new TourLogsViewModel(ToursListView);
             //todo create a TourListTourLogsViewModel -> this makes a new TourListViewModel and binds it to the tour logs list
             //ToursListTourLogsViewModel = new ToursListView(not sure if we gotta do tours or tourlogs here);
             // this binds the subtab buttons to the tours viewmodel
             SubTabButtonsForToursListView = new SubTabButtonsViewModel(
                 ToursListView.AddCommand,
-                ToursListView.DeleteCommand
+                ToursListView.DeleteCommand,
+                ToursListView.UpdateCommand
             );
             // this binds the subtab buttons to the tour logs viewmodel
             SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(

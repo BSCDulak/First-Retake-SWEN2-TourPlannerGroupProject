@@ -15,10 +15,20 @@ namespace SWEN2_TourPlannerGroupProject.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Tour>()
-                .HasMany(t => t.TourLogs)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Tour>(entity =>
+            {
+                entity.HasKey(t => t.TourId);
+                entity.Property(t => t.TourId).ValueGeneratedOnAdd();
+                entity.HasMany(l => l.TourLogs)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<TourLog>(entity =>
+            {
+                entity.HasKey(l => l.TourLogId);
+                entity.Property(l => l.TourLogId).ValueGeneratedOnAdd();
+            });
         }
     }
 }

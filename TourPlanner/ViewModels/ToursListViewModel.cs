@@ -2,7 +2,10 @@
 using System.Windows.Input;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
+using SWEN2_TourPlannerGroupProject.Data;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -11,6 +14,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     // that the button is only enabled when a tour is selected in the list.
     internal class ToursListViewModel : ViewModelBase
     {
+        private readonly ITourRepository _tourRepository;
         public ObservableCollection<Tour> Tours { get; }
         private Tour? _selectedTour;
 
@@ -27,34 +31,59 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand UpdateCommand { get; }
         public ICommand UpdateCalculationsCommand { get; }
 
         public ToursListViewModel()
         {
-            // Initialize properties if necessary
+            Tours = new ObservableCollection<Tour>();
         }
 
         public ToursListViewModel(ObservableCollection<Tour> tours)
         {
             Tours = tours;
-            AddCommand = new RelayCommand(_ => AddTour());
-            DeleteCommand = new RelayCommand(_ => DeleteTour(), _ => SelectedTour != null);
+            _tourRepository = App.ServiceProvider.GetRequiredService<ITourRepository>();
+            AddCommand = new RelayCommand(async _ => await AddTourAsync());
+            DeleteCommand = new RelayCommand(async _ => await DeleteTourAsync(), _ => SelectedTour != null);
+            UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
+            _ = LoadToursAsync();
             UpdateAllCalculations();
         }
 
-        private void AddTour()
+        private async Task LoadToursAsync()
         {
-            var newTour = new Tour { Name = "newTour" };
-            Tours.Add(newTour);
+            var tours = await _tourRepository.GetAllToursAsync();
+            Tours.Clear();
+            foreach (var tour in tours)
+            {
+                Tours.Add(tour);
+            }
         }
 
-        private void DeleteTour()
+        private async Task AddTourAsync()
+        {
+            var newTour = new Tour { Name = "newTour" };
+            var addedTour = await _tourRepository.AddTourAsync(newTour);
+            Tours.Add(addedTour);
+            SelectedTour = addedTour;
+        }
+
+        private async Task DeleteTourAsync()
         {
             if (SelectedTour != null)
             {
+                await _tourRepository.DeleteTourAsync(SelectedTour.TourId ?? 0);
                 Tours.Remove(SelectedTour);
                 SelectedTour = null;
+            }
+        }
+
+        private async Task UpdateTourAsync()
+        {
+            if (SelectedTour != null)
+            {
+                await _tourRepository.UpdateTourAsync(SelectedTour);
             }
         }
 
