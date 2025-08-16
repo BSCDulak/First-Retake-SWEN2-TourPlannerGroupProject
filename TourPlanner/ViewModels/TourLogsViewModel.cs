@@ -92,6 +92,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task UpdateTourLogAsync()
         {
+            System.Diagnostics.Debug.WriteLine($"Updating TourLog: {SelectedTourLog?.TourLogId}");
             if (SelectedTourLog != null && SelectedTourLog.TourLogId.HasValue)
             {
                 await _tourLogRepository.UpdateTourLogAsync(SelectedTourLog);
