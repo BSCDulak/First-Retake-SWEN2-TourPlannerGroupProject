@@ -66,8 +66,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 { 
                     Comment = "New Log Entry",
                     TourId = _toursListViewModel.SelectedTour.TourId,
-                    DateTime = DateTime.Now,
-                    Date = DateTime.Now.ToString("yyyy-MM-dd"),
+                    DateTime = DateTime.UtcNow,
+                    Date = DateTime.UtcNow.ToString("yyyy-MM-dd"),
                     TotalTime = "00:00:00",
                     TimeSpan = TimeSpan.Zero
                 };
