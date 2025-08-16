@@ -73,7 +73,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 };
                 
                 var addedLog = await _tourLogRepository.AddTourLogAsync(newLog);
-                _toursListViewModel.SelectedTour.TourLogs.Add(addedLog);
                 OnPropertyChanged(nameof(TourLogs));
             }
         }
@@ -86,7 +85,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 {
                     await _tourLogRepository.DeleteTourLogAsync(SelectedTourLog.TourLogId.Value);
                 }
-                _toursListViewModel.SelectedTour.TourLogs.Remove(SelectedTourLog);
                 SelectedTourLog = null;
                 OnPropertyChanged(nameof(TourLogs));
             }
