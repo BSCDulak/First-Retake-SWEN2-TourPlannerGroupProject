@@ -10,7 +10,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
 {
     // This class is a model for a Tour, it contains all the information that is needed for a Tour and is used
     // by toursList(ViewModel) and TourDetailsWrapPanel(ViewModel) to display the information in the GUI.
-    internal class Tour : INotifyPropertyChanged
+    public class Tour : INotifyPropertyChanged
     {
         private string? _name;
         private string? _description;

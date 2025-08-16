@@ -12,6 +12,7 @@
         <WrapPanel>
             <Button Content="Add" Command="{Binding AddCommand}"></Button>
             <Button Content="Remove" Command="{Binding DeleteCommand}"></Button>
+            <Button Content="Update" Command="{Binding UpdateCommand}"></Button>
         </WrapPanel>
 
     </Grid>
