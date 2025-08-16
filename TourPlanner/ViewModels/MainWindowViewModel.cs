@@ -406,7 +406,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             });
             */
             //this makes a new TourListViewModel and binds it to the tours list
-            ToursListView = new ToursListViewModel(new ObservableCollection<Tour>());
+            ToursListView = new ToursListViewModel();
             TourLogs = new TourLogsViewModel(ToursListView);
             //todo create a TourListTourLogsViewModel -> this makes a new TourListViewModel and binds it to the tour logs list
             //ToursListTourLogsViewModel = new ToursListView(not sure if we gotta do tours or tourlogs here);

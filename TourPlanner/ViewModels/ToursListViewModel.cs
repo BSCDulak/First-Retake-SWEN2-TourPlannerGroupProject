@@ -14,6 +14,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
     // that the button is only enabled when a tour is selected in the list.
     internal class ToursListViewModel : ViewModelBase
     {
+        private static int _instanceCounter = 0;
         private readonly ITourRepository _tourRepository;
         public ObservableCollection<Tour> Tours { get; }
         private Tour? _selectedTour;
@@ -36,28 +37,52 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public ToursListViewModel()
         {
+            _instanceCounter++;
+            System.Diagnostics.Debug.WriteLine($"ToursListViewModel Constructor Called (Instance #{_instanceCounter})");
+            
             Tours = new ObservableCollection<Tour>();
-        }
-
-        public ToursListViewModel(ObservableCollection<Tour> tours)
-        {
-            Tours = tours;
             _tourRepository = App.ServiceProvider.GetRequiredService<ITourRepository>();
             AddCommand = new RelayCommand(async _ => await AddTourAsync());
             DeleteCommand = new RelayCommand(async _ => await DeleteTourAsync(), _ => SelectedTour != null);
             UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
-            _ = LoadToursAsync();
-            UpdateAllCalculations();
+            
+            System.Diagnostics.Debug.WriteLine($"ToursListViewModel created. Tours count: {Tours.Count}");
+            
+            // Load data asynchronously to avoid blocking the UI thread
+            _ = Task.Run(async () =>
+            {
+                await LoadToursAsync();
+                App.Current.Dispatcher.Invoke(() => UpdateAllCalculations());
+            });
         }
 
         private async Task LoadToursAsync()
         {
-            var tours = await _tourRepository.GetAllToursAsync();
-            Tours.Clear();
-            foreach (var tour in tours)
+            try
             {
-                Tours.Add(tour);
+                System.Diagnostics.Debug.WriteLine("Loading tours from database...");
+                var tours = await _tourRepository.GetAllToursAsync();
+                System.Diagnostics.Debug.WriteLine($"Found {tours.Count()} tours in database");
+
+                // Ensure UI updates happen on UI thread
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    Tours.Clear();
+                    foreach (var tour in tours)
+                    {
+                        Tours.Add(tour);
+                        System.Diagnostics.Debug.WriteLine($"Added tour: {tour.Name}");
+                    }
+                    System.Diagnostics.Debug.WriteLine($"Total tours in collection: {Tours.Count}");
+                    
+                    // Force UI refresh
+                    OnPropertyChanged(nameof(Tours));
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading tours: {ex.Message}");
             }
         }
 
