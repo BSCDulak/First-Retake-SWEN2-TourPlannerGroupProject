@@ -19,8 +19,9 @@ namespace SWEN2_TourPlannerGroupProject.Data
             {
                 entity.HasKey(t => t.TourId);
                 entity.Property(t => t.TourId).ValueGeneratedOnAdd();
-                entity.HasMany(l => l.TourLogs)
-                    .WithOne()
+                entity.HasMany(t => t.TourLogs)
+                    .WithOne(l => l.Tour)
+                    .HasForeignKey(l => l.TourId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

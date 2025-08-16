@@ -14,7 +14,9 @@ namespace SWEN2_TourPlannerGroupProject.Data
 
         public async Task<IEnumerable<Tour>> GetAllToursAsync()
         {
-            return await _context.Tours.ToListAsync();
+            return await _context.Tours
+                .Include(t => t.TourLogs)
+                .ToListAsync();
         }
 
         public async Task<Tour> AddTourAsync(Tour tour)

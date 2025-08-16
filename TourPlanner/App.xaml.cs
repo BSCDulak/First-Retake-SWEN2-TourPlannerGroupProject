@@ -34,6 +34,7 @@ public partial class App : Application
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(ConnectionString));
         services.AddScoped<ITourRepository, TourRepository>();
+        services.AddScoped<ITourLogRepository, TourLogRepository>();
         ServiceProvider = services.BuildServiceProvider();
 
 
