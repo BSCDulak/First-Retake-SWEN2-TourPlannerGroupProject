@@ -16,15 +16,13 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-            <userControls:MenuBar ></userControls:MenuBar>
-        <TabControl Grid.Column="0" Grid.Row="1">
-            <TabItem Header="Tab1">
+        <TabControl>
+            <TabItem Header="Tours">
                 <subViews:Tab1></subViews:Tab1>
             </TabItem>
-            <TabItem Header="Tab2">
+            <TabItem Header="TourLogs">
                 <subViews:Tab2></subViews:Tab2>
             </TabItem>
         </TabControl>

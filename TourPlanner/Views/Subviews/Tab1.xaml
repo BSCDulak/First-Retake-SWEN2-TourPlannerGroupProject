@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="9*"></RowDefinition>
         </Grid.RowDefinitions>
         <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="2"></userControls:SubTabButtons>
         <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"></userControls:ToursList>
