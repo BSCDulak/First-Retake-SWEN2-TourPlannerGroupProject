@@ -41,22 +41,22 @@
             <TextBox Text="{Binding SelectedTour.EndLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5"/>
 
             <Label Content="Transport Type:" Grid.Row="4" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTour.TransportType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.TransportType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5" IsReadOnly="True"/>
 
             <Label Content="Distance:" Grid.Row="5" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTour.Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.Distance, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5" IsReadOnly="True"/>
 
             <Label Content="Estimated Time:" Grid.Row="6" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.EstimatedTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5" IsReadOnly="True"/>
 
             <Label Content="Route Information:" Grid.Row="7" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5"/>
 
             <Label Content="Popularity:" Grid.Row="8" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTour.Popularity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.Popularity, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Margin="5" IsReadOnly="True"/>
 
             <Label Content="Child Friendliness:" Grid.Row="9" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTour.ChildFriendliness, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="1" Margin="5"/>
+            <TextBox Text="{Binding SelectedTour.ChildFriendliness, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="1" Margin="5" IsReadOnly="True"/>
         </Grid>
     </ScrollViewer>
 </UserControl>
