@@ -92,6 +92,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             var addedTour = await _tourRepository.AddTourAsync(newTour);
             Tours.Add(addedTour);
             SelectedTour = addedTour;
+            UpdateAllCalculations();
         }
 
         private async Task DeleteTourAsync()
@@ -108,6 +109,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             if (SelectedTour != null)
             {
+                // Update the tour in the repository
+                UpdateAllCalculations();
                 await _tourRepository.UpdateTourAsync(SelectedTour);
             }
         }
@@ -210,6 +213,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
+        // This method updates all calculations for each tour in the Tours collection. Possible concerns: Might be slow for large datasets causing UI lag.
         public void UpdateAllCalculations()
         {
             foreach (var tour in Tours)
