@@ -15,7 +15,7 @@
                   MinHeight="100"
                   CanContentScroll="True"
                   Padding="0">
-        <Grid Margin="0" MinHeight="40" Height="430" Width="753">
+        <Grid Margin="10" MinHeight="40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="100"/>
