@@ -15,7 +15,7 @@
                   MinHeight="100"
                   CanContentScroll="True"
                   Padding="0">
-        <Grid Margin="0" MinHeight="40" Height="430" Width="753">
+        <Grid Margin="10,-1,10,-5" MinHeight="40" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="100"/>
@@ -30,13 +30,13 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Label Content="Date:" Grid.Row="0" Grid.Column="0" Margin="0"/>
+            <Label Content="Date:" Grid.Row="0" Grid.Column="0" Margin="5"/>
             <DatePicker SelectedDate="{Binding SelectedTourLog.DateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-            <Label Content="Time:" Grid.Row="1" Grid.Column="0" Margin="0"/>
+            <Label Content="Time:" Grid.Row="1" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTourLog.TotalTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="1" Grid.Column="1" Margin="5" PreviewTextInput="TimeTextBox_PreviewTextInput" LostFocus="TimeTextBox_LostFocus"/>
 
-            <Label Content="Difficulty:" Grid.Row="2" Grid.Column="0" Margin="0"/>
+            <Label Content="Difficulty:" Grid.Row="2" Grid.Column="0" Margin="5"/>
             <!-- Replaced IntegerUpDown with ComboBox for WPF compatibility -->
             <ComboBox SelectedValue="{Binding SelectedTourLog.Difficulty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5">
                 <ComboBox.ItemsSource>
@@ -55,13 +55,13 @@
                 </ComboBox.ItemsSource>
             </ComboBox>
 
-            <Label Content="Distance:" Grid.Row="3" Grid.Column="0" Margin="0"/>
+            <Label Content="Distance:" Grid.Row="3" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTourLog.TotalDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5" PreviewTextInput="DistanceTextBox_PreviewTextInput" LostFocus="DistanceTextBox_LostFocus"/>
 
-            <Label Content="Comment:" Grid.Row="4" Grid.Column="0" Margin="0"/>
+            <Label Content="Comment:" Grid.Row="4" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTourLog.Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5"/>
 
-            <Label Content="Rating:" Grid.Row="5" Grid.Column="0" Margin="0"/>
+            <Label Content="Rating:" Grid.Row="5" Grid.Column="0" Margin="5"/>
             <ComboBox SelectedValue="{Binding SelectedTourLog.Rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5">
                 <ComboBox.ItemsSource>
                     <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
