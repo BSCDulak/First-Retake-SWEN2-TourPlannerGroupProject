@@ -24,10 +24,5 @@ namespace SWEN2_TourPlannerGroupProject.Views.UserControls
         {
             InitializeComponent();
         }
-
-        private void TourLogsDetails_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
