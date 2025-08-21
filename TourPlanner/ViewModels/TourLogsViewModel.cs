@@ -150,21 +150,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             string safeLogName = SelectedTourLog.Name ?? "Unnamed Tour Log";
             string dest = Path.Combine(downloadsPath, $"TourLogReport_{safeLogName.Replace(" ", "_")}_{DateTime.Now:yyyyMMddHHmmss}.pdf");
 
-            string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            if (!Directory.Exists(downloadsPath))
-            {
-                Directory.CreateDirectory(downloadsPath);
-            }
-            string safeLogName = SelectedTourLog.Name ?? "Unnamed Tour Log";
-            string dest = Path.Combine(downloadsPath, $"TourLogReport_{safeLogName.Replace(" ", "_")}_{DateTime.Now:yyyyMMddHHmmss}.pdf");
-            PdfWriter writer = new PdfWriter(dest);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
-            Paragraph header = new Paragraph(safeLogName)
-                .SetTextAlignment(TextAlignment.CENTER)
-                .SetFontSize(20);
-            document.Add(header);
-
             PdfWriter writer = new PdfWriter(dest);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
