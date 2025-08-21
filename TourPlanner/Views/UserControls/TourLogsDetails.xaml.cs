@@ -31,7 +31,7 @@ namespace SWEN2_TourPlannerGroupProject.Views.UserControls
             {
                 if (!_timeRegex.IsMatch(tb.Text))
                 {
-                    MessageBox.Show("Please enter time in format hh:mm:ss (e.g., 05:30:45)", "Invalid Time Format", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Please enter time in format hh:mm:ss (e.g., hh:mm:ss)", "Invalid Time Format", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     // Use Dispatcher to avoid infinite focus loop
                     Dispatcher.BeginInvoke(new Action(() => tb.Focus()), DispatcherPriority.ApplicationIdle);
