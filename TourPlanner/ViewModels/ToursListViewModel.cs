@@ -244,7 +244,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             try
             {
                 var tour = SelectedTour;
-                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\Downloads";
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
                 string fileName = $"TourReport_{tour.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
                 string filePath = Path.Combine(downloadsPath, fileName);
 
@@ -256,8 +256,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     document.Add(new iText.Layout.Element.Paragraph("Tour Report").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(20));
                     document.Add(new iText.Layout.Element.Paragraph($"Tour Name: {tour.Name}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Description: {tour.Description}"));
-                    document.Add(new iText.Layout.Element.Paragraph($"From: {tour.From}"));
-                    document.Add(new iText.Layout.Element.Paragraph($"To: {tour.To}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"From: {tour.StartLocation}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"To: {tour.EndLocation}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Transport Type: {tour.TransportType}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Distance: {tour.Distance}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Estimated Time: {tour.EstimatedTime}"));
