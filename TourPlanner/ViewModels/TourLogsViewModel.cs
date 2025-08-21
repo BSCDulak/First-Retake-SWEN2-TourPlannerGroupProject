@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SWEN2_TourPlannerGroupProject.MVVM;
@@ -9,17 +8,13 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using SWEN2_TourPlannerGroupProject.Data;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.RegularExpressions;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
-    internal class TourLogsViewModel : ViewModelBase, IDataErrorInfo
+    internal class TourLogsViewModel : ViewModelBase
     {
         private readonly ToursListViewModel _toursListViewModel;
         private readonly ITourLogRepository _tourLogRepository;
-
-        // Regex to match time format: h:mm:ss or hh:mm:ss (e.g., 5:30:45 or 05:30:45)
-        private static readonly Regex _timeRegex = new Regex(@"^([0-9]{1,2}):([0-5][0-9]):([0-5][0-9])$");
 
         public ObservableCollection<TourLog> TourLogs
         {
@@ -103,22 +98,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
-        // IDataErrorInfo implementation for validation
-        public string Error => null;
 
-        public string this[string propertyName]
-        {
-            get
-            {
-                if (propertyName == "SelectedTourLog.TotalTime" && SelectedTourLog != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(SelectedTourLog.TotalTime) && !_timeRegex.IsMatch(SelectedTourLog.TotalTime))
-                    {
-                        return "Please enter time in format hh:mm:ss (e.g., 05:30:45)";
-                    }
-                }
-                return null;
-            }
-        }
+
+        public string Error => null;
     }
 }
