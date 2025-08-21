@@ -18,6 +18,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         private readonly ITourRepository _tourRepository;
         public ObservableCollection<Tour> Tours { get; }
         private Tour? _selectedTour;
+        private static readonly ILoggerWrapper log = LoggerFactory.GetLogger();
 
         public Tour? SelectedTour
         {
@@ -38,7 +39,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ToursListViewModel()
         {
             _instanceCounter++;
-            System.Diagnostics.Debug.WriteLine($"ToursListViewModel Constructor Called (Instance #{_instanceCounter})");
+            log.Info($"ToursListViewModel Constructor Called (Instance #{_instanceCounter})");
             
             Tours = new ObservableCollection<Tour>();
             _tourRepository = App.ServiceProvider.GetRequiredService<ITourRepository>();
@@ -47,7 +48,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
             
-            System.Diagnostics.Debug.WriteLine($"ToursListViewModel created. Tours count: {Tours.Count}");
+            log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
             
             // Load data asynchronously to avoid blocking the UI thread
             _ = Task.Run(async () =>
@@ -61,9 +62,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("Loading tours from database...");
+                log.Info("Loading tours from database...");
                 var tours = await _tourRepository.GetAllToursAsync();
-                System.Diagnostics.Debug.WriteLine($"Found {tours.Count()} tours in database");
+                log.Info($"Found {tours.Count()} tours in database");
 
                 // Ensure UI updates happen on UI thread
                 App.Current.Dispatcher.Invoke(() =>
@@ -72,9 +73,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     foreach (var tour in tours)
                     {
                         Tours.Add(tour);
-                        System.Diagnostics.Debug.WriteLine($"Added tour: {tour.Name}");
+                        log.Info($"Added tour: {tour.Name}");
                     }
-                    System.Diagnostics.Debug.WriteLine($"Total tours in collection: {Tours.Count}");
+                    log.Info($"Total tours in collection: {Tours.Count}");
                     
                     // Force UI refresh
                     OnPropertyChanged(nameof(Tours));
@@ -82,7 +83,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading tours: {ex.Message}");
+                log.Error($"Error loading tours: {ex}");
             }
         }
 
