@@ -6,6 +6,9 @@ using SWEN2_TourPlannerGroupProject.Data;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using System.IO; // ✅ Added for file output
+using iText.Kernel.Pdf; // ✅ iText
+using System.Windows; // ✅ For MessageBox
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -35,7 +38,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand DeleteCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand UpdateCalculationsCommand { get; }
-
+        public ICommand ReportCommand { get; } 
         public ToursListViewModel()
         {
             _instanceCounter++;
@@ -46,6 +49,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             AddCommand = new RelayCommand(async _ => await AddTourAsync());
             DeleteCommand = new RelayCommand(async _ => await DeleteTourAsync(), _ => SelectedTour != null);
             UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
+            ReportCommand = new RelayCommand(_ => { /* Mock report action */ });
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
             
             log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");

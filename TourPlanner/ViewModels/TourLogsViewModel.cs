@@ -38,7 +38,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand AddTourLogCommand { get; }
         public ICommand DeleteTourLogCommand { get; }
         public ICommand UpdateTourLogCommand { get; }
-        
+        public ICommand ReportCommand { get; }
+
         public TourLogsViewModel() : this(new ToursListViewModel()) { }
 
         public TourLogsViewModel(ToursListViewModel toursListViewModel)
