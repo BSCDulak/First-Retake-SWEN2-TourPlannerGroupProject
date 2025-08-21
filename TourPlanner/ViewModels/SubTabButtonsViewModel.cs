@@ -14,6 +14,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UpdateCommand { get; }
+        public ICommand ReportCommand { get; }
 
         // The ICommand? updateCommand parameter is optional and can be null because I haven´t set it yet for the TourLogsViewModel. TODO later today maybe?
         public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand, ICommand? updateCommand = null)
@@ -21,6 +22,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             AddCommand = addCommand;
             DeleteCommand = deleteCommand;
             UpdateCommand = updateCommand ?? new RelayCommand(_ => { });
+            ReportCommand = ReportCommand ?? new RelayCommand(_ => { /* Mock report action */ });
         }
 
         // This constructor is only used for design-time data, if we do not have this
@@ -31,6 +33,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             AddCommand = new RelayCommand(_ => { /* Mock add action */ });
             DeleteCommand = new RelayCommand(_ => { /* Mock delete action */ });
             UpdateCommand = new RelayCommand(_ => { /* Mock update action */ });
+            ReportCommand = new RelayCommand(_ => { /* Mock report action */ });
         }
 
     }
