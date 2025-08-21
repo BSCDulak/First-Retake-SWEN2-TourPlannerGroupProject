@@ -73,7 +73,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     foreach (var tour in tours)
                     {
                         Tours.Add(tour);
-                        log.Info($"Added tour: {tour.Name}");
+                        log.Info($"Loaded tour: {tour.Name} from Database");
                     }
                     log.Info($"Total tours in collection: {Tours.Count}");
                     
@@ -93,6 +93,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             var addedTour = await _tourRepository.AddTourAsync(newTour);
             Tours.Add(addedTour);
             SelectedTour = addedTour;
+            log.Info($"Added new tour: {addedTour.Name} with ID: {addedTour.TourId}");
             UpdateAllCalculations();
         }
 
@@ -100,9 +101,11 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             if (SelectedTour != null)
             {
+                log.Info($"Deleting tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
                 await _tourRepository.DeleteTourAsync(SelectedTour.TourId ?? 0);
                 Tours.Remove(SelectedTour);
                 SelectedTour = null;
+                log.Info($"Tour deleted successfully. Remaining tours count: {Tours.Count}");
             }
         }
 
@@ -113,6 +116,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 // Update the tour in the repository
                 UpdateAllCalculations();
                 await _tourRepository.UpdateTourAsync(SelectedTour);
+                log.Info($"Updated tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
             }
         }
 
