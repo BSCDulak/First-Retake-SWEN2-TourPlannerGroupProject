@@ -13,21 +13,16 @@
         Title="MainWindow" Height="450" Width="800">
 <!-- This is our main entry point and also the only xaml where the xaml.cs has to have some additional code to initialize our
     DataContext, to be precise our MainWindowViewModel which constructs all the other viewModels in its constructor, without this nothing works.-->
-    <Window.DataContext>
-        <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
-    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-            <userControls:MenuBar ></userControls:MenuBar>
-        <TabControl Grid.Column="0" Grid.Row="1">
-            <TabItem Header="Tab1">
+        <TabControl>
+            <TabItem Header="Tours">
                 <subViews:Tab1></subViews:Tab1>
             </TabItem>
-            <TabItem Header="Tab2">
+            <TabItem Header="TourLogs">
                 <subViews:Tab2></subViews:Tab2>
             </TabItem>
         </TabControl>

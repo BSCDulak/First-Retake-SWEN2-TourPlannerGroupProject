@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="9*"></RowDefinition>
         </Grid.RowDefinitions>
         <userControls:SubTabButtons DataContext="{Binding SubTabButtonsForToursListView}" Grid.ColumnSpan="2"></userControls:SubTabButtons>
         <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"></userControls:ToursList>
@@ -25,8 +25,7 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <!--- the image below is still just a placeholder, later on it needs to be bound using path string variable in Tour.cs -->
-            <Image Source="../../Images/fantasymap.png"></Image>
+            <userControls:MapUserControl DataContext="{Binding MapViewModel}"></userControls:MapUserControl>
             <userControls:TourDetailsWrapPanel Grid.Row="1" DataContext="{Binding TourDetailsWrapPanelView}"></userControls:TourDetailsWrapPanel>
 
         </Grid>

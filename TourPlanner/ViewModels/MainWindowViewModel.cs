@@ -9,85 +9,62 @@ using SWEN2_TourPlannerGroupProject.Models;
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
     // This is the main viewmodel for the MainWindow, it contains the viewmodels for
-    // the ToursList, SubTabButtons and TourDetailsWrapPanel.
-    // every time a new viewmodel is created it needs to be added here and initialized in the constructor.
+    // the whole application and is used to connect all the different parts of the application together.
+    // Every time a new viewmodel is created it needs to be added here and initialized in the constructor.
     internal class MainWindowViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper log = LoggerFactory.GetLogger();
         public ToursListViewModel ToursListView { get; }
         public TourLogsViewModel TourLogs { get; }
         public SubTabButtonsViewModel SubTabButtonsForToursListView { get; }
         public SubTabButtonsViewModel SubTabButtonsForTourLogsView { get; }
         public TourDetailsWrapPanelViewModel TourDetailsWrapPanelView { get; }
+        public MapViewModel MapViewModel { get; }
 
         public MainWindowViewModel()
         {
-            var tours = new ObservableCollection<Tour>();
-            for (var i = 1; i < 10; i++)
+            try
             {
-                tours.Add(new Tour
+                log.Info("MainWindowViewModel constructor called. Initializing viewmodels...");
+                // this makes a new TourListViewModel called ToursListView
+                ToursListView = new ToursListViewModel();
+                // this makes a new TourLogsViewModel called TourLogs
+                log.Info("ToursListView initialized.");
+                TourLogs = new TourLogsViewModel(ToursListView);
+                log.Info("TourLogs initialized.");
+                // this binds the subtab buttons to the tours viewmodel, it is super important that the commands are passed in the correct order
+                SubTabButtonsForToursListView = new SubTabButtonsViewModel(
+                    ToursListView.AddCommand,
+                    ToursListView.DeleteCommand,
+                    ToursListView.UpdateCommand
+                );
+                log.Info("SubTabButtonsForToursListView initialized.");
+                // this binds the subtab buttons to the tour logs viewmodel, and don´t you forget to add new buttons here if you add them to the TourLogsViewModel
+                SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
+                    TourLogs.AddTourLogCommand,
+                    TourLogs.DeleteTourLogCommand,
+                    TourLogs.UpdateTourLogCommand
+                );
+                log.Info("SubTabButtonsForTourLogsView initialized.");
+                TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
+                log.Info("TourDetailsWrapPanelView initialized.");
+                MapViewModel = new MapViewModel();
+                log.Info("MapViewModel initialized.");
+                // Connect the selected tour to the map view model
+                ToursListView.PropertyChanged += (sender, e) =>
                 {
-                    Name = $"Tour{i}"
-                });
+                    if (e.PropertyName == nameof(ToursListViewModel.SelectedTour))
+                    {
+                        MapViewModel.SetSelectedTour(ToursListView.SelectedTour);
+                    }
+                };
             }
-
-            // Add test data for TourLogs
-            var tour1 = tours[0];
-            tour1.TourLogs.Add(new TourLog 
-            { 
-                Date = DateTime.Now.ToString("dd.MM.yyyy"),
-                TotalTime = "2:00:00",
-                TotalDistance = 10.5,
-                Rating = "4",
-                AverageSpeed = "5.25",
-                Comment = "Great tour with beautiful scenery",
-                Difficulty = "Moderate",
-                Report = "Perfect weather conditions",
-                Name = "First Log"
-            });
-
-            tour1.TourLogs.Add(new TourLog
+            catch (Exception ex)
             {
-                Date = DateTime.Now.ToString("dd.MM.yyyy"),
-                TotalTime = "1:00:00",
-                TotalDistance = 10.5,
-                Rating = "1",
-                AverageSpeed = "5.25",
-                Comment = "Ez Tour",
-                Difficulty = "Easy",
-                Report = "Perfect weather conditions",
-                Name = "Second Log"
-            });
-
-            var tour2 = tours[1];
-            tour2.TourLogs.Add(new TourLog 
-            { 
-                Date = DateTime.Now.AddDays(-1).ToString("dd.MM.yyyy"),
-                TotalTime = "3:00:00",
-                TotalDistance = 15.0,
-                Rating = "5",
-                AverageSpeed = "5.0",
-                Comment = "Challenging but rewarding hike",
-                Difficulty = "Hard",
-                Report = "Some rain but manageable",
-                Name = "Log2"
-            });
-
-            //this makes a new TourListViewModel and binds it to the tours list
-            ToursListView = new ToursListViewModel(tours);
-            TourLogs = new TourLogsViewModel(ToursListView);
-            //todo create a TourListTourLogsViewModel -> this makes a new TourListViewModel and binds it to the tour logs list
-            //ToursListTourLogsViewModel = new ToursListView(not sure if we gotta do tours or tourlogs here);
-            // this binds the subtab buttons to the tours viewmodel
-            SubTabButtonsForToursListView = new SubTabButtonsViewModel(
-                ToursListView.AddCommand,
-                ToursListView.DeleteCommand
-            );
-            // this binds the subtab buttons to the tour logs viewmodel
-            SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
-                TourLogs.AddTourLogCommand,
-                TourLogs.DeleteTourLogCommand
-            );
-            TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
+                log.Fatal("Error initializing MainWindowViewModel", ex);
+                throw;
+            }
+            log.Info("MainWindowViewModel initialized successfully.");
         }
     }
 }
