@@ -51,7 +51,7 @@
             </ComboBox>
 
             <Label Content="Distance:" Grid.Row="3" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTourLog.TotalDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+            <TextBox Text="{Binding SelectedTourLog.TotalDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5" PreviewTextInput="DistanceTextBox_PreviewTextInput" LostFocus="DistanceTextBox_LostFocus"/>
 
             <Label Content="Comment:" Grid.Row="4" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTourLog.Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5"/>
