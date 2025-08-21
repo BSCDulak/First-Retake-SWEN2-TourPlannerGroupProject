@@ -22,6 +22,6 @@
                   Margin="10" />
 
         <!-- Tour Log Details Editor -->
-        <local:UserControl1 Grid.Column="1" Margin="10"/>
+        <local:TourLogsDetails Grid.Column="1" Margin="10"/>
     </Grid>
 </UserControl>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SWEN2_TourPlannerGroupProject.MVVM;
 using SWEN2_TourPlannerGroupProject.Models;
@@ -98,5 +97,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 await _tourLogRepository.UpdateTourLogAsync(SelectedTourLog);
             }
         }
+
+
+
+        public string Error => null;
     }
 }
