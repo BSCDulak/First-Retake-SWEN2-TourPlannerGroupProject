@@ -9,7 +9,7 @@ namespace SWEN2_TourPlannerGroupProject.Logging
 {
     public class Log4NetWrapper : ILoggerWrapper
     {
-        private readonly log4net.ILog logger;
+        private readonly log4net.ILog _logger;
 
         public static Log4NetWrapper CreateLogger(string configPath, string caller)
         {
@@ -23,32 +23,24 @@ namespace SWEN2_TourPlannerGroupProject.Logging
             return new Log4NetWrapper(logger);
         }
 
-        private Log4NetWrapper(log4net.ILog logger)
+        public Log4NetWrapper(log4net.ILog logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
-        public void Debug(string message)
-        {
-            this.logger.Debug(message);
-        }
-        public void Info(string message)
-        {
-            this.logger.Info(message);
-        }
-        public void Warn(string message)
-        {
-            this.logger.Warn(message);
-        }
+        public void Debug(string message) => _logger.Debug(message);
+        public void Debug(string message, Exception ex) => _logger.Debug(message, ex);
 
-        public void Error(string message)
-        {
-            this.logger.Error(message);
-        }
+        public void Info(string message) => _logger.Info(message);
+        public void Info(string message, Exception ex) => _logger.Info(message, ex);
 
-        public void Fatal(string message)
-        {
-            this.logger.Fatal(message);
-        }
+        public void Warn(string message) => _logger.Warn(message);
+        public void Warn(string message, Exception ex) => _logger.Warn(message, ex);
+
+        public void Error(string message) => _logger.Error(message);
+        public void Error(string message, Exception ex) => _logger.Error(message, ex);
+
+        public void Fatal(string message) => _logger.Fatal(message);
+        public void Fatal(string message, Exception ex) => _logger.Fatal(message, ex);
     }
 }
