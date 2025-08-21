@@ -127,10 +127,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             {
                 await _tourLogRepository.UpdateTourLogAsync(SelectedTourLog);
             }
-            else
-            {
-                log.Warn("SelectedTourLog is null or does not have a valid TourLogId.");
-            }
         }
 
         private string GetLogName()

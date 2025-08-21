@@ -23,33 +23,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         public MainWindowViewModel()
         {
-<<<<<<< Updated upstream
             try
-=======
-
-            // this makes a new TourListViewModel called ToursListView
-            ToursListView = new ToursListViewModel();
-            // this makes a new TourLogsViewModel called TourLogs
-            TourLogs = new TourLogsViewModel(ToursListView);
-            // this binds the subtab buttons to the tours viewmodel
-            SubTabButtonsForToursListView = new SubTabButtonsViewModel(
-                ToursListView.AddCommand,
-                ToursListView.DeleteCommand,
-                ToursListView.UpdateCommand
-            );
-            // this binds the subtab buttons to the tour logs viewmodel
-            SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
-                TourLogs.AddTourLogCommand,
-                TourLogs.DeleteTourLogCommand,
-                TourLogs.UpdateTourLogCommand,
-                TourLogs.ReportCommand
-            );
-            TourDetailsWrapPanelView = new TourDetailsWrapPanelViewModel(ToursListView);
-            MapViewModel = new MapViewModel();
-
-            // Connect the selected tour to the map view model
-            ToursListView.PropertyChanged += (sender, e) =>
->>>>>>> Stashed changes
             {
                 log.Info("MainWindowViewModel constructor called. Initializing viewmodels...");
                 // this makes a new TourListViewModel called ToursListView
