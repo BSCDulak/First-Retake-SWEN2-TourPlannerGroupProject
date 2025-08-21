@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Windows;
 using SWEN2_TourPlannerGroupProject.Data;
+using SWEN2_TourPlannerGroupProject.Logging;
 
 namespace SWEN2_TourPlannerGroupProject;
 
@@ -37,6 +38,7 @@ public partial class App : Application
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         ServiceProvider = services.BuildServiceProvider();
 
-
+        var log = LoggerFactory.GetLogger();
+        log.Info("WPF application started.");
     }
 }
