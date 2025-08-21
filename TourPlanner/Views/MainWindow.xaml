@@ -10,7 +10,7 @@
         xmlns:userControls="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
         xmlns:subViews="clr-namespace:SWEN2_TourPlannerGroupProject.Views.Subviews"
 
-        Title="MainWindow" Height="450" Width="800" MinHeight="500">
+        Title="MainWindow" Height="450" Width="800" MinHeight="550" MinWidth="535">
 <!-- This is our main entry point and also the only xaml where the xaml.cs has to have some additional code to initialize our
     DataContext, to be precise our MainWindowViewModel which constructs all the other viewModels in its constructor, without this nothing works.-->
 
