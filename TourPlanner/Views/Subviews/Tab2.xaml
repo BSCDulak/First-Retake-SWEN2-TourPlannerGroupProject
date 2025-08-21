@@ -21,9 +21,9 @@
 
         <userControls:ToursList DataContext="{Binding ToursListView}" Grid.Row="1"/>
 
-        <userControls:SubTabButtons  DataContext="{Binding SubTabButtonsForTourLogsView}" Grid.ColumnSpan="2" Margin="0,0,173,0"/>
+        <userControls:SubTabButtons  DataContext="{Binding SubTabButtonsForTourLogsView}" Grid.ColumnSpan="2" Margin="0,0,0,0"/>
 
-        <userControls:TourLogs Grid.Row="1" Grid.Column="1" DataContext="{Binding TourLogs}" Margin="0,0,0,-10" Loaded="TourLogs_Loaded_1" />
+        <userControls:TourLogs Grid.Row="1" Grid.Column="1" DataContext="{Binding TourLogs}" Margin="0,0,-10,-10" Loaded="TourLogs_Loaded_1" />
 
     </Grid>
 </UserControl>
