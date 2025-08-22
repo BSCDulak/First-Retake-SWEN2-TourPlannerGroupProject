@@ -28,6 +28,7 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Content="Date:" Grid.Row="0" Grid.Column="0" Margin="0"/>
@@ -73,6 +74,9 @@
                     </x:Array>
                 </ComboBox.ItemsSource>
             </ComboBox>
+
+            <Label Content="Name:" Grid.Row="6" Grid.Column="0" Margin="0"/>
+            <TextBox Text="{Binding SelectedTourLog.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5"/>
         </Grid>
     </ScrollViewer>
 </UserControl>
