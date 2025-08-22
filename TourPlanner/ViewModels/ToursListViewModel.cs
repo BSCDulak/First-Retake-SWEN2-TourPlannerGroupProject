@@ -254,8 +254,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 {
                     var document = new iText.Layout.Document(pdf);
 
-                    document.Add(new iText.Layout.Element.Paragraph("Tour Report").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(20));
-                    document.Add(new iText.Layout.Element.Paragraph($"Tour Name: {tour.Name}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"{tour.Name}").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(24));
                     document.Add(new iText.Layout.Element.Paragraph($"Description: {tour.Description}"));
                     document.Add(new iText.Layout.Element.Paragraph($"From: {tour.StartLocation}"));
                     document.Add(new iText.Layout.Element.Paragraph($"To: {tour.EndLocation}"));
@@ -302,7 +301,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                         document.Add(new iText.Layout.Element.Paragraph($"Average Distance: {avgDistanceStr}"));
                         document.Add(new iText.Layout.Element.Paragraph($"Average Rating: {avgRatingStr}"));
                     }
-
+                    /*
+                    Left in case for future testing of compute valuse
                     document.Add(new iText.Layout.Element.Paragraph("Tour Logs").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(16));
 
                     if (tour.TourLogs != null && tour.TourLogs.Any())
@@ -323,6 +323,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     {
                         document.Add(new iText.Layout.Element.Paragraph("No tour logs available for this tour."));
                     }
+                    */
 
                     document.Close();
                 }
