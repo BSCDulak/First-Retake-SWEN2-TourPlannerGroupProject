@@ -131,7 +131,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private string GetLogName()
         {
-            return SelectedTourLog?.Name ?? "Unnamed Tour Log";
+            return SelectedTourLog.Name ?? "Unnamed Tour Log";
         }
 
         private void GenerateReport(string logName)
@@ -147,7 +147,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             {
                 Directory.CreateDirectory(downloadsPath);
             }
-            string safeLogName = SelectedTourLog.Name ?? "Unnamed Tour Log";
+            string safeLogName = SelectedTourLog.Name ?? "New Log Entry";
             string dest = Path.Combine(downloadsPath, $"TourLogReport_{safeLogName.Replace(" ", "_")}_{DateTime.Now:yyyyMMddHHmmss}.pdf");
 
             PdfWriter writer = new PdfWriter(dest);
@@ -161,8 +161,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             document.Add(new Paragraph($"Comment: {SelectedTourLog.Comment ?? "N/A"}"));
             document.Add(new Paragraph($"Difficulty: {SelectedTourLog.Difficulty ?? "N/A"}"));
             document.Add(new Paragraph($"Date: {SelectedTourLog.DateTime.ToShortDateString()}"));
-            document.Add(new Paragraph($"Total Time: {SelectedTourLog.TotalTime ?? "N/A"}"));
-            document.Add(new Paragraph($"Total Distance: {SelectedTourLog.TotalDistance}"));
+            document.Add(new Paragraph($"Time: {SelectedTourLog.TotalTime ?? "N/A"}"));
+            document.Add(new Paragraph($"Distance: {SelectedTourLog.TotalDistance.ToString("F2")}"));
             document.Add(new Paragraph($"Rating: {SelectedTourLog.Rating ?? "N/A"}"));
 
             document.Close();
