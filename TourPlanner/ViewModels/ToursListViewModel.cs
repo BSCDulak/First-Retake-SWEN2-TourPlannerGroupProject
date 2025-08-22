@@ -1,15 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using iText.Kernel.Pdf; // ✅ iText
+using Microsoft.Extensions.DependencyInjection;
+using SWEN2_TourPlannerGroupProject.Data;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
-using SWEN2_TourPlannerGroupProject.Data;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO; // ✅ Added for file output
-using iText.Kernel.Pdf; // ✅ iText
-using System.Windows; // ✅ For MessageBox
 using System.Linq; // ✅ Added for .Any()
+using System.Threading.Tasks;
+using System.Windows; // ✅ For MessageBox
+using System.Windows.Input;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -260,9 +261,47 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     document.Add(new iText.Layout.Element.Paragraph($"To: {tour.EndLocation}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Transport Type: {tour.TransportType}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Distance: {tour.Distance}"));
-                    document.Add(new iText.Layout.Element.Paragraph($"Estimated Time: {tour.EstimatedTime}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Time: {tour.EstimatedTime}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Child Friendliness: {tour.ChildFriendliness}"));
                     document.Add(new iText.Layout.Element.Paragraph($"Popularity: {tour.Popularity}"));
+
+                    if (tour.TourLogs != null && tour.TourLogs.Any())
+                    {
+                        // --- Average Time ---
+                        var validTimes = tour.TourLogs
+                            .Where(log => TimeSpan.TryParse(log.TotalTime, out _))
+                            .Select(log => TimeSpan.Parse(log.TotalTime).Ticks)
+                            .ToList();
+
+                        string avgTimeStr = validTimes.Any()
+                            ? TimeSpan.FromTicks((long)validTimes.Average()).ToString(@"hh\:mm\:ss")
+                            : "N/A";
+
+                        // --- Average Distance ---
+                        var validDistances = tour.TourLogs
+                            .Where(log => double.TryParse(log.Distance, out _))
+                            .Select(log => double.Parse(log.Distance))
+                            .ToList();
+
+                        string avgDistanceStr = validDistances.Any()
+                            ? $"{validDistances.Average():F2} km"
+                            : "N/A";
+
+                        // --- Average Rating ---
+                        var validRatings = tour.TourLogs
+                            .Where(log => double.TryParse(log.Rating, out _))
+                            .Select(log => double.Parse(log.Rating))
+                            .ToList();
+
+                        string avgRatingStr = validRatings.Any()
+                            ? $"{validRatings.Average():F2}/5"
+                            : "N/A";
+
+                        // Add results to PDF
+                        document.Add(new iText.Layout.Element.Paragraph($"Average Time: {avgTimeStr}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Average Distance: {avgDistanceStr}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Average Rating: {avgRatingStr}"));
+                    }
 
                     document.Add(new iText.Layout.Element.Paragraph("Tour Logs").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(16));
 
@@ -275,7 +314,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                             document.Add(new iText.Layout.Element.Paragraph($"  Report: {log.Report}"));
                             document.Add(new iText.Layout.Element.Paragraph($"  Distance: {log.Distance}"));
                             document.Add(new iText.Layout.Element.Paragraph($"  Rating: {log.Rating}"));
-                            document.Add(new iText.Layout.Element.Paragraph($"  Average Speed: {log.AverageSpeed}"));
                             document.Add(new iText.Layout.Element.Paragraph($"  Comment: {log.Comment}"));
                             document.Add(new iText.Layout.Element.Paragraph($"  Difficulty: {log.Difficulty}"));
                             document.Add(new iText.Layout.Element.Paragraph("--------------------"));
@@ -289,8 +327,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     document.Close();
                 }
 
-                MessageBox.Show($"Tour report generated successfully at: {filePath}", "Report Generated", MessageBoxButton.OK, MessageBoxImage.Information);
-                log.Info($"Tour report generated at: {filePath}");
+                // Automatically open the PDF in the default browser
+                System.Diagnostics.Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+
+                log.Info($"Tour report generated and opened: {filePath}");
             }
             catch (Exception ex)
             {
