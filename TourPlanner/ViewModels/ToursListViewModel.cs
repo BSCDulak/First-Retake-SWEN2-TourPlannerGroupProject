@@ -1,14 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using iText.Kernel.Pdf; // ✅ iText
+using Microsoft.Extensions.DependencyInjection;
+using SWEN2_TourPlannerGroupProject.Data;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
-using SWEN2_TourPlannerGroupProject.Data;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO; // ✅ Added for file output
-using iText.Kernel.Pdf; // ✅ iText
+using System.Linq; // ✅ Added for .Any()
+using System.Threading.Tasks;
 using System.Windows; // ✅ For MessageBox
+using System.Windows.Input;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -49,7 +51,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             AddCommand = new RelayCommand(async _ => await AddTourAsync());
             DeleteCommand = new RelayCommand(async _ => await DeleteTourAsync(), _ => SelectedTour != null);
             UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
-            ReportCommand = new RelayCommand(_ => { /* Mock report action */ });
+            ReportCommand = new RelayCommand(_ => GenerateTourReport(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
             
             log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
@@ -232,5 +234,110 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
+        private void GenerateTourReport()
+        {
+            if (SelectedTour == null)
+            {
+                MessageBox.Show("Please select a tour to generate a report.", "No Tour Selected", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                var tour = SelectedTour;
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
+                string fileName = $"TourReport_{tour.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                string filePath = Path.Combine(downloadsPath, fileName);
+
+                using (var writer = new PdfWriter(filePath))
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new iText.Layout.Document(pdf);
+
+                    document.Add(new iText.Layout.Element.Paragraph($"{tour.Name}").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(24));
+                    document.Add(new iText.Layout.Element.Paragraph($"Description: {tour.Description}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"From: {tour.StartLocation}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"To: {tour.EndLocation}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Transport Type: {tour.TransportType}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Distance: {tour.Distance}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Time: {tour.EstimatedTime}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Child Friendliness: {tour.ChildFriendliness}"));
+                    document.Add(new iText.Layout.Element.Paragraph($"Popularity: {tour.Popularity}"));
+
+                    if (tour.TourLogs != null && tour.TourLogs.Any())
+                    {
+                        // --- Average Time ---
+                        var validTimes = tour.TourLogs
+                            .Where(log => TimeSpan.TryParse(log.TotalTime, out _))
+                            .Select(log => TimeSpan.Parse(log.TotalTime).Ticks)
+                            .ToList();
+
+                        string avgTimeStr = validTimes.Any()
+                            ? TimeSpan.FromTicks((long)validTimes.Average()).ToString(@"hh\:mm\:ss")
+                            : "N/A";
+
+                        // --- Average Distance ---
+                        var validDistances = tour.TourLogs
+                            .Where(log => double.TryParse(log.Distance, out _))
+                            .Select(log => double.Parse(log.Distance))
+                            .ToList();
+
+                        string avgDistanceStr = validDistances.Any()
+                            ? $"{validDistances.Average():F2} km"
+                            : "N/A";
+
+                        // --- Average Rating ---
+                        var validRatings = tour.TourLogs
+                            .Where(log => double.TryParse(log.Rating, out _))
+                            .Select(log => double.Parse(log.Rating))
+                            .ToList();
+
+                        string avgRatingStr = validRatings.Any()
+                            ? $"{validRatings.Average():F2}/5"
+                            : "N/A";
+
+                        // Add results to PDF
+                        document.Add(new iText.Layout.Element.Paragraph($"Average Time: {avgTimeStr}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Average Distance: {avgDistanceStr}"));
+                        document.Add(new iText.Layout.Element.Paragraph($"Average Rating: {avgRatingStr}"));
+                    }
+                    /*
+                    Left in case for future testing of compute valuse
+                    document.Add(new iText.Layout.Element.Paragraph("Tour Logs").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(16));
+
+                    if (tour.TourLogs != null && tour.TourLogs.Any())
+                    {
+                        foreach (var log in tour.TourLogs)
+                        {
+                            document.Add(new iText.Layout.Element.Paragraph($"  Date: {log.Date}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"  Total Time: {log.TotalTime}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"  Report: {log.Report}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"  Distance: {log.Distance}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"  Rating: {log.Rating}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"  Comment: {log.Comment}"));
+                            document.Add(new iText.Layout.Element.Paragraph($"  Difficulty: {log.Difficulty}"));
+                            document.Add(new iText.Layout.Element.Paragraph("--------------------"));
+                        }
+                    }
+                    else
+                    {
+                        document.Add(new iText.Layout.Element.Paragraph("No tour logs available for this tour."));
+                    }
+                    */
+
+                    document.Close();
+                }
+
+                // Automatically open the PDF in the default browser
+                System.Diagnostics.Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+
+                log.Info($"Tour report generated and opened: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error generating tour report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                log.Error($"Error generating tour report: {ex}");
+            }
+        }
     }
 }

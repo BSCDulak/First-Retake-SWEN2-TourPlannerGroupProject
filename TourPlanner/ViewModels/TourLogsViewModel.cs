@@ -8,6 +8,12 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using SWEN2_TourPlannerGroupProject.Data;
 using Microsoft.Extensions.DependencyInjection;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using System.IO;
+using System.Diagnostics;
 
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
@@ -40,6 +46,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand UpdateTourLogCommand { get; }
         public ICommand ReportCommand { get; }
 
+        public SubTabButtonsViewModel SubTabButtonsForTourLogsView { get; }
+
         public TourLogsViewModel() : this(new ToursListViewModel()) { }
 
         public TourLogsViewModel(ToursListViewModel toursListViewModel)
@@ -59,6 +67,14 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             AddTourLogCommand = new RelayCommand(async _ => await AddTourLogAsync(), _ => _toursListViewModel.SelectedTour != null);
             DeleteTourLogCommand = new RelayCommand(async _ => await DeleteTourLogAsync(), _ => SelectedTourLog != null);
             UpdateTourLogCommand = new RelayCommand(async _ => await UpdateTourLogAsync(), _ => SelectedTourLog != null);
+            ReportCommand = new RelayCommand(_ => GenerateReport(GetLogName()), _ => SelectedTourLog != null);
+
+            SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
+                AddTourLogCommand,
+                DeleteTourLogCommand,
+                UpdateTourLogCommand,
+                ReportCommand
+            );
         }
 
         private async Task AddTourLogAsync()
@@ -111,14 +127,50 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             {
                 await _tourLogRepository.UpdateTourLogAsync(SelectedTourLog);
             }
-            else
-            {
-                log.Warn("SelectedTourLog is null or does not have a valid TourLogId.");
-            }
         }
 
+        private string GetLogName()
+        {
+            return SelectedTourLog.Name ?? "Unnamed Tour Log";
+        }
 
+        private void GenerateReport(string logName)
+        {
+            if (SelectedTourLog == null)
+            {
+                System.Diagnostics.Debug.WriteLine("No Tour Log selected for report generation.");
+                return;
+            }
 
-        public string Error => null;
+            string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            if (!Directory.Exists(downloadsPath))
+            {
+                Directory.CreateDirectory(downloadsPath);
+            }
+            string safeLogName = SelectedTourLog.Name ?? "New Log Entry";
+            string dest = Path.Combine(downloadsPath, $"TourLogReport_{safeLogName.Replace(" ", "_")}_{DateTime.Now:yyyyMMddHHmmss}.pdf");
+
+            PdfWriter writer = new PdfWriter(dest);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+            Paragraph header = new Paragraph(safeLogName)
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontSize(20);
+            document.Add(header);
+
+            document.Add(new Paragraph($"Comment: {SelectedTourLog.Comment ?? "N/A"}"));
+            document.Add(new Paragraph($"Difficulty: {SelectedTourLog.Difficulty ?? "N/A"}"));
+            document.Add(new Paragraph($"Date: {SelectedTourLog.DateTime.ToShortDateString()}"));
+            document.Add(new Paragraph($"Time: {SelectedTourLog.TotalTime ?? "N/A"}"));
+            document.Add(new Paragraph($"Distance: {SelectedTourLog.TotalDistance.ToString("F2")}"));
+            document.Add(new Paragraph($"Rating: {SelectedTourLog.Rating ?? "N/A"}"));
+
+            document.Close();
+
+            System.Diagnostics.Debug.WriteLine($"Report for Tour Log: {SelectedTourLog.Name} generated at {dest}.");
+            System.Diagnostics.Process.Start(new ProcessStartInfo(dest) { UseShellExecute = true });
+        }
+
+        public string Error => string.Empty;
     }
 }
