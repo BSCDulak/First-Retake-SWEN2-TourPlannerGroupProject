@@ -14,6 +14,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
     internal class MapViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper log = LoggerFactory.GetLogger();
         private Tour? _selectedTour;
         private readonly HttpClient _httpClient;
         private const string API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQ4NjYyZmU3YmRhNzRjZWFhNzU5NGM4ZjRkYzE4OThhIiwiaCI6Im11cm11cjY0In0=";
@@ -57,7 +58,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             // Only update map when start or end location changes
             if (e.PropertyName == nameof(Tour.StartLocation) || e.PropertyName == nameof(Tour.EndLocation))
             {
-                Console.WriteLine($"Tour property changed: {e.PropertyName}, updating map...");
+                log.Info($"MAP: Tour property changed: {e.PropertyName}, updating map...");
                 UpdateMap();
             }
         }
@@ -100,7 +101,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating map: {ex.Message}");
+                log.Info($"MAP: Error updating map: {ex.Message}");
                 ShowDefaultMap();
             }
         }
@@ -110,28 +111,28 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             try
             {
                 var url = $"https://api.openrouteservice.org/geocode/search?api_key={API_KEY}&text={Uri.EscapeDataString(address)}&size=1";
-                Console.WriteLine($"Geocoding URL: {url}");
+                log.Info($"MAP: Geocoding URL: {url}");
                 var response = await _httpClient.GetStringAsync(url);
-                Console.WriteLine($"Geocoding response: {response}");
+                log.Info($"MAP: Geocoding response: {response}");
                 var jsonDoc = JsonDocument.Parse(response);
-                
+
                 var features = jsonDoc.RootElement.GetProperty("features");
                 if (features.GetArrayLength() > 0)
                 {
                     var coordinates = features[0].GetProperty("geometry").GetProperty("coordinates");
                     var lng = coordinates[0].GetDouble();
                     var lat = coordinates[1].GetDouble();
-                    Console.WriteLine($"Found coordinates for {address}: {lat}, {lng}");
+                    log.Info($"MAP: Found coordinates for {address}: {lat}, {lng}");
                     return (lat, lng);
                 }
                 else
                 {
-                    Console.WriteLine($"No coordinates found for {address}");
+                    log.Info($"MAP: No coordinates found for {address}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting coordinates for {address}: {ex.Message}");
+                log.Info($"MAP: Error getting coordinates for {address}: {ex.Message}");
             }
             return null;
         }
@@ -184,7 +185,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting route: {ex.Message}");
+                log.Info($"MAP: Error getting route: {ex.Message}");
                 ShowDefaultMap();
             }
         }
@@ -237,12 +238,12 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 }
                 else
                 {
-                    Console.WriteLine($"Route API error for {profile}: {responseContent}");
+                    log.Info($"MAP: Route API error for {profile}: {responseContent}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting {profile} route: {ex.Message}");
+                log.Info($"MAP: Error getting {profile} route: {ex.Message}");
             }
             return null;
         }
