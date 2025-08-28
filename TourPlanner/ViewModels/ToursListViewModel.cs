@@ -126,46 +126,42 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task DeleteTourAsync()
         {
-            if (SelectedTours == null || !SelectedTours.Any())
+            // Determine which tours to delete: multi-select first, then single-select fallback
+            var toursToDelete = SelectedTours?.Any() == true
+                ? SelectedTours.ToList()
+                : (SelectedTour != null ? new List<Tour> { SelectedTour } : new List<Tour>());
+
+            if (!toursToDelete.Any())
             {
                 log.Warn("No tours selected for deletion.");
-                return;
+                return; // Nothing to delete
             }
 
-            var toursToDelete = SelectedTours.ToList(); // Make a copy
-            var successfullyDeleted = new List<Tour>();
-
-            try
+            foreach (var tour in toursToDelete)
             {
-                foreach (var tour in toursToDelete)
+                if (tour.TourId.HasValue)
                 {
-                    if (tour.TourId.HasValue)
+                    try
                     {
                         log.Info($"Deleting tour: {tour.Name} with ID: {tour.TourId}");
                         await _tourRepository.DeleteTourAsync(tour.TourId.Value);
-                        successfullyDeleted.Add(tour);
+                        Tours.Remove(tour);
+                        log.Info($"Tour deleted successfully: {tour.Name}");
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        log.Warn("A selected tour does not have a valid TourId.");
+                        log.Error($"Error deleting tour {tour.Name}: {ex}");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                log.Error($"Error deleting tours: {ex}");
-                throw;
+                else
+                {
+                    log.Warn($"Tour {tour.Name} has no valid ID, skipping deletion.");
+                }
             }
 
-            // Remove deleted tours from UI
-            foreach (var tour in successfullyDeleted)
-                Tours.Remove(tour);
-
-            SelectedTours.Clear();
+            // Clear selection after deletion
+            SelectedTours?.Clear();
             SelectedTour = null;
-            OnPropertyChanged(nameof(Tours));
-
-            log.Info("Tours deleted successfully.");
         }
 
         private async Task UpdateTourAsync()

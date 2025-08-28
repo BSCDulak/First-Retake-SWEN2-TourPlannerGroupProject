@@ -97,5 +97,30 @@ namespace SWEN2_TourPlannerGroupProject.Tests
                 vm.Tours.Select(t => t.Name).ToList()
             );
         }
+        [Test]
+        public async Task DeleteMultipleTours_ShouldRemoveAllSelectedTours()
+        {
+            // Arrange
+            var vm = new ToursListViewModel();
+            await vm.InitializeAsync();
+
+            var tour1 = await _tourRepository.AddTourAsync(new Tour { Name = "Tour 1" });
+            var tour2 = await _tourRepository.AddTourAsync(new Tour { Name = "Tour 2" });
+            var tour3 = await _tourRepository.AddTourAsync(new Tour { Name = "Tour 3" });
+
+            await vm.InitializeAsync(); // reload tours
+            vm.SelectedTours = new List<Tour> { vm.Tours[0], vm.Tours[2] }; // select first and last
+            vm.SelectedTour = vm.Tours[2]; // to simulate User clicking on last item because SelectedTour is used in DeleteCommand CanExecute
+            // Act
+            await ((AsyncRelayCommand)vm.DeleteCommand).ExecuteAsync();
+
+            // Assert
+            Assert.That(vm.Tours.Count, Is.EqualTo(1));
+            Assert.That(vm.Tours.First().Name, Is.EqualTo("Tour 2"));
+            CollectionAssert.IsEmpty(vm.SelectedTours);
+
+            var remainingTours = (await _tourRepository.GetAllToursAsync()).Select(t => t.Name).ToList();
+            CollectionAssert.AreEqual(new[] { "Tour 2" }, remainingTours);
+        }
     }
 }
