@@ -64,9 +64,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 }
             };
 
-            AddTourLogCommand = new RelayCommand(async _ => await AddTourLogAsync(), _ => _toursListViewModel.SelectedTour != null);
-            DeleteTourLogCommand = new RelayCommand(async _ => await DeleteTourLogAsync(), _ => SelectedTourLog != null);
-            UpdateTourLogCommand = new RelayCommand(async _ => await UpdateTourLogAsync(), _ => SelectedTourLog != null);
+            AddTourLogCommand = new AsyncRelayCommand(_ => AddTourLogAsync(), _ => _toursListViewModel.SelectedTour != null);
+            DeleteTourLogCommand = new AsyncRelayCommand(_ => DeleteTourLogAsync(), _ => SelectedTourLog != null);
+            UpdateTourLogCommand = new AsyncRelayCommand(_ => UpdateTourLogAsync(), _ => SelectedTourLog != null);
             ReportCommand = new RelayCommand(_ => GenerateReport(GetLogName()), _ => SelectedTourLog != null);
 
             SubTabButtonsForTourLogsView = new SubTabButtonsViewModel(
@@ -75,6 +75,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 UpdateTourLogCommand,
                 ReportCommand
             );
+            log.Info("TourLogsViewModel initialized.");
         }
 
         private async Task AddTourLogAsync()
