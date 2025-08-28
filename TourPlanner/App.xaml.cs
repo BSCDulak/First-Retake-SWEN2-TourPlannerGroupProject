@@ -17,6 +17,11 @@ public partial class App : Application
 {
     public static string ConnectionString { get; private set; }
     public static IServiceProvider ServiceProvider { get; private set; }
+    public static void ConfigureServicesForTest(IServiceProvider provider)
+    {
+        ServiceProvider = provider;
+    }
+
 
     protected override void OnStartup(StartupEventArgs e)
     {

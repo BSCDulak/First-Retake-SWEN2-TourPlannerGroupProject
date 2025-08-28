@@ -17,10 +17,26 @@ namespace SWEN2_TourPlannerGroupProject;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private MainWindowViewModel vm;
+
     public MainWindow()
     {
         InitializeComponent();
-        var vm = new MainWindowViewModel();
+        Loaded += MainWindow_Loaded; // subscribe to Loaded event
+    }
+
+    private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        vm = new MainWindowViewModel();
         DataContext = vm;
+
+        try
+        {
+            await vm.InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error initializing application: {ex.Message}", "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }

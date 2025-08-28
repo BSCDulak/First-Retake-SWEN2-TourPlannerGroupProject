@@ -20,6 +20,12 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public SubTabButtonsViewModel SubTabButtonsForTourLogsView { get; }
         public TourDetailsWrapPanelViewModel TourDetailsWrapPanelView { get; }
         public MapViewModel MapViewModel { get; }
+        public async Task InitializeAsync()
+        {
+            await ToursListView.InitializeAsync();
+            // this is here because in testing we got a race condition with the configureservicesfortest taking too long
+            // and the tests starting the constructor with async loading of tours before the services are configured properly.
+        }
 
         public MainWindowViewModel()
         {

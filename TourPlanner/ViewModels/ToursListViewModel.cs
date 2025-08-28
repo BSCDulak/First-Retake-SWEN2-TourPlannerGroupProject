@@ -56,12 +56,12 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             
             log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
             
-            // Load data asynchronously to avoid blocking the UI thread
-            _ = Task.Run(async () =>
-            {
-                await LoadToursAsync();
-                App.Current.Dispatcher.Invoke(() => UpdateAllCalculations());
-            });
+        }
+
+        public async Task InitializeAsync()
+        {
+            await LoadToursAsync();
+            UpdateAllCalculations();
         }
 
         private async Task LoadToursAsync()

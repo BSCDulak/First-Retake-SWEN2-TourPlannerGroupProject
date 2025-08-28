@@ -1,92 +1,73 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using SWEN2_TourPlannerGroupProject.ViewModels;
+using SWEN2_TourPlannerGroupProject.Data;
 using SWEN2_TourPlannerGroupProject.Models;
-using System.Collections.ObjectModel;
+using SWEN2_TourPlannerGroupProject.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SWEN2_TourPlannerGroupProject.Tests;
-[TestFixture]
-public class ToursListViewModelButtonsTests
+namespace SWEN2_TourPlannerGroupProject.Tests
 {
-    private ToursListViewModel _viewModel;
-
-    [SetUp] // This method runs before each test to initialize your test setup
-    public void SetUp()
+    [TestFixture]
+    public class ToursListViewModelTests
     {
-        // Initialize the view model with an empty ObservableCollection
-        _viewModel = new ToursListViewModel(new ObservableCollection<Tour>());
-    }
-
-    [Test] // This attribute marks the method as a test method
-    public void AddTour_ShouldAddNewTourToCollection()
-    {
-        // Arrange
-        int initialCount = _viewModel.Tours.Count;
-
-        // Act
-        _viewModel.AddCommand.Execute(null);
-
-        // Assert
-        Assert.AreEqual(initialCount + 1, _viewModel.Tours.Count);
-        Assert.AreEqual("newTour", _viewModel.Tours[initialCount].Name);
-    }
-
-    [Test]
-    public void DeleteTour_ShouldRemoveSelectedTour()
-    {
-        // Arrange
-        // Manually create and populate the collection with a sample tour, because if we use .Add we depend on
-        // the Add method working correctly which turns this into an integration test -> and that is not a unit test
-        var tourList = new ObservableCollection<Tour>
+        [SetUp]
+        public void Setup()
         {
-            new Tour { Name = "Test Tour" }
-        };
+            // Configure DI with InMemory DB for testing
+            var services = new ServiceCollection();
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseInMemoryDatabase("TestDatabase" + System.Guid.NewGuid().ToString()));
+            // unique name ensures a fresh DB each test
 
-        // Initialize ViewModel with the predefined list
-        _viewModel = new ToursListViewModel(tourList);
+            services.AddScoped<ITourRepository, TourRepository>();
+            services.AddScoped<ITourLogRepository, TourLogRepository>();
 
-        // Select the tour to delete
-        var selectedTour = tourList[0];
-        _viewModel.SelectedTour = selectedTour;
+            App.ConfigureServicesForTest(services.BuildServiceProvider());
+        }
 
-        int initialCount = _viewModel.Tours.Count;
+        [Test]
+        public async Task AddTour_ShouldIncreaseTourCount()
+        {
+            var vm = new ToursListViewModel();
+            await Task.Run(() => vm.AddCommand.Execute(null));
 
-        // Act
-        _viewModel.DeleteCommand.Execute(null);
+            Assert.That(vm.Tours.Count, Is.EqualTo(1));
+            Assert.That(vm.SelectedTour, Is.Not.Null);
+            Assert.That(vm.SelectedTour.Name, Is.EqualTo("newTour"));
+        }
 
-        // Assert
-        Assert.AreEqual(initialCount - 1, _viewModel.Tours.Count);  // Ensure the count is decremented
-        Assert.IsNull(_viewModel.SelectedTour);  // Ensure the selected tour is null after deletion
-    }
+        [Test]
+        public async Task DeleteTour_ShouldRemoveTourFromList()
+        {
+            var vm = new ToursListViewModel();
+            await Task.Run(() => vm.AddCommand.Execute(null));
+            var tourToDelete = vm.Tours.First();
+            vm.SelectedTour = tourToDelete;
 
-    [Test]
-    public void DeleteTour_ShouldNotExecuteWhenNoTourIsSelected()
-    {
-        // Arrange
-        _viewModel.SelectedTour = null;
-        int initialCount = _viewModel.Tours.Count;
+            await Task.Run(() => vm.DeleteCommand.Execute(null));
 
-        // Act
-        _viewModel.DeleteCommand.Execute(null);
+            Assert.That(vm.Tours.Count, Is.EqualTo(0));
+            Assert.That(vm.SelectedTour, Is.Null);
+        }
 
-        // Assert
-        Assert.AreEqual(initialCount, _viewModel.Tours.Count, "Cannot delete a tour if you haven't selected one");  // The collection should remain the same
-    }
-    [Test]
-    public void SelectedTour_ShouldBeActuallySelected()
-    {
-        // Arrange
-        var toursListViewModel = new ToursListViewModel(new ObservableCollection<Tour>());
-        
+        [Test]
+        public async Task UpdateTour_ShouldPersistChanges()
+        {
+            var vm = new ToursListViewModel();
+            await Task.Run(() => vm.AddCommand.Execute(null));
+            var tourToUpdate = vm.Tours.First();
+            vm.SelectedTour = tourToUpdate;
 
-        var tour = new Tour { Name = "Test Tour" };
+            vm.SelectedTour.Name = "UpdatedName";
+            await Task.Run(() => vm.UpdateCommand.Execute(null));
 
-        // Act
+            var repo = App.ServiceProvider.GetRequiredService<ITourRepository>();
+            var allTours = await repo.GetAllToursAsync();
 
-        toursListViewModel.SelectedTour = tour;
-        var selectedTourFromToursListViewModel = toursListViewModel.SelectedTour;
-
-        // Assert
-        Assert.AreEqual(tour, selectedTourFromToursListViewModel);
+            Assert.That(allTours.First().Name, Is.EqualTo("UpdatedName"));
+        }
     }
 }
