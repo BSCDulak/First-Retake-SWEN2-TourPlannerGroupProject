@@ -36,6 +36,18 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
         }
 
+        private IList<Tour> _selectedTours = new List<Tour>();
+        public IList<Tour> SelectedTours
+        {
+            get => _selectedTours;
+            set
+            {
+                _selectedTours = value;
+                OnPropertyChanged(nameof(SelectedTours));
+                CommandManager.InvalidateRequerySuggested(); // Updates CanExecute for DeleteCommand
+            }
+        }
+
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand UpdateCommand { get; }
@@ -114,14 +126,46 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task DeleteTourAsync()
         {
-            if (SelectedTour != null)
+            if (SelectedTours == null || !SelectedTours.Any())
             {
-                log.Info($"Deleting tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
-                await _tourRepository.DeleteTourAsync(SelectedTour.TourId ?? 0);
-                Tours.Remove(SelectedTour);
-                SelectedTour = null;
-                log.Info($"Tour deleted successfully. Remaining tours count: {Tours.Count}");
+                log.Warn("No tours selected for deletion.");
+                return;
             }
+
+            var toursToDelete = SelectedTours.ToList(); // Make a copy
+            var successfullyDeleted = new List<Tour>();
+
+            try
+            {
+                foreach (var tour in toursToDelete)
+                {
+                    if (tour.TourId.HasValue)
+                    {
+                        log.Info($"Deleting tour: {tour.Name} with ID: {tour.TourId}");
+                        await _tourRepository.DeleteTourAsync(tour.TourId.Value);
+                        successfullyDeleted.Add(tour);
+                    }
+                    else
+                    {
+                        log.Warn("A selected tour does not have a valid TourId.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error deleting tours: {ex}");
+                throw;
+            }
+
+            // Remove deleted tours from UI
+            foreach (var tour in successfullyDeleted)
+                Tours.Remove(tour);
+
+            SelectedTours.Clear();
+            SelectedTour = null;
+            OnPropertyChanged(nameof(Tours));
+
+            log.Info("Tours deleted successfully.");
         }
 
         private async Task UpdateTourAsync()
