@@ -48,9 +48,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             
             Tours = new ObservableCollection<Tour>();
             _tourRepository = App.ServiceProvider.GetRequiredService<ITourRepository>();
-            AddCommand = new RelayCommand(async _ => await AddTourAsync());
-            DeleteCommand = new RelayCommand(async _ => await DeleteTourAsync(), _ => SelectedTour != null);
-            UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
+            AddCommand = new AsyncRelayCommand(_ => AddTourAsync());
+            DeleteCommand = new AsyncRelayCommand(_ => DeleteTourAsync(), _ => SelectedTour != null);
+            UpdateCommand = new AsyncRelayCommand(_ => UpdateTourAsync(), _ => SelectedTour != null);
             ReportCommand = new RelayCommand(_ => GenerateTourReport(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
             
@@ -72,26 +72,35 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 var tours = await _tourRepository.GetAllToursAsync();
                 log.Info($"Found {tours.Count()} tours in database");
 
-                // Ensure UI updates happen on UI thread
-                App.Current.Dispatcher.Invoke(() =>
+                if (App.Current != null)
                 {
-                    Tours.Clear();
-                    foreach (var tour in tours)
-                    {
-                        Tours.Add(tour);
-                        log.Info($"Loaded tour: {tour.Name} from Database");
-                    }
-                    log.Info($"Total tours in collection: {Tours.Count}");
-                    
-                    // Force UI refresh
-                    OnPropertyChanged(nameof(Tours));
-                });
+                    // In production, ensure UI thread safety
+                    App.Current.Dispatcher.Invoke(() => PopulateToursCollection(tours));
+                    log.Info("Tours collection populated in production.");
+                }
+                else
+                {
+                    // In unit tests (no Dispatcher)
+                    PopulateToursCollection(tours);
+                    log.Info("TESTING: Tours collection populated in test environment.");
+                }
             }
             catch (Exception ex)
             {
                 log.Error($"Error loading tours: {ex}");
             }
         }
+
+        private void PopulateToursCollection(IEnumerable<Tour> tours)
+        {
+            Tours.Clear();
+            foreach (var tour in tours) { 
+                Tours.Add(tour);
+                log.Info($"Loaded tour: {tour.Name} with ID: {tour.TourId}");
+            }
+            OnPropertyChanged(nameof(Tours));
+        }
+
 
         private async Task AddTourAsync()
         {

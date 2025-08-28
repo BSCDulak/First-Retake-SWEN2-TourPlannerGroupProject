@@ -82,7 +82,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             if (_toursListViewModel.SelectedTour != null)
             {
                 var newLog = new TourLog 
-                { 
+                {
+                    Name = "New Log Entry",
                     Comment = "New Log Entry",
                     TourId = _toursListViewModel.SelectedTour.TourId,
                     DateTime = DateTime.UtcNow,
