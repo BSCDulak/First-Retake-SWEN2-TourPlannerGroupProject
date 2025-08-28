@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SWEN2_TourPlannerGroupProject.Views.UserControls"
              xmlns:viewModels="clr-namespace:SWEN2_TourPlannerGroupProject.ViewModels"
-             d:DataContext="{d:DesignInstance Type=viewModels:TourLogsViewModel, IsDesignTimeCreatable=True}"
+             xmlns:helpers="clr-namespace:SWEN2_TourPlannerGroupProject.Helpers"
+             d:DataContext="{d:DesignInstance Type=viewModels:TourLogsViewModel, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -20,6 +21,8 @@
         <ListView Grid.Column="0"
                   ItemsSource="{Binding TourLogs}" 
                   SelectedItem="{Binding SelectedTourLog}" 
+                  helpers:SelectedItemsBehavior.SelectedItems="{Binding SelectedTourLogs}" 
+                  SelectionMode="Extended"
                   DisplayMemberPath="Name"
                   Margin="0,0,10,10" Grid.ColumnSpan="3" />
 

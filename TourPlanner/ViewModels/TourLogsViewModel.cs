@@ -40,6 +40,17 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             }
         }
+        private IList<TourLog> _selectedTourLogs = new List<TourLog>();
+        public IList<TourLog> SelectedTourLogs
+        {
+            get => _selectedTourLogs;
+            set
+            {
+                _selectedTourLogs = value ?? new List<TourLog>();
+                OnPropertyChanged(nameof(SelectedTourLogs));
+                CommandManager.InvalidateRequerySuggested(); // Updates CanExecute if needed
+            }
+        }
 
         public ICommand AddTourLogCommand { get; }
         public ICommand DeleteTourLogCommand { get; }
@@ -65,7 +76,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             };
 
             AddTourLogCommand = new AsyncRelayCommand(_ => AddTourLogAsync(), _ => _toursListViewModel.SelectedTour != null);
-            DeleteTourLogCommand = new AsyncRelayCommand(_ => DeleteTourLogAsync(), _ => SelectedTourLog != null);
+            DeleteTourLogCommand = new AsyncRelayCommand(_ => DeleteTourLogAsync(), _ => SelectedTourLog != null || (SelectedTourLogs?.Any() ?? false));
             UpdateTourLogCommand = new AsyncRelayCommand(_ => UpdateTourLogAsync(), _ => SelectedTourLog != null);
             ReportCommand = new RelayCommand(_ => GenerateReport(GetLogName()), _ => SelectedTourLog != null);
 
@@ -105,22 +116,44 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task DeleteTourLogAsync()
         {
-            if (_toursListViewModel.SelectedTour != null && SelectedTourLog != null)
+            // Defensive check: ensure a tour is selected and there are logs selected
+            if (_toursListViewModel.SelectedTour == null || SelectedTourLogs == null || !SelectedTourLogs.Any())
             {
-                log.Info($"Deleting TourLog: ID:{SelectedTourLog.TourLogId} Name:{SelectedTourLog.Name} of Tour ID:{SelectedTourLog.TourId} Name:{SelectedTourLog.Tour?.Name}");
-                if (SelectedTourLog.TourLogId.HasValue)
+                log.Warn("No tour and/or logs selected for deletion.");
+                return;
+            }
+
+            // Make a copy to avoid collection modification issues during iteration
+            var logsToDelete = SelectedTourLogs.ToList();
+
+            foreach (var logToDelete in logsToDelete)
+            {
+                if (logToDelete.TourLogId.HasValue)
                 {
-                    await _tourLogRepository.DeleteTourLogAsync(SelectedTourLog.TourLogId.Value);
+                    log.Info($"Deleting TourLog: ID:{logToDelete.TourLogId} Name:{logToDelete.Name} " +
+                             $"of Tour ID:{logToDelete.TourId} Name:{logToDelete.Tour?.Name}");
+
+                    // Delete from database
+                    await _tourLogRepository.DeleteTourLogAsync(logToDelete.TourLogId.Value);
+
+                    // Remove from ObservableCollection bound to the UI
+                    _toursListViewModel.SelectedTour?.TourLogs.Remove(logToDelete);
                 }
                 else
                 {
-                    log.Warn("SelectedTourLog does not have a valid TourLogId.");
+                    log.Warn("A selected TourLog does not have a valid TourLogId.");
                 }
-                SelectedTourLog = null;
-                OnPropertyChanged(nameof(TourLogs));
-                log.Info("TourLog deleted successfully.");
             }
+
+            // Clear selection after deletion
+            SelectedTourLogs.Clear();
+
+            // Notify the UI that the collection changed
+            OnPropertyChanged(nameof(TourLogs));
+
+            log.Info("Selected TourLogs deleted successfully.");
         }
+
 
         private async Task UpdateTourLogAsync()
         {
