@@ -9,6 +9,7 @@ using SWEN2_TourPlannerGroupProject.ViewModels;
 using SWEN2_TourPlannerGroupProject.Models;
 using System;
 using System.Reflection;
+using System.Globalization;
 
 namespace SWEN2_TourPlannerGroupProject.Tests
 {
@@ -119,8 +120,8 @@ namespace SWEN2_TourPlannerGroupProject.Tests
 
             Assert.IsNotNull(js, "Generated JS should not be null");
             Assert.IsTrue(js!.Contains("L.polyline"), "JS should contain polyline");
-            Assert.IsTrue(js.Contains(start.lat.ToString()), "Start latitude should be in the JS");
-            Assert.IsTrue(js.Contains(end.lat.ToString()), "End latitude should be in the JS");
+            Assert.IsTrue(js.Contains(start.lat.ToString(CultureInfo.InvariantCulture)), "Start latitude should be in the JS");
+            Assert.IsTrue(js.Contains(end.lat.ToString(CultureInfo.InvariantCulture)), "End latitude should be in the JS");
             Assert.IsTrue(js.Contains("Walking"), "Transport type should be in the JS");
         }
 
