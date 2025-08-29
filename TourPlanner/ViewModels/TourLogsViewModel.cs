@@ -173,7 +173,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             if (SelectedTourLog == null)
             {
-                System.Diagnostics.Debug.WriteLine("No Tour Log selected for report generation.");
+                log.Debug("No Tour Log selected for report generation.");
                 return;
             }
 
@@ -202,7 +202,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
             document.Close();
 
-            System.Diagnostics.Debug.WriteLine($"Report for Tour Log: {SelectedTourLog.Name} generated at {dest}.");
+            log.Debug($"Report for Tour Log: {SelectedTourLog.Name} generated at {dest}.");
             System.Diagnostics.Process.Start(new ProcessStartInfo(dest) { UseShellExecute = true });
         }
 

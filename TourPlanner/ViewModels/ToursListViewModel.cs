@@ -33,6 +33,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 SetField(ref _selectedTour, value);
                 OnPropertyChanged(nameof(SelectedTour));
                 CommandManager.InvalidateRequerySuggested();
+                log.Info($"SelectedTour changed to: {value?.Name ?? "null"}");
             }
         }
 
@@ -276,6 +277,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         // This method updates all calculations for each tour in the Tours collection. Possible concerns: Might be slow for large datasets causing UI lag.
         public void UpdateAllCalculations()
         {
+            log.Info("Updating calculations for all tours...");
             foreach (var tour in Tours)
             {
                 UpdateChildFriendliness(tour);
