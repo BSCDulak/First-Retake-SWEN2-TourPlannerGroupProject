@@ -105,9 +105,13 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
                 log.Info($"Import command triggered. Selected file: {filePath}");
 
-                await ImportToursAsync(Tours, filePath, _tourRepository);
+                // Use the new helper for DTO-based import
+                await Helpers.ImportHelper.ImportToursAsync(Tours, filePath, _tourRepository, log);
+
+                // Recalculate fields after import
                 UpdateAllCalculations();
             });
+
 
 
 
