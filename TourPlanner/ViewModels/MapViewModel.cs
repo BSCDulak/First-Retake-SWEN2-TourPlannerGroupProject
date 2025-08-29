@@ -123,7 +123,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     var coordinates = features[0].GetProperty("geometry").GetProperty("coordinates");
                     var lng = coordinates[0].GetDouble();
                     var lat = coordinates[1].GetDouble();
-                    log.Info($"MAP: Found coordinates for {address}: {lat}, {lng}");
+                    log.Info($"MAP: Found coordinates for {address}: {lat.ToString(CultureInfo.InvariantCulture)}, {lng.ToString(CultureInfo.InvariantCulture)}");
                     return (lat, lng);
                 }
                 else
@@ -248,7 +248,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
             return null;
         }
-
+        // everywhere we use lat/lng we need .ToString(CultureInfo.InvariantCulture) to avoid different behaviour in different locale, in particular issues with the API not getting correct values.
         private void UpdateTourWithRouteInfo(((double lat, double lng)[] coordinates, double distance, double duration) routeInfo, string transportType)
         {
             if (SelectedTour != null)
@@ -278,7 +278,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 OnPropertyChanged(nameof(SelectedTour));
             }
         }
-
+        // everywhere we use lat/lng we need .ToString(CultureInfo.InvariantCulture) to avoid different behaviour in different locale, in particular issues with the API not getting correct values.
         private string GenerateRouteJavaScript((double lat, double lng) start, (double lat, double lng) end, (double lat, double lng)[] coordinates, string startAddress, string endAddress, string transportType)
         {
             var routeCoords = new StringBuilder();
