@@ -36,12 +36,7 @@ namespace SWEN2_TourPlannerGroupProject.Tests
         [Test]
         public async Task GetCoordinatesAsync_ReturnsCoordinates_WhenApiReturnsValidData()
         {
-            // Arrange: mock HttpClient
-            var jsonResponse = @"{
-                ""features"": [
-                    { ""geometry"": { ""coordinates"": [16.3738, 48.2082] } }
-                ]
-            }";
+            var jsonResponse = @"{""features"":[{""geometry"":{""coordinates"":[16.3738,48.2082]}}]}";
 
             var handlerMock = new Mock<HttpMessageHandler>();
             handlerMock.Protected()
@@ -57,21 +52,13 @@ namespace SWEN2_TourPlannerGroupProject.Tests
                });
 
             var httpClient = new HttpClient(handlerMock.Object);
-
-            // Inject via reflection (since constructor uses private readonly)
-            typeof(MapViewModel)
-                .GetField("_httpClient", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            typeof(MapViewModel).GetField("_httpClient", BindingFlags.NonPublic | BindingFlags.Instance)
                 ?.SetValue(_mapVM, httpClient);
 
-            // Act
-            var method = _mapVM.GetType()
-                                     .GetMethod("GetCoordinatesAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-                                     
+            var method = _mapVM.GetType().GetMethod("GetCoordinatesAsync", BindingFlags.NonPublic | BindingFlags.Instance);
             var task = (Task<(double lat, double lng)?>)method!.Invoke(_mapVM, new object[] { "Vienna" })!;
-
             var coordinates = await task;
 
-            // Assert
             Assert.IsNotNull(coordinates);
             Assert.AreEqual(48.2082, coordinates.Value.lat);
             Assert.AreEqual(16.3738, coordinates.Value.lng);
@@ -92,14 +79,11 @@ namespace SWEN2_TourPlannerGroupProject.Tests
                });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            typeof(MapViewModel).GetField("_httpClient", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            typeof(MapViewModel).GetField("_httpClient", BindingFlags.NonPublic | BindingFlags.Instance)
                 ?.SetValue(_mapVM, httpClient);
 
-            var method = _mapVM.GetType()
-                                     .GetMethod("GetCoordinatesAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-
+            var method = _mapVM.GetType().GetMethod("GetCoordinatesAsync", BindingFlags.NonPublic | BindingFlags.Instance);
             var task = (Task<(double lat, double lng)?>)method!.Invoke(_mapVM, new object[] { "Unknown" })!;
-
             var coordinates = await task;
 
             Assert.IsNull(coordinates);
@@ -112,24 +96,32 @@ namespace SWEN2_TourPlannerGroupProject.Tests
         [Test]
         public void GenerateRouteJavaScript_ContainsMarkersAndPolyline()
         {
-            var coordinates = new (double lat, double lng)[] { (48.2082, 16.3738), (48.2100, 16.3800) };
+            // Use explicit tuple names for start, end, and coordinates
+            var start = (lat: 48.2082, lng: 16.3738);
+            var end = (lat: 48.2100, lng: 16.3800);
+            var coordinates = new[]
+            {
+                (lat: 48.2082, lng: 16.3738),
+                (lat: 48.2100, lng: 16.3800)
+            };
 
             var js = _mapVM.GetType()
-                .GetMethod("GenerateRouteJavaScript", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetMethod("GenerateRouteJavaScript", BindingFlags.NonPublic | BindingFlags.Instance)
                 ?.Invoke(_mapVM, new object[]
                 {
-                    (48.2082, 16.3738),
-                    (48.2100, 16.3800),
+                    start,
+                    end,
                     coordinates,
                     "StartAddress",
                     "EndAddress",
                     "Walking"
                 }) as string;
 
-            Assert.IsNotNull(js);
-            Assert.IsTrue(js!.Contains("L.polyline"));
-            Assert.IsTrue(js.Contains("48.2082"));
-            Assert.IsTrue(js.Contains("Walking"));
+            Assert.IsNotNull(js, "Generated JS should not be null");
+            Assert.IsTrue(js!.Contains("L.polyline"), "JS should contain polyline");
+            Assert.IsTrue(js.Contains(start.lat.ToString()), "Start latitude should be in the JS");
+            Assert.IsTrue(js.Contains(end.lat.ToString()), "End latitude should be in the JS");
+            Assert.IsTrue(js.Contains("Walking"), "Transport type should be in the JS");
         }
 
         #endregion
@@ -139,34 +131,30 @@ namespace SWEN2_TourPlannerGroupProject.Tests
         [Test]
         public async Task UpdateMap_FiresOnMapUpdateRequested_WhenTourHasNoCoordinates()
         {
-            bool eventFired = false;
-            _mapVM.OnMapUpdateRequested += _ => eventFired = true;
+            var tcs = new TaskCompletionSource<string>();
+            _mapVM.OnMapUpdateRequested += html => tcs.TrySetResult(html);
 
             var emptyTour = new Tour { StartLocation = "", EndLocation = "" };
             _mapVM.SetSelectedTour(emptyTour);
 
-            await Task.Delay(200); // allow async void UpdateMap to complete
+            await Task.WhenAny(tcs.Task, Task.Delay(2000));
 
-            Assert.IsTrue(eventFired);
+            Assert.IsTrue(tcs.Task.IsCompleted, "OnMapUpdateRequested should fire");
+            Assert.IsTrue(tcs.Task.Result.Contains("Vienna"), "Default map should show Vienna");
         }
 
         [Test]
         public async Task UpdateMap_FiresOnMapUpdateRequested_WhenTourHasCoordinates()
         {
-            // We mock GetCoordinatesAsync to always return some coordinates
-            var method = _mapVM.GetType().GetMethod("GetCoordinatesAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var coordinates = (48.2082, 16.3738);
-
-            // Replace method using Moq? Not easily possible since it's private. So for integration test, we can just set a real tour with StartLocation/EndLocation to real strings
-            bool eventFired = false;
-            _mapVM.OnMapUpdateRequested += _ => eventFired = true;
+            var tcs = new TaskCompletionSource<string>();
+            _mapVM.OnMapUpdateRequested += html => tcs.TrySetResult(html);
 
             _mapVM.SetSelectedTour(_sampleTour);
 
-            await Task.Delay(2000); // wait for async void UpdateMap to complete API call
+            await Task.WhenAny(tcs.Task, Task.Delay(5000));
 
-            // We cannot assert exact route without network, but we can check the event fired
-            Assert.IsTrue(eventFired);
+            Assert.IsTrue(tcs.Task.IsCompleted, "OnMapUpdateRequested should fire");
+            Assert.IsTrue(tcs.Task.Result.Contains("L.marker"), "Map HTML should contain markers");
         }
 
         #endregion
