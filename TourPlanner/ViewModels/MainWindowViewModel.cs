@@ -43,7 +43,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                     ToursListView.AddCommand,
                     ToursListView.DeleteCommand,
                     ToursListView.UpdateCommand,
-                    ToursListView.ReportCommand
+                    ToursListView.ReportCommand,
+                    ToursListView.ExportCommand,
+                    ToursListView.ImportCommand
                 );
                 log.Info("SubTabButtonsForToursListView initialized.");
                 // this binds the subtab buttons to the tour logs viewmodel, and don´t you forget to add new buttons here if you add them to the TourLogsViewModel

@@ -15,14 +15,18 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand DeleteCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand ReportCommand { get; }
+        public ICommand ExportCommand { get; }
+        public ICommand ImportCommand { get; }
 
         // The ICommand? updateCommand parameter is optional and can be null because I haven´t set it yet for the TourLogsViewModel. TODO later today maybe?
-        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand, ICommand? updateCommand = null, ICommand? reportCommand = null)
+        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand, ICommand? updateCommand = null, ICommand? reportCommand = null, ICommand? exportCommand = null, ICommand? importCommand = null)
         {
             AddCommand = addCommand;
             DeleteCommand = deleteCommand;
             UpdateCommand = updateCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
             ReportCommand = reportCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
+            ExportCommand = exportCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
+            ImportCommand = importCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
         }
 
         // This constructor is only used for design-time data, if we do not have this
@@ -34,6 +38,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             DeleteCommand = new RelayCommand(_ => { /* Mock delete action */ });
             UpdateCommand = new RelayCommand(_ => { /* Mock update action */ });
             ReportCommand = new RelayCommand(_ => { /* Mock report action */ });
+            ExportCommand = new RelayCommand(_ => { /* Mock export action */ });
+            ImportCommand = new RelayCommand(_ => { /* Mock import action */ });
         }
 
     }

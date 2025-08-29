@@ -1,6 +1,8 @@
 ﻿using iText.Kernel.Pdf; // ✅ iText
 using Microsoft.Extensions.DependencyInjection;
 using SWEN2_TourPlannerGroupProject.Data;
+using SWEN2_TourPlannerGroupProject.DTOs;
+using SWEN2_TourPlannerGroupProject.Mappers;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
 using System;
@@ -8,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO; // ✅ Added for file output
 using System.Linq; // ✅ Added for .Any()
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows; // ✅ For MessageBox
 using System.Windows.Input;
@@ -54,6 +57,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand UpdateCommand { get; }
         public ICommand UpdateCalculationsCommand { get; }
         public ICommand ReportCommand { get; } 
+        public ICommand ExportCommand { get; }
+        public ICommand ImportCommand { get; }
+
         public ToursListViewModel()
         {
             _instanceCounter++;
@@ -66,7 +72,46 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             UpdateCommand = new AsyncRelayCommand(_ => UpdateTourAsync(), _ => SelectedTour != null);
             ReportCommand = new RelayCommand(_ => GenerateTourReport(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
-            
+            ExportCommand = new RelayCommand(_ =>
+            {
+                // Get user's Downloads folder
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
+                string fileName = $"TourBackup_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+                string filePath = Path.Combine(downloadsPath, fileName);
+
+                ExportTours(Tours, filePath);
+                log.Info($"Export command triggered. File saved to: {filePath}");
+            }, _ => Tours.Any());
+
+            ImportCommand = new AsyncRelayCommand(async _ =>
+            {
+                // Ask the user to pick a file
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads",
+                    Filter = "JSON files (*.json)|*.json",
+                    Title = "Select a tour backup file to import"
+                };
+
+                bool? result = openFileDialog.ShowDialog();
+
+                if (result != true)
+                {
+                    log.Info("Import cancelled by user.");
+                    return;
+                }
+
+                string filePath = openFileDialog.FileName;
+
+                log.Info($"Import command triggered. Selected file: {filePath}");
+
+                await ImportToursAsync(Tours, filePath, _tourRepository);
+                UpdateAllCalculations();
+            });
+
+
+
+
             log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
             
         }
@@ -175,6 +220,53 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 log.Info($"Updated tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
             }
         }
+        public void ExportTours(IEnumerable<Tour> tours, string filePath)
+        {
+            var dtoList = tours.Select(TourMapper.ToDto).ToList();
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(dtoList, options);
+            File.WriteAllText(filePath, json);
+            log.Info($"Exported {tours.Count()} tours to {filePath}");
+        }
+
+
+        /// <summary>
+        /// Imports tours from a JSON file into an ObservableCollection.
+        /// Optionally, also saves them to a repository.
+        /// </summary>
+        public async Task ImportToursAsync(
+            ObservableCollection<Tour> targetCollection,
+            string filePath,
+            ITourRepository? repository = null)
+        {
+            if (!File.Exists(filePath))
+            {
+                log.Warn($"File not found: {filePath}");
+                return;
+            }
+
+            string json = File.ReadAllText(filePath);
+            var importedDtos = JsonSerializer.Deserialize<List<TourDto>>(json);
+
+            if (importedDtos == null || importedDtos.Count == 0)
+            {
+                log.Warn($"No tours found in file: {filePath}");
+                return;
+            }
+
+            foreach (var dto in importedDtos)
+            {
+                var tour = TourMapper.FromDto(dto); // map back to domain model
+                targetCollection.Add(tour);
+
+                if (repository != null)
+                    await repository.AddTourAsync(tour);
+            }
+
+            log.Info($"Imported {importedDtos.Count} tours from {filePath}");
+        }
+
+
 
         public void UpdateChildFriendliness(Tour tour)
         {
