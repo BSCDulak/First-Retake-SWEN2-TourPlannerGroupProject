@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Text.Json;
-using System.Windows.Input;
-using System.ComponentModel;
-using SWEN2_TourPlannerGroupProject.Models;
+﻿using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
@@ -257,7 +258,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 
                 // Update distance (convert meters to km)
                 var distanceKm = routeInfo.distance / 1000.0;
-                SelectedTour.Distance = $"{distanceKm:F1} km";
+                SelectedTour.Distance = distanceKm.ToString("F1", CultureInfo.InvariantCulture) + "km";
                 
                 // Update estimated time (convert seconds to hours and minutes)
                 var totalMinutes = routeInfo.duration / 60.0;
@@ -283,7 +284,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             var routeCoords = new StringBuilder();
             foreach (var coord in coordinates)
             {
-                routeCoords.Append($"[{coord.lat}, {coord.lng}],");
+                routeCoords.Append($"[{coord.lat.ToString(CultureInfo.InvariantCulture)}, {coord.lng.ToString(CultureInfo.InvariantCulture)}],");
             }
 
             var routeColor = transportType switch
@@ -295,7 +296,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             };
 
             return $@"
-                var map = L.map('map').setView([{(start.lat + end.lat) / 2}, {(start.lng + end.lng) / 2}], 12);
+                var map = L.map('map').setView([{((start.lat + end.lat) / 2).ToString(CultureInfo.InvariantCulture)}, {((start.lng + end.lng) / 2).ToString(CultureInfo.InvariantCulture)}], 12);
                 L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
                     maxZoom: 19,
                     attribution: '© OpenStreetMap contributors'
@@ -304,10 +305,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 var routeCoords = [{routeCoords.ToString().TrimEnd(',')}];
                 var route = L.polyline(routeCoords, {{color: '{routeColor}', weight: 5}}).addTo(map);
                 
-                var startMarker = L.marker([{start.lat}, {start.lng}]).addTo(map);
+                var startMarker = L.marker([{start.lat.ToString(CultureInfo.InvariantCulture)}, {start.lng.ToString(CultureInfo.InvariantCulture)}]).addTo(map);
                 startMarker.bindPopup('<b>Start</b><br>{startAddress}<br><b>Transport:</b> {transportType}');
                 
-                var endMarker = L.marker([{end.lat}, {end.lng}]).addTo(map);
+                var endMarker = L.marker([{end.lat.ToString(CultureInfo.InvariantCulture)}, {end.lng.ToString(CultureInfo.InvariantCulture)}]).addTo(map);
                 endMarker.bindPopup('<b>End</b><br>{endAddress}<br><b>Transport:</b> {transportType}');
                 
                 map.fitBounds(route.getBounds());
