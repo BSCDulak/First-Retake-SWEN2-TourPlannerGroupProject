@@ -21,8 +21,8 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             AddCommand = addCommand;
             DeleteCommand = deleteCommand;
-            UpdateCommand = updateCommand ?? new RelayCommand(_ => { });
-            ReportCommand = reportCommand ?? new RelayCommand(_ => { /* Mock report action */ });
+            UpdateCommand = updateCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
+            ReportCommand = reportCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
         }
 
         // This constructor is only used for design-time data, if we do not have this
