@@ -17,6 +17,7 @@ public partial class App : Application
 {
     public static string ConnectionString { get; private set; }
     public static IServiceProvider ServiceProvider { get; private set; }
+    public static string ConnectionStringName { get; private set; }
     public static void ConfigureServicesForTest(IServiceProvider provider)
     {
         ServiceProvider = provider;
@@ -31,8 +32,8 @@ public partial class App : Application
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
-
-        ConnectionString = config.GetConnectionString("DefaultConnection");
+        ConnectionStringName = "TestConnection";
+        ConnectionString = config.GetConnectionString(ConnectionStringName);
         // Now you can use App.ConnectionString anywhere in your app
 
         // Set up dependency injection

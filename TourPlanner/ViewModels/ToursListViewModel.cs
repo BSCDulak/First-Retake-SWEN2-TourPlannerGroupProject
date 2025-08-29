@@ -126,7 +126,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         {
             try
             {
-                log.Info("Loading tours from database...");
+                log.Info($"Loading tours from database...{App.ConnectionStringName}");
                 var tours = await _tourRepository.GetAllToursAsync();
                 log.Info($"Found {tours.Count()} tours in database");
 
@@ -254,17 +254,38 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 return;
             }
 
+            int successImportedCount = 0;
             foreach (var dto in importedDtos)
             {
-                var tour = TourMapper.FromDto(dto); // map back to domain model
+                // Map DTO → domain model
+                var tour = TourMapper.FromDto(dto);
+
+                // Check for duplicate by TourId so we don´t crash the program when importing the same file twice
+                bool exists = targetCollection.Any(t => t.TourId.HasValue && t.TourId == tour.TourId);
+
+                if (exists)
+                {
+                    log.Warn($"Skipping duplicate tour: {tour.Name} (ID: {tour.TourId})");
+                    continue; 
+                }
+
                 targetCollection.Add(tour);
 
                 if (repository != null)
+                {
+                    if (tour.TourId.HasValue)
+                    {
+                        tour.TourId = null;
+                    }
                     await repository.AddTourAsync(tour);
+                }
+
+                successImportedCount++;
             }
 
-            log.Info($"Imported {importedDtos.Count} tours from {filePath}");
+            log.Info($"Imported {successImportedCount} tours from {filePath}");
         }
+
 
 
 
