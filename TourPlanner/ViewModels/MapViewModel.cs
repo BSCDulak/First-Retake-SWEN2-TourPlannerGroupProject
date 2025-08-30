@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Text.Json;
-using System.Windows.Input;
-using System.ComponentModel;
-using SWEN2_TourPlannerGroupProject.Models;
+﻿using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
 {
     internal class MapViewModel : ViewModelBase
     {
+        private static readonly ILoggerWrapper log = LoggerFactory.GetLogger();
         private Tour? _selectedTour;
         private readonly HttpClient _httpClient;
-        private const string API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQ4NjYyZmU3YmRhNzRjZWFhNzU5NGM4ZjRkYzE4OThhIiwiaCI6Im11cm11cjY0In0=";
+        private string API_KEY = App.ApiKey;
 
         public Tour? SelectedTour
         {
@@ -57,7 +59,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             // Only update map when start or end location changes
             if (e.PropertyName == nameof(Tour.StartLocation) || e.PropertyName == nameof(Tour.EndLocation))
             {
-                Console.WriteLine($"Tour property changed: {e.PropertyName}, updating map...");
+                log.Info($"MAP: Tour property changed: {e.PropertyName}, updating map...");
                 UpdateMap();
             }
         }
@@ -100,7 +102,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating map: {ex.Message}");
+                log.Info($"MAP: Error updating map: {ex.Message}");
                 ShowDefaultMap();
             }
         }
@@ -110,28 +112,28 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             try
             {
                 var url = $"https://api.openrouteservice.org/geocode/search?api_key={API_KEY}&text={Uri.EscapeDataString(address)}&size=1";
-                Console.WriteLine($"Geocoding URL: {url}");
+                log.Info($"MAP: Geocoding URL: {url}");
                 var response = await _httpClient.GetStringAsync(url);
-                Console.WriteLine($"Geocoding response: {response}");
+                log.Info($"MAP: Geocoding response: {response}");
                 var jsonDoc = JsonDocument.Parse(response);
-                
+
                 var features = jsonDoc.RootElement.GetProperty("features");
                 if (features.GetArrayLength() > 0)
                 {
                     var coordinates = features[0].GetProperty("geometry").GetProperty("coordinates");
                     var lng = coordinates[0].GetDouble();
                     var lat = coordinates[1].GetDouble();
-                    Console.WriteLine($"Found coordinates for {address}: {lat}, {lng}");
+                    log.Info($"MAP: Found coordinates for {address}: {lat.ToString(CultureInfo.InvariantCulture)}, {lng.ToString(CultureInfo.InvariantCulture)}");
                     return (lat, lng);
                 }
                 else
                 {
-                    Console.WriteLine($"No coordinates found for {address}");
+                    log.Info($"MAP: No coordinates found for {address}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting coordinates for {address}: {ex.Message}");
+                log.Info($"MAP: Error getting coordinates for {address}: {ex.Message}");
             }
             return null;
         }
@@ -184,7 +186,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting route: {ex.Message}");
+                log.Info($"MAP: Error getting route: {ex.Message}");
                 ShowDefaultMap();
             }
         }
@@ -237,16 +239,16 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 }
                 else
                 {
-                    Console.WriteLine($"Route API error for {profile}: {responseContent}");
+                    log.Info($"MAP: Route API error for {profile}: {responseContent}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error getting {profile} route: {ex.Message}");
+                log.Info($"MAP: Error getting {profile} route: {ex.Message}");
             }
             return null;
         }
-
+        // everywhere we use lat/lng we need .ToString(CultureInfo.InvariantCulture) to avoid different behaviour in different locale, in particular issues with the API not getting correct values.
         private void UpdateTourWithRouteInfo(((double lat, double lng)[] coordinates, double distance, double duration) routeInfo, string transportType)
         {
             if (SelectedTour != null)
@@ -256,7 +258,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 
                 // Update distance (convert meters to km)
                 var distanceKm = routeInfo.distance / 1000.0;
-                SelectedTour.Distance = $"{distanceKm:F1} km";
+                SelectedTour.Distance = distanceKm.ToString("F1", CultureInfo.InvariantCulture) + "km";
                 
                 // Update estimated time (convert seconds to hours and minutes)
                 var totalMinutes = routeInfo.duration / 60.0;
@@ -276,13 +278,13 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 OnPropertyChanged(nameof(SelectedTour));
             }
         }
-
+        // everywhere we use lat/lng we need .ToString(CultureInfo.InvariantCulture) to avoid different behaviour in different locale, in particular issues with the API not getting correct values.
         private string GenerateRouteJavaScript((double lat, double lng) start, (double lat, double lng) end, (double lat, double lng)[] coordinates, string startAddress, string endAddress, string transportType)
         {
             var routeCoords = new StringBuilder();
             foreach (var coord in coordinates)
             {
-                routeCoords.Append($"[{coord.lat}, {coord.lng}],");
+                routeCoords.Append($"[{coord.lat.ToString(CultureInfo.InvariantCulture)}, {coord.lng.ToString(CultureInfo.InvariantCulture)}],");
             }
 
             var routeColor = transportType switch
@@ -294,7 +296,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             };
 
             return $@"
-                var map = L.map('map').setView([{(start.lat + end.lat) / 2}, {(start.lng + end.lng) / 2}], 12);
+                var map = L.map('map').setView([{((start.lat + end.lat) / 2).ToString(CultureInfo.InvariantCulture)}, {((start.lng + end.lng) / 2).ToString(CultureInfo.InvariantCulture)}], 12);
                 L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
                     maxZoom: 19,
                     attribution: '© OpenStreetMap contributors'
@@ -303,10 +305,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 var routeCoords = [{routeCoords.ToString().TrimEnd(',')}];
                 var route = L.polyline(routeCoords, {{color: '{routeColor}', weight: 5}}).addTo(map);
                 
-                var startMarker = L.marker([{start.lat}, {start.lng}]).addTo(map);
+                var startMarker = L.marker([{start.lat.ToString(CultureInfo.InvariantCulture)}, {start.lng.ToString(CultureInfo.InvariantCulture)}]).addTo(map);
                 startMarker.bindPopup('<b>Start</b><br>{startAddress}<br><b>Transport:</b> {transportType}');
                 
-                var endMarker = L.marker([{end.lat}, {end.lng}]).addTo(map);
+                var endMarker = L.marker([{end.lat.ToString(CultureInfo.InvariantCulture)}, {end.lng.ToString(CultureInfo.InvariantCulture)}]).addTo(map);
                 endMarker.bindPopup('<b>End</b><br>{endAddress}<br><b>Transport:</b> {transportType}');
                 
                 map.fitBounds(route.getBounds());

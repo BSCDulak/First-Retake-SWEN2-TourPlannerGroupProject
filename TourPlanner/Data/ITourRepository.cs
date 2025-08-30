@@ -8,5 +8,6 @@ namespace SWEN2_TourPlannerGroupProject.Data
         Task<Tour> AddTourAsync(Tour tour);
         Task DeleteTourAsync(int id);
         Task UpdateTourAsync(Tour tour);
+        Task<bool> ExistsByBackupIdAsync(Guid backupId);
     }
 } 

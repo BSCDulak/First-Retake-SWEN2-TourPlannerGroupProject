@@ -8,7 +8,7 @@ namespace TourPlanner.Tests
         }
 
         [Test]
-        public void Test1()
+        public void AlwaysPass()
         {
             Assert.Pass();
         }

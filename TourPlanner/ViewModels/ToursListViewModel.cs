@@ -1,13 +1,17 @@
 ﻿using iText.Kernel.Pdf; // ✅ iText
 using Microsoft.Extensions.DependencyInjection;
 using SWEN2_TourPlannerGroupProject.Data;
+using SWEN2_TourPlannerGroupProject.DTOs;
+using SWEN2_TourPlannerGroupProject.Mappers;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
+using SWEN2_TourPlannerGroupProject.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO; // ✅ Added for file output
 using System.Linq; // ✅ Added for .Any()
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows; // ✅ For MessageBox
 using System.Windows.Input;
@@ -33,6 +37,19 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 SetField(ref _selectedTour, value);
                 OnPropertyChanged(nameof(SelectedTour));
                 CommandManager.InvalidateRequerySuggested();
+                log.Info($"SelectedTour changed to: {value?.Name ?? "null"}");
+            }
+        }
+
+        private IList<Tour> _selectedTours = new List<Tour>();
+        public IList<Tour> SelectedTours
+        {
+            get => _selectedTours;
+            set
+            {
+                _selectedTours = value;
+                OnPropertyChanged(nameof(SelectedTours));
+                CommandManager.InvalidateRequerySuggested(); // Updates CanExecute for DeleteCommand
             }
         }
 
@@ -41,6 +58,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand UpdateCommand { get; }
         public ICommand UpdateCalculationsCommand { get; }
         public ICommand ReportCommand { get; } 
+        public ICommand ExportCommand { get; }
+        public ICommand ImportCommand { get; }
+
         public ToursListViewModel()
         {
             _instanceCounter++;
@@ -48,50 +68,100 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             
             Tours = new ObservableCollection<Tour>();
             _tourRepository = App.ServiceProvider.GetRequiredService<ITourRepository>();
-            AddCommand = new RelayCommand(async _ => await AddTourAsync());
-            DeleteCommand = new RelayCommand(async _ => await DeleteTourAsync(), _ => SelectedTour != null);
-            UpdateCommand = new RelayCommand(async _ => await UpdateTourAsync(), _ => SelectedTour != null);
+            AddCommand = new AsyncRelayCommand(_ => AddTourAsync());
+            DeleteCommand = new AsyncRelayCommand(_ => DeleteTourAsync(), _ => SelectedTour != null);
+            UpdateCommand = new AsyncRelayCommand(_ => UpdateTourAsync(), _ => SelectedTour != null);
             ReportCommand = new RelayCommand(_ => GenerateTourReport(), _ => SelectedTour != null);
             UpdateCalculationsCommand = new RelayCommand(_ => UpdateAllCalculations());
-            
-            log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
-            
-            // Load data asynchronously to avoid blocking the UI thread
-            _ = Task.Run(async () =>
+            ExportCommand = new RelayCommand(_ =>
             {
-                await LoadToursAsync();
-                App.Current.Dispatcher.Invoke(() => UpdateAllCalculations());
+                // Get user's Downloads folder
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
+                string fileName = $"TourBackup_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+                string filePath = Path.Combine(downloadsPath, fileName);
+                ImportExportHelper.ExportTours(Tours, filePath, log);
+                log.Info($"Export command triggered. File saved to: {filePath}");
+            }, _ => Tours.Any());
+
+            ImportCommand = new AsyncRelayCommand(async _ =>
+            {
+                // Ask the user to pick a file
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads",
+                    Filter = "JSON files (*.json)|*.json",
+                    Title = "Select a tour backup file to import"
+                };
+
+                bool? result = openFileDialog.ShowDialog();
+
+                if (result != true)
+                {
+                    log.Info("Import cancelled by user.");
+                    return;
+                }
+
+                string filePath = openFileDialog.FileName;
+
+                log.Info($"Import command triggered. Selected file: {filePath}");
+
+                // Use the new helper for DTO-based import
+                await ImportExportHelper.ImportToursAsync(Tours, filePath, _tourRepository, log);
+
+                // Recalculate fields after import
+                UpdateAllCalculations();
             });
+            log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
+            // This makes the commands re-evaluate their CanExecute after the ToursListViewModel has been initialized. (so the export button is clickable without having to click on a tour)
+            Tours.CollectionChanged += (s, e) =>
+            {
+                CommandManager.InvalidateRequerySuggested();
+            };
+        }
+
+        public async Task InitializeAsync()
+        {
+            await LoadToursAsync();
+            UpdateAllCalculations();
         }
 
         private async Task LoadToursAsync()
         {
             try
             {
-                log.Info("Loading tours from database...");
+                log.Info($"Loading tours from database...{App.ConnectionStringName}");
                 var tours = await _tourRepository.GetAllToursAsync();
                 log.Info($"Found {tours.Count()} tours in database");
 
-                // Ensure UI updates happen on UI thread
-                App.Current.Dispatcher.Invoke(() =>
+                if (App.Current != null)
                 {
-                    Tours.Clear();
-                    foreach (var tour in tours)
-                    {
-                        Tours.Add(tour);
-                        log.Info($"Loaded tour: {tour.Name} from Database");
-                    }
-                    log.Info($"Total tours in collection: {Tours.Count}");
-                    
-                    // Force UI refresh
-                    OnPropertyChanged(nameof(Tours));
-                });
+                    // In production, ensure UI thread safety
+                    App.Current.Dispatcher.Invoke(() => PopulateToursCollection(tours));
+                    log.Info("Tours collection populated in production.");
+                }
+                else
+                {
+                    // In unit tests (no Dispatcher)
+                    PopulateToursCollection(tours);
+                    log.Info("TESTING: Tours collection populated in test environment.");
+                }
             }
             catch (Exception ex)
             {
                 log.Error($"Error loading tours: {ex}");
             }
         }
+
+        private void PopulateToursCollection(IEnumerable<Tour> tours)
+        {
+            Tours.Clear();
+            foreach (var tour in tours) { 
+                Tours.Add(tour);
+                log.Info($"Loaded tour: {tour.Name} with ID: {tour.TourId}");
+            }
+            OnPropertyChanged(nameof(Tours));
+        }
+
 
         private async Task AddTourAsync()
         {
@@ -105,14 +175,42 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task DeleteTourAsync()
         {
-            if (SelectedTour != null)
+            // Determine which tours to delete: multi-select first, then single-select fallback
+            var toursToDelete = SelectedTours?.Any() == true
+                ? SelectedTours.ToList()
+                : (SelectedTour != null ? new List<Tour> { SelectedTour } : new List<Tour>());
+
+            if (!toursToDelete.Any())
             {
-                log.Info($"Deleting tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
-                await _tourRepository.DeleteTourAsync(SelectedTour.TourId ?? 0);
-                Tours.Remove(SelectedTour);
-                SelectedTour = null;
-                log.Info($"Tour deleted successfully. Remaining tours count: {Tours.Count}");
+                log.Warn("No tours selected for deletion.");
+                return; // Nothing to delete
             }
+
+            foreach (var tour in toursToDelete)
+            {
+                if (tour.TourId.HasValue)
+                {
+                    try
+                    {
+                        log.Info($"Deleting tour: {tour.Name} with ID: {tour.TourId}");
+                        await _tourRepository.DeleteTourAsync(tour.TourId.Value);
+                        Tours.Remove(tour);
+                        log.Info($"Tour deleted successfully: {tour.Name}");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"Error deleting tour {tour.Name}: {ex}");
+                    }
+                }
+                else
+                {
+                    log.Warn($"Tour {tour.Name} has no valid ID, skipping deletion.");
+                }
+            }
+
+            // Clear selection after deletion
+            SelectedTours?.Clear();
+            SelectedTour = null;
         }
 
         private async Task UpdateTourAsync()
@@ -125,7 +223,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 log.Info($"Updated tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
             }
         }
-
         public void UpdateChildFriendliness(Tour tour)
         {
             if (tour.TourLogs == null || tour.TourLogs.Count == 0)
@@ -227,6 +324,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         // This method updates all calculations for each tour in the Tours collection. Possible concerns: Might be slow for large datasets causing UI lag.
         public void UpdateAllCalculations()
         {
+            log.Info("Updating calculations for all tours...");
             foreach (var tour in Tours)
             {
                 UpdateChildFriendliness(tour);
