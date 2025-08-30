@@ -83,8 +83,6 @@ namespace SWEN2_TourPlannerGroupProject.Helpers
             {
                 log?.Error($"Failed to export tours to {filePath}: {ex.Message}");
             }
-            log.Info($"Exported {tours.Count()} tours to {filePath}");
         }
     }
-
 }

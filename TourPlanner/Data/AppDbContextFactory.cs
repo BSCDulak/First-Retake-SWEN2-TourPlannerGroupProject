@@ -17,7 +17,7 @@ namespace SWEN2_TourPlannerGroupProject.Data
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
-            var connectionStringName = "TestConnection"; // or "DefaultConnection" based on your setup
+            var connectionStringName = "TestConnection";
             var connectionString = config.GetConnectionString(connectionStringName);
 
             /* // this does not work, sad. we gotta change the connection string in the AppDbcontext class manually before migrating to the correct db.
