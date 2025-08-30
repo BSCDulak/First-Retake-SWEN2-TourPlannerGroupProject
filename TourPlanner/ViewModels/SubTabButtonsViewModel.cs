@@ -1,5 +1,6 @@
-﻿using System.Windows.Input;
-using SWEN2_TourPlannerGroupProject.MVVM;
+﻿using SWEN2_TourPlannerGroupProject.MVVM;
+using System.Windows;
+using System.Windows.Input;
 
 
 namespace SWEN2_TourPlannerGroupProject.ViewModels
@@ -17,9 +18,11 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         public ICommand ReportCommand { get; }
         public ICommand ExportCommand { get; }
         public ICommand ImportCommand { get; }
+        public bool ShowImportExport { get; set; }
+        public Visibility ImportExportVisibility => ShowImportExport ? Visibility.Visible : Visibility.Collapsed;
 
         // The ICommand? updateCommand parameter is optional and can be null because I haven´t set it yet for the TourLogsViewModel. TODO later today maybe?
-        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand, ICommand? updateCommand = null, ICommand? reportCommand = null, ICommand? exportCommand = null, ICommand? importCommand = null)
+        public SubTabButtonsViewModel(ICommand addCommand, ICommand deleteCommand, ICommand? updateCommand = null, ICommand? reportCommand = null, ICommand? exportCommand = null, ICommand? importCommand = null, bool showimportexport = false)
         {
             AddCommand = addCommand;
             DeleteCommand = deleteCommand;
@@ -27,6 +30,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             ReportCommand = reportCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
             ExportCommand = exportCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
             ImportCommand = importCommand ?? new AsyncRelayCommand(_ => Task.CompletedTask); // Provide a default no-op command if null
+            ShowImportExport = showimportexport; // Default to false, can be set to true where needed
         }
 
         // This constructor is only used for design-time data, if we do not have this
