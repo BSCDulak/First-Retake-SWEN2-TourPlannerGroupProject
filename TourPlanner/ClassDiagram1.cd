@@ -1,2 +1,237 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.MainWindowViewModel" Collapsed="true">
+    <Position X="7.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAACABAAAAEAAAASAAAAAAAAAAAgAAAAAAAEAA=</HashCode>
+      <FileName>ViewModels\MainWindowViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.MapViewModel" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIACFAAAAAAABAICQgEAAAAAQAAEAAAAkAAAEA=</HashCode>
+      <FileName>ViewModels\MapViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.SubTabButtonsViewModel" Collapsed="true">
+    <Position X="7.25" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAIBAkCQAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>ViewModels\SubTabButtonsViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.TourDetailsWrapPanelViewModel" Collapsed="true">
+    <Position X="11.25" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAACEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\TourDetailsWrapPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.TourLogsViewModel" Collapsed="true">
+    <Position X="2.5" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAGAAAAQAAEBAACAAAAAAAAAAUAEDAACAAAAA=</HashCode>
+      <FileName>ViewModels\TourLogsViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.ToursListViewModel" Collapsed="true">
+    <Position X="11.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EAAIAEMASAAABEkSAABACAAAAIFAAABgAAIAQAECAAA=</HashCode>
+      <FileName>ViewModels\ToursListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.App" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAgAAAAAAIAAAAASAAAAAEAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Views\MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Models.Tour" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAQYQAUKAQgQAAEIQAAEAQggAAgBgTAAAAEAAQAIAA=</HashCode>
+      <FileName>Models\Tour.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Models.TourLog" Collapsed="true">
+    <Position X="2.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAEAAAAAQAAEAAAAAQEAAAAAAVBAIQEAAAABAA=</HashCode>
+      <FileName>Models\TourLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Logging.LoggerFactory" Collapsed="true">
+    <Position X="6.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\LoggerFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Logging.Log4NetWrapper" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAYAAAAAAAAAAIAAAAAEAAAAAAEAEAAA=</HashCode>
+      <FileName>Logging\Log4NetWrapper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.ViewModels.ViewModelBase" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ViewModelBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.MVVM.AsyncRelayCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQEACAAQAAEAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>MVVM\AsyncRelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Data.TourRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAFAhAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\TourRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Data.TourLogRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAJAAAAAAABAAAABAAAAAAAAAAAAIAAABAAAAAAAA=</HashCode>
+      <FileName>Data\TourLogRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Data.AppDbContext" Collapsed="true">
+    <Position X="6.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAEAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Data\AppDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Data.AppDbContextFactory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\AppDbContextFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.DTOs.TourDto" Collapsed="true">
+    <Position X="10.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAQAECAQgQAAAAAAAEAQgAAAAAgDAAAAEAAAAAAA=</HashCode>
+      <FileName>DTOs\TourDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.DTOs.TourLogDto" Collapsed="true">
+    <Position X="2.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAQAAEAAAAAQEAAAAAAVBAIQEAAAABAA=</HashCode>
+      <FileName>DTOs\TourLogDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Helpers.ImportExportHelper" Collapsed="true">
+    <Position X="9.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Helpers\ImportExportHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Helpers.SelectedItemsBehavior" Collapsed="true">
+    <Position X="6.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAgAAAAAAAAABgAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\MultiSelectedItems.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Mappers.TourMapper" Collapsed="true">
+    <Position X="12" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\TourMapperForJson.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.UserControls.MapUserControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAIAAAAAAAAAIAAIAAEAAAABAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\MapUserControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.UserControls.SubTabButtons" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\SubTabButtons.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.UserControls.TourDetailsWrapPanel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\TourDetails.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.UserControls.TourLogsDetails" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAgAgAAgAAAEAAAAAACAAACAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\TourLogsDetails.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.UserControls.TourLogs" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\TourLogsList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.UserControls.ToursList" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserControls\ToursList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.Subviews.Tab1" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Subviews\Tab1.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWEN2_TourPlannerGroupProject.Views.Subviews.Tab2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Views\Subviews\Tab2.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
