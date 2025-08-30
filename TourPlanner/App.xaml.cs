@@ -16,7 +16,14 @@ namespace SWEN2_TourPlannerGroupProject;
 public partial class App : Application
 {
     public static string ConnectionString { get; private set; }
+    public static string ApiKey { get; private set; }
     public static IServiceProvider ServiceProvider { get; private set; }
+    public static string ConnectionStringName { get; private set; }
+    public static void ConfigureServicesForTest(IServiceProvider provider)
+    {
+        ServiceProvider = provider;
+    }
+
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -26,8 +33,11 @@ public partial class App : Application
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
+        // BE AWARE THAT THIS CONNECTION STRING IS ONLY FOR RUNTIME, IT IS NOT USED FOR MIGRATIONS, YOU GOTTA CHANGE IT IN THE APPDbContext CLASS FOR THAT. ALWAYS MAKE SURE THAT YOU ARE MIGRATING TO THE CORRECT DB WHEN YOU MIGRATE. CHECK AppDbContext CLASS FOR THE CONNECTION STRING IT USES FOR MIGRATIONS.
+        ConnectionStringName = "TestConnection";
+        ConnectionString = config.GetConnectionString(ConnectionStringName);
+        ApiKey = config.GetConnectionString("LeafletAPIKey");
 
-        ConnectionString = config.GetConnectionString("DefaultConnection");
         // Now you can use App.ConnectionString anywhere in your app
 
         // Set up dependency injection

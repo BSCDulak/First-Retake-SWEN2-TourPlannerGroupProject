@@ -13,6 +13,9 @@
             <Button Content="Add" Command="{Binding AddCommand}"></Button>
             <Button Content="Remove" Command="{Binding DeleteCommand}"></Button>
             <Button Content="Update" Command="{Binding UpdateCommand}"></Button>
+            <Button Content="Report" Command="{Binding ReportCommand}"></Button>
+            <Button Content="Export" Command="{Binding ExportCommand}" Visibility="{Binding ImportExportVisibility}"></Button>
+            <Button Content="Import" Command="{Binding ImportCommand}" Visibility="{Binding ImportExportVisibility}"></Button>
         </WrapPanel>
 
     </Grid>
