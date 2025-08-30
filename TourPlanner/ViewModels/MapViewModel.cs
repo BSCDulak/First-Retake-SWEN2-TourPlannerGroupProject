@@ -18,7 +18,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
         private static readonly ILoggerWrapper log = LoggerFactory.GetLogger();
         private Tour? _selectedTour;
         private readonly HttpClient _httpClient;
-        private const string API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQ4NjYyZmU3YmRhNzRjZWFhNzU5NGM4ZjRkYzE4OThhIiwiaCI6Im11cm11cjY0In0=";
+        private string API_KEY = App.ApiKey;
 
         public Tour? SelectedTour
         {
