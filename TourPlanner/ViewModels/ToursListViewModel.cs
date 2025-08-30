@@ -5,6 +5,7 @@ using SWEN2_TourPlannerGroupProject.DTOs;
 using SWEN2_TourPlannerGroupProject.Mappers;
 using SWEN2_TourPlannerGroupProject.Models;
 using SWEN2_TourPlannerGroupProject.MVVM;
+using SWEN2_TourPlannerGroupProject.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -78,8 +79,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
                 string fileName = $"TourBackup_{DateTime.Now:yyyyMMdd_HHmmss}.json";
                 string filePath = Path.Combine(downloadsPath, fileName);
-
-                ExportTours(Tours, filePath);
+                ImportExportHelper.ExportTours(Tours, filePath, log);
                 log.Info($"Export command triggered. File saved to: {filePath}");
             }, _ => Tours.Any());
 
@@ -106,18 +106,17 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 log.Info($"Import command triggered. Selected file: {filePath}");
 
                 // Use the new helper for DTO-based import
-                await Helpers.ImportHelper.ImportToursAsync(Tours, filePath, _tourRepository, log);
+                await ImportExportHelper.ImportToursAsync(Tours, filePath, _tourRepository, log);
 
                 // Recalculate fields after import
                 UpdateAllCalculations();
             });
-
-
-
-
-
             log.Info($"ToursListViewModel created. Tours count: {Tours.Count}");
-            
+            // This makes the commands re-evaluate their CanExecute after the ToursListViewModel has been initialized. (so the export button is clickable without having to click on a tour)
+            Tours.CollectionChanged += (s, e) =>
+            {
+                CommandManager.InvalidateRequerySuggested();
+            };
         }
 
         public async Task InitializeAsync()
@@ -224,75 +223,6 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 log.Info($"Updated tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
             }
         }
-        public void ExportTours(IEnumerable<Tour> tours, string filePath)
-        {
-            var dtoList = tours.Select(TourMapper.ToDto).ToList();
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string json = JsonSerializer.Serialize(dtoList, options);
-            File.WriteAllText(filePath, json);
-            log.Info($"Exported {tours.Count()} tours to {filePath}");
-        }
-
-
-        /// <summary>
-        /// Imports tours from a JSON file into an ObservableCollection.
-        /// Optionally, also saves them to a repository.
-        /// </summary>
-        public async Task ImportToursAsync(
-            ObservableCollection<Tour> targetCollection,
-            string filePath,
-            ITourRepository? repository = null)
-        {
-            if (!File.Exists(filePath))
-            {
-                log.Warn($"File not found: {filePath}");
-                return;
-            }
-
-            string json = File.ReadAllText(filePath);
-            var importedDtos = JsonSerializer.Deserialize<List<TourDto>>(json);
-
-            if (importedDtos == null || importedDtos.Count == 0)
-            {
-                log.Warn($"No tours found in file: {filePath}");
-                return;
-            }
-
-            int successImportedCount = 0;
-            foreach (var dto in importedDtos)
-            {
-                // Map DTO → domain model
-                var tour = TourMapper.FromDto(dto);
-
-                // Check for duplicate by TourId so we don´t crash the program when importing the same file twice
-                bool exists = targetCollection.Any(t => t.TourId.HasValue && t.TourId == tour.TourId);
-
-                if (exists)
-                {
-                    log.Warn($"Skipping duplicate tour: {tour.Name} (ID: {tour.TourId})");
-                    continue; 
-                }
-
-                targetCollection.Add(tour);
-
-                if (repository != null)
-                {
-                    if (tour.TourId.HasValue)
-                    {
-                        tour.TourId = null;
-                    }
-                    await repository.AddTourAsync(tour);
-                }
-
-                successImportedCount++;
-            }
-
-            log.Info($"Imported {successImportedCount} tours from {filePath}");
-        }
-
-
-
-
         public void UpdateChildFriendliness(Tour tour)
         {
             if (tour.TourLogs == null || tour.TourLogs.Count == 0)

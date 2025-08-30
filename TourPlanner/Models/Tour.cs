@@ -22,6 +22,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
         private string? _routeInformation;
         private string? _routeImagePath;
         private int? _tourId;
+        public Guid BackupId { get; set; } = Guid.NewGuid();
         private string? _popularity;
         private string? _childFriendliness;
 

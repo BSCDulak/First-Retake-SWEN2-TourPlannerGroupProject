@@ -32,6 +32,7 @@ public partial class App : Application
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
+        // BE AWARE THAT THIS CONNECTION STRING IS ONLY FOR RUNTIME, IT IS NOT USED FOR MIGRATIONS, YOU GOTTA CHANGE IT IN THE APPDbContext CLASS FOR THAT. ALWAYS MAKE SURE THAT YOU ARE MIGRATING TO THE CORRECT DB WHEN YOU MIGRATE. CHECK AppDbContext CLASS FOR THE CONNECTION STRING IT USES FOR MIGRATIONS.
         ConnectionStringName = "TestConnection";
         ConnectionString = config.GetConnectionString(ConnectionStringName);
         // Now you can use App.ConnectionString anywhere in your app

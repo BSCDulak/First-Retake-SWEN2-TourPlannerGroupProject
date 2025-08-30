@@ -8,6 +8,7 @@ namespace SWEN2_TourPlannerGroupProject.Mappers
         public static TourDto ToDto(Tour tour) => new TourDto
         {
             TourId = tour.TourId,
+            BackupId = tour.BackupId,
             Name = tour.Name,
             Description = tour.Description,
             StartLocation = tour.StartLocation,
@@ -45,6 +46,7 @@ namespace SWEN2_TourPlannerGroupProject.Mappers
             var tour = new Tour
             {
                 TourId = dto.TourId,
+                BackupId = dto.BackupId,
                 Name = dto.Name,
                 Description = dto.Description,
                 StartLocation = dto.StartLocation,

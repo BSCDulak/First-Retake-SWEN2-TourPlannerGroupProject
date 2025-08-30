@@ -41,5 +41,9 @@ namespace SWEN2_TourPlannerGroupProject.Data
             _context.Tours.Update(tour);
             await _context.SaveChangesAsync();
         }
+        public async Task<bool> ExistsByBackupIdAsync(Guid backupId)
+        {
+            return await _context.Tours.AnyAsync(t => t.BackupId == backupId);
+        }
     }
 } 
