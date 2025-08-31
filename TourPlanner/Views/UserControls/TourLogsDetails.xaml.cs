@@ -35,7 +35,7 @@ namespace SWEN2_TourPlannerGroupProject.Views.UserControls
             {
                 if (!_timeRegex.IsMatch(tb.Text))
                 {
-                    MessageBox.Show("Please enter time in format hh:mm:ss (e.g., 05:30:45)", "Invalid Time Format", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Please enter time in format hh:mm:ss (e.g., hh:mm:ss)", "Invalid Time Format", MessageBoxButton.OK, MessageBoxImage.Warning);
                     Dispatcher.BeginInvoke(new Action(() => tb.Focus()), DispatcherPriority.ApplicationIdle);
                 }
             }
@@ -55,7 +55,7 @@ namespace SWEN2_TourPlannerGroupProject.Views.UserControls
             TextBox textBox = sender as TextBox;
             if (!string.IsNullOrWhiteSpace(textBox?.Text) && !_distanceExactFormatRegex.IsMatch(textBox.Text))
             {
-                MessageBox.Show("Please enter a valid distance (e.g., 10.2, 115.6)", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please enter a valid distance (e.g., km.m)", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
                 textBox.Text = string.Empty;
             }
         }
