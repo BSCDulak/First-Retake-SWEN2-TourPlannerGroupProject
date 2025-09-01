@@ -25,9 +25,9 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             get => _selectedTour;
             set
             {
-                if (ReferenceEquals(_selectedTour, value))
+                if (ReferenceEquals(_selectedTour, value) && _selectedTour != null)
                 {
-                    log.Warn($"RefernceEquals raised on {_selectedTour.Name}  same as {value.Name} / Id: {_selectedTour.TourId} / BId: {_selectedTour.BackupId}" );
+                    log.Warn($"RefernceEquals raised on {_selectedTour.Name}  same as {value?.Name} / Id: {_selectedTour.TourId} / BId: {_selectedTour.BackupId}" );
                     return;
                 }
                 // Unsubscribe from previous tour's property changes
@@ -48,7 +48,10 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 }
                 
                 UpdateMap();
-                log.Info($"{_selectedTour.Name} finished set.");
+                if (_selectedTour != null)
+                { 
+                    log.Info($"{_selectedTour.Name} finished set."); 
+                }
             }
         }
 
