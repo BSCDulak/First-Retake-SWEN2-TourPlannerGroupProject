@@ -220,8 +220,15 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 // Update the tour in the repository
                 UpdateAllCalculations();
                 await _tourRepository.UpdateTourAsync(SelectedTour);
+                ManualOnPropertyChangedForTourLocations(SelectedTour);
                 log.Info($"Updated tour: {SelectedTour.Name} with ID: {SelectedTour.TourId}");
             }
+        }
+        private void ManualOnPropertyChangedForTourLocations(Tour tour)
+        {
+            // Trigger property changed for start/end location manually
+            tour.ManualOnPropertyChanged(nameof(tour.StartLocation));
+            tour.ManualOnPropertyChanged(nameof(tour.EndLocation));
         }
         public void UpdateChildFriendliness(Tour tour)
         {

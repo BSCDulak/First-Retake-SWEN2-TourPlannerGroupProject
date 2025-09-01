@@ -25,9 +25,15 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
             get => _selectedTour;
             set
             {
+                if (ReferenceEquals(_selectedTour, value))
+                {
+                    log.Warn($"RefernceEquals raised on {_selectedTour.Name}  same as {value.Name} / Id: {_selectedTour.TourId} / BId: {_selectedTour.BackupId}" );
+                    return;
+                }
                 // Unsubscribe from previous tour's property changes
                 if (_selectedTour != null)
                 {
+                    log.Info($"{_selectedTour.Name} unsubscribe is not null and calling OnTourProperyChanged");
                     _selectedTour.PropertyChanged -= OnTourPropertyChanged;
                 }
 
@@ -37,10 +43,12 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
                 // Subscribe to new tour's property changes
                 if (_selectedTour != null)
                 {
+                    log.Info($"{_selectedTour.Name} subscribe is not null and calling OnTourProperyChanged");
                     _selectedTour.PropertyChanged += OnTourPropertyChanged;
                 }
                 
                 UpdateMap();
+                log.Info($"{_selectedTour.Name} finished set.");
             }
         }
 
@@ -56,6 +64,14 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private void OnTourPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (sender is Tour tour)
+            {
+                log.Info($"MAP: OnTourPropertyChanged called for tour: {tour.Name}");
+            }
+            else
+            {
+                log.Info($"MAP: OnTourPropertyChanged called for unknown sender: {sender}");
+            }
             // Only update map when start or end location changes
             if (e.PropertyName == nameof(Tour.StartLocation) || e.PropertyName == nameof(Tour.EndLocation))
             {
@@ -66,6 +82,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async void UpdateMap()
         {
+            log.Info("MAP: UpdateMap called.");
             if (SelectedTour == null)
             {
                 // Show default Vienna map
@@ -140,6 +157,7 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task ShowRouteAsync((double lat, double lng) start, (double lat, double lng) end, string startAddress, string endAddress)
         {
+            log.Info($"MAP: ShowRouteAsync from {startAddress} to {endAddress}");
             try
             {
                 // First try walking route

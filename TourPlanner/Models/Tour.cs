@@ -32,6 +32,10 @@ namespace SWEN2_TourPlannerGroupProject.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public virtual void ManualOnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public string? Name
         {
@@ -67,7 +71,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 if (_startLocation != value)
                 {
                     _startLocation = value;
-                    OnPropertyChanged(nameof(StartLocation));
+                    // OnPropertyChanged(nameof(StartLocation));
                 }
             }
         }
@@ -80,7 +84,7 @@ namespace SWEN2_TourPlannerGroupProject.Models
                 if (_endLocation != value)
                 {
                     _endLocation = value;
-                    OnPropertyChanged(nameof(EndLocation));
+                    // OnPropertyChanged(nameof(EndLocation));
                 }
             }
         }
