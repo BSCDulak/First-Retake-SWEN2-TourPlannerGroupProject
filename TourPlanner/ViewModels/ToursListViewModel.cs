@@ -165,11 +165,11 @@ namespace SWEN2_TourPlannerGroupProject.ViewModels
 
         private async Task AddTourAsync()
         {
-            var newTour = new Tour { Name = "newTour" };
+            var newTour = new Tour { Name = "" };
             var addedTour = await _tourRepository.AddTourAsync(newTour);
             Tours.Add(addedTour);
             SelectedTour = addedTour;
-            log.Info($"Added new tour: {addedTour.Name} with ID: {addedTour.TourId}");
+            log.Info($"Added new tour with ID: {addedTour.TourId}");
             UpdateAllCalculations();
         }
 

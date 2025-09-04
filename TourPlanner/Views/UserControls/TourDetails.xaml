@@ -51,7 +51,7 @@
             <TextBox l:TextBoxHelper.Placeholder="Will be automatically filled" Text="{Binding SelectedTour.EstimatedTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5" IsReadOnly="True"/>
 
             <Label Content="Route Information:" Grid.Row="7" Grid.Column="0" Margin="5"/>
-            <TextBox Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5"/>
+            <TextBox l:TextBoxHelper.Placeholder="Insert route information here" Text="{Binding SelectedTour.RouteInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5"/>
 
             <Label Content="Popularity:" Grid.Row="8" Grid.Column="0" Margin="5"/>
             <TextBox Text="{Binding SelectedTour.Popularity, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="8" Grid.Column="1" Margin="5" IsReadOnly="True"/>
