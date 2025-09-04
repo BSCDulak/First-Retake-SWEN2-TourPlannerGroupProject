@@ -12,7 +12,27 @@
         <ListView ItemsSource="{Binding Tours}" 
                   SelectedItem="{Binding SelectedTour}" 
                   helpers:SelectedItemsBehavior.SelectedItems="{Binding SelectedTours}" 
-                  SelectionMode="Extended"
-                  DisplayMemberPath="Name"></ListView>
+                  SelectionMode="Extended">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="{Binding Name}" />
+                                <Style.Triggers>
+                                    <!-- If Name is empty, show placeholder text -->
+                                    <DataTrigger Binding="{Binding Name}" Value="">
+                                        <Setter Property="Text" Value="(Unnamed Tour)" />
+                                        <Setter Property="Foreground" Value="Gray" />
+                                        <Setter Property="FontStyle" Value="Italic" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
     </Grid>
 </UserControl>
